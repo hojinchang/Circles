@@ -2,7 +2,18 @@ const express = require("express");
 const cors = require("cors");
 const path = require("path");
 
+// Load environment variables
+require("dotenv").config();
+
 const app = express();
+
+// connect to MongoDB databse with mongoose
+const mongoose = require("mongoose");
+
+main().catch((err) => console.log(err));
+async function main() {
+  await mongoose.connect(process.env.MONGODB_URI);
+}
 
 app.use(cors());
 app.use(express.json());
