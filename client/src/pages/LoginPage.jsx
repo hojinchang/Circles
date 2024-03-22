@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 
+import googleLogo from "../assets/images/Google__G__logo.svg";
+
 const LoginPage = () => {
 
     return(
@@ -11,13 +13,13 @@ const LoginPage = () => {
                 </div>
             </header>
             
-            <section className="mb-6 w-full">
+            <section className="mb-6 max-w-96">
                 <h1 className="text-3xl font-semibold text-center mb-2">Sign in</h1>
-                <p className="text-neutral-600  text-center text-sm">Enter your credentials below to sign in.</p>
+                <p className="text-neutral-500  text-center text-sm">Enter your credentials below to sign in.</p>
             </section>
 
-            <section className="w-full">
-                <form className="max-w-96 mx-auto">
+            <section className="max-w-96 w-full">
+                <form className="w-full mx-auto">
                     <div className="flex flex-col gap-2">
                         <div className="grid grid-cols-4 items-center gap-4">
                             <label htmlFor="email" className="text-sm font-medium text-right">Email</label>
@@ -49,6 +51,30 @@ const LoginPage = () => {
                     </div>
                 </form>
             </section>
+            <div className="flex items-center my-6 max-w-96 w-full">
+                <div className="flex-grow bg-neutral-300 h-0.5"></div> {/* Left bar */}
+                <p className="mx-2 text-sm font-medium">OR CONTINUE WITH</p>
+                <div className="flex-grow bg-neutral-300 h-0.5"></div> {/* Right bar */}
+            </div>
+            <section className="max-w-96 w-full flex flex-col gap-3 mb-4">
+                <form className="w-full mx-auto">
+                    <div>
+                        <button type="submit" className="bg-slate-400 w-full px-6 py-2 font-medium rounded-md hover:bg-slate-500 transition ease duration-200">Demo Account</button>
+                    </div>
+                </form>
+                <form className="w-full mx-auto">
+                    <div>
+                        <button type="submit" className="flex justify-center items-center gap-3 bg-google-400 text-neutral-50 w-full px-6 py-2 font-medium rounded-md hover:bg-google-700 transition ease duration-200">
+                            <div className="bg-white rounded-full p-0.5">
+                                <img src={googleLogo} alt="Google logo" />
+                            </div>
+                            Sign in with Google
+                        </button>
+                    </div>
+                </form>
+            </section>
+            <p className="font-medium text-sm text-neutral-500">Don't have an account? <Link to="/user/sign-up" className="text-slate-800 hover:text-slate-500 hover:underline transition ease duration-200">Sign up.</Link></p>
+
         </main>
     )
 };

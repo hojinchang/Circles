@@ -11,6 +11,12 @@ export default {
     extend: {
       maxWidth: {
         '400': '400px'
+      },
+      colors: {
+        google: {
+          '400': '#4285F4',
+          '700': '#3C78DC'
+        }
       }
     },
   },

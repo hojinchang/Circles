@@ -3,6 +3,6 @@
 @tailwind utilities;
 
 .input {
-    @apply py-1 px-2 border border-neutral-300 rounded-md focus:outline-neutral-300
+    @apply py-2 px-3 border border-neutral-300 rounded-md text-sm focus:outline-neutral-300
 }
 
