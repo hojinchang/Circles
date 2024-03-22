@@ -3,8 +3,8 @@ const cors = require("cors");
 const path = require("path");
 
 // Router
-const indexRouter = require("./router/indexRouter");
-const userRouter = require("./router/userRouter");
+const indexRouter = require("./routers/indexRouter");
+const userRouter = require("./routers/userRouter");
 
 // Load environment variables
 require("dotenv").config();
@@ -25,11 +25,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use("/", indexRouter);
-app.use("/user", userRouter);
+// app.use("/user", userRouter);
 
-app.get("/v1", (req, res, next) => {
-    res.json( {users: ["userOne", "userTwo", "userThree"]} );
-});
+// app.get("/v1", (req, res, next) => {
+//     res.json( {users: ["userOne", "userTwo", "userThree"]} );
+// });
 
 
 app.listen(5000, () => {
