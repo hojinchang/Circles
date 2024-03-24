@@ -25,8 +25,6 @@ const SignUpPage = () => {
     const emailSignUpSubmission = async(e) => {
         e.preventDefault();
         try {
-            console.log("YEET")
-            console.log(formData)
             // Have to make requests to /api/.. as we are using a proxy
             const response = await fetch("/api/user/sign-up", {
                 method: "POST",
@@ -41,7 +39,6 @@ const SignUpPage = () => {
             // Check if the response is good or not
             if (response.ok) {
                 // If its good, redirect to login page
-                console.log("GOOD LOGIN")
                 navigate("/login");
             } else {
                 // Set the form errors to be displayed
