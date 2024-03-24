@@ -1,8 +1,67 @@
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 import googleLogo from "../assets/images/Google__G__logo.svg";
 
 const SignUpPage = () => {
+    const navigate = useNavigate();
+    const [formData, setFormData] = useState({
+        firstName: '',
+        lastName: '',
+        email: '',
+        password: '',
+        passwordConfirm: ''
+    });
+    const [formErrors, setFormErrors] = useState(null);
+    const [formSubmitted, setFormSubmitted] = useState(false);
+
+    // dynamically set the formData state as the user types into the input
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+    }
+
+    // Post request to server containing form data payload
+    const emailSignUpSubmission = async(e) => {
+        e.preventDefault();
+        try {
+            console.log("YEET")
+            console.log(formData)
+            // Have to make requests to /api/.. as we are using a proxy
+            const response = await fetch("/api/user/sign-up", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formData)
+            });
+
+            const responseData = await response.json();
+
+            // Check if the response is good or not
+            if (response.ok) {
+                // If its good, redirect to login page
+                console.log("GOOD LOGIN")
+                navigate("/login");
+            } else {
+                // Set the form errors to be displayed
+                setFormErrors(responseData.errors);
+            }
+        } catch (err) {
+            console.error("Error:", err);
+        }
+
+        setFormSubmitted(true);
+    }
+
+    useEffect(() => {
+        if (formSubmitted && formErrors && formErrors.length > 0) {
+            setFormData({...formData, password: "", passwordConfirm: ""});
+            setFormSubmitted(false);
+        }
+    }, [formSubmitted, formErrors]);
+
+
 
     return(
         <main className="flex flex-col justify-center items-center px-8 py-10 lg:py-24">
@@ -18,8 +77,18 @@ const SignUpPage = () => {
                 <p className="text-neutral-500  text-center text-sm">Enter your credentials below to sign in.</p>
             </section>
 
+            {formErrors && formErrors.length > 0 && (
+                <section className="mb-4 self-start">
+                    <ul>
+                        {formErrors.map((error, idx) => (
+                            <li key={idx} className="list-disc mb-1"><p className="text-red-600">{error.msg}</p></li>
+                        ))}
+                    </ul>
+                </section>
+            )}
+
             <section className="max-w-96 w-full">
-                <form className="w-full mx-auto">
+                <form className="w-full mx-auto" onSubmit={emailSignUpSubmission}>
                     <div className="flex flex-col gap-2">
                         <div className="grid grid-cols-4 items-center gap-4">
                             <label htmlFor="firstName" className="text-sm font-medium text-right">First Name</label>
@@ -29,6 +98,8 @@ const SignUpPage = () => {
                                 name="firstName" 
                                 minLength="1"
                                 placeholder="John"
+                                onChange={handleInputChange}
+                                value={formData.firstName}
                                 required
                                 className="input col-span-3"
                             />
@@ -41,6 +112,8 @@ const SignUpPage = () => {
                                 name="lastName" 
                                 minLength="1"
                                 placeholder="Doe"
+                                onChange={handleInputChange}
+                                value={formData.lastName}
                                 required
                                 className="input col-span-3"
                             />
@@ -53,6 +126,8 @@ const SignUpPage = () => {
                                 name="email" 
                                 minLength="1"
                                 placeholder="name@example.com"
+                                onChange={handleInputChange}
+                                value={formData.email}
                                 required
                                 className="input col-span-3"
                             />
@@ -65,6 +140,9 @@ const SignUpPage = () => {
                                 name="password" 
                                 minLength="1"
                                 placeholder="********"
+                                onChange={handleInputChange}
+                                // value={ formErrors && formErrors.length > 0 ? "" : formData.password }
+                                value={formData.password}
                                 required
                                 className="input col-span-3"
                             />
@@ -77,6 +155,9 @@ const SignUpPage = () => {
                                 name="passwordConfirm" 
                                 minLength="1"
                                 placeholder="********"
+                                onChange={handleInputChange}
+                                // value={ formErrors && formErrors.length > 0 ? "" : formData.passwordConfirm }
+                                value={formData.passwordConfirm}
                                 required
                                 className="input col-span-3"
                             />
@@ -89,7 +170,7 @@ const SignUpPage = () => {
             </section>
             <div className="flex items-center my-6 max-w-96 w-full">
                 <div className="flex-grow bg-neutral-300 h-0.5"></div> {/* Left bar */}
-                <p className="mx-2 text-sm font-medium">OR CONTINUE WITH</p>
+                <p className="mx-2 text-sm font-medium text-neutral-500">OR CONTINUE WITH</p>
                 <div className="flex-grow bg-neutral-300 h-0.5"></div> {/* Right bar */}
             </div>
             <section className="max-w-96 w-full flex flex-col gap-3 mb-4">

@@ -15,7 +15,7 @@ const LoginPage = () => {
             
             <section className="mb-6 max-w-96">
                 <h1 className="text-3xl font-semibold text-center mb-2">Login</h1>
-                <p className="text-neutral-500  text-center text-sm">Enter your credentials below to sign in.</p>
+                <p className="text-neutral-500  text-center text-sm">Enter your credentials below to sign up.</p>
             </section>
 
             <section className="max-w-96 w-full">
@@ -53,7 +53,7 @@ const LoginPage = () => {
             </section>
             <div className="flex items-center my-6 max-w-96 w-full">
                 <div className="flex-grow bg-neutral-300 h-0.5"></div> {/* Left bar */}
-                <p className="mx-2 text-sm font-medium">OR CONTINUE WITH</p>
+                <p className="mx-2 text-sm font-medium text-neutral-500">OR CONTINUE WITH</p>
                 <div className="flex-grow bg-neutral-300 h-0.5"></div> {/* Right bar */}
             </div>
             <section className="max-w-96 w-full flex flex-col gap-3 mb-4">
