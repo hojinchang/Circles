@@ -1,17 +1,22 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 import googleLogo from "../assets/images/Google__G__logo.svg";
 import { handleInputChange } from "../globals/utilityFunctions";
 
 const LoginPage = () => {
     const navigate = useNavigate();
+
     const [formData, setFormData] = useState({
         email: '',
         password: ''
     });
     const [loginError, setLoginError] = useState(null);
 
+    // Cookies
+    const [cookies, setCookie] = useCookies(["jwt"]);
+    
     // Post request to server for user authentication
     const emailLoginSubmission = async(e) => {
         e.preventDefault();
@@ -27,8 +32,21 @@ const LoginPage = () => {
             // If sucessful, this will return a success object with the user object
             // If not successful, this will return an error message
             const responseData = await response.json();
-                        
-            if (response.ok) {
+
+            // Save the JWT token in a cookie
+            if (response.ok) {              
+                const expiryDate = new Date();
+                // Set expiry date 1 day from now
+                expiryDate.setDate(expiryDate.getDate() + 1);
+
+                // Save the jwt token in a cookie
+                // The cookies are automatically sent with every HTTP request to the server
+                setCookie("jwt", responseData.token, {
+                    expires: expiryDate,
+                    path: "/",
+                    httpOnly: true,   // This setting is a security feature to ensure that the cookie isnt accessible via JavaScript
+                });
+
                 navigate("/");
             } else {
                 setLoginError(responseData.message);

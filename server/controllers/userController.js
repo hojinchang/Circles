@@ -5,6 +5,7 @@ const { body, validationResult } = require("express-validator");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 
 // Username / Password local strategy authentication
@@ -162,8 +163,18 @@ exports.login_post = [
                 if (err) {
                     return next(err);
                 }
-    
-                return res.status(200).json({ success: true, user });
+                
+                jwt.sign({user: user}, process.env.JWT_SECRET, (err, token) => {
+                    if (err) {
+                        return next(err);
+                    }
+
+                    // Send the JWT token in the "Authorization" header
+                    res.set("Authorization", "Bearer " + token);
+
+                    // {user, token} = {user: user, token: token}
+                    return res.status(200).json({ success: true, user, token });
+                });
             })
         })(req, res, next);
     }
