@@ -1,8 +1,28 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 import googleLogo from "../assets/images/Google__G__logo.svg";
 
 const LoginPage = () => {
+    const [formData, setFormData] = useState({
+        email: '',
+        password: ''
+    });
+
+    const emailLoginSubmission = async(e) => {
+        e.preventDefault();
+        try {
+            const response = await fetch("/api/user/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formData)
+            })
+        } catch(err) {
+            console.err("Login Error", err);
+        }
+    }
 
     return(
         <main className="flex flex-col justify-center items-center px-8 py-10 lg:py-24">

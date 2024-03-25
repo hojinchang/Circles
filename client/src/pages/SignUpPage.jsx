@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import googleLogo from "../assets/images/Google__G__logo.svg";
+import { handleInputChange } from "../globals/utilityFunctions";
 
 const SignUpPage = () => {
     const navigate = useNavigate();
@@ -14,12 +15,6 @@ const SignUpPage = () => {
     });
     const [formErrors, setFormErrors] = useState(null);
     const [formSubmitted, setFormSubmitted] = useState(false);
-
-    // dynamically set the formData state as the user types into the input
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
-    }
 
     // Post request to server containing form data payload
     const emailSignUpSubmission = async(e) => {
@@ -45,7 +40,7 @@ const SignUpPage = () => {
                 setFormErrors(responseData.errors);
             }
         } catch (err) {
-            console.error("Error:", err);
+            console.error("Sign Up:", err);
         }
 
         setFormSubmitted(true);
@@ -95,7 +90,7 @@ const SignUpPage = () => {
                                 name="firstName" 
                                 minLength="1"
                                 placeholder="John"
-                                onChange={handleInputChange}
+                                onChange={(e) => handleInputChange(e, formData, setFormData)}
                                 value={formData.firstName}
                                 required
                                 className="input col-span-3"
@@ -109,7 +104,7 @@ const SignUpPage = () => {
                                 name="lastName" 
                                 minLength="1"
                                 placeholder="Doe"
-                                onChange={handleInputChange}
+                                onChange={(e) => handleInputChange(e, formData, setFormData)}
                                 value={formData.lastName}
                                 required
                                 className="input col-span-3"
@@ -123,7 +118,7 @@ const SignUpPage = () => {
                                 name="email" 
                                 minLength="1"
                                 placeholder="name@example.com"
-                                onChange={handleInputChange}
+                                onChange={(e) => handleInputChange(e, formData, setFormData)}
                                 value={formData.email}
                                 required
                                 className="input col-span-3"
@@ -137,8 +132,7 @@ const SignUpPage = () => {
                                 name="password" 
                                 minLength="1"
                                 placeholder="********"
-                                onChange={handleInputChange}
-                                // value={ formErrors && formErrors.length > 0 ? "" : formData.password }
+                                onChange={(e) => handleInputChange(e, formData, setFormData)}
                                 value={formData.password}
                                 required
                                 className="input col-span-3"
@@ -152,8 +146,7 @@ const SignUpPage = () => {
                                 name="passwordConfirm" 
                                 minLength="1"
                                 placeholder="********"
-                                onChange={handleInputChange}
-                                // value={ formErrors && formErrors.length > 0 ? "" : formData.passwordConfirm }
+                                onChange={(e) => handleInputChange(e, formData, setFormData)}
                                 value={formData.passwordConfirm}
                                 required
                                 className="input col-span-3"
