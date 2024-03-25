@@ -1,14 +1,18 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import googleLogo from "../assets/images/Google__G__logo.svg";
+import { handleInputChange } from "../globals/utilityFunctions";
 
 const LoginPage = () => {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         email: '',
         password: ''
     });
+    const [loginError, setLoginError] = useState(null);
 
+    // Post request to server for user authentication
     const emailLoginSubmission = async(e) => {
         e.preventDefault();
         try {
@@ -19,6 +23,17 @@ const LoginPage = () => {
                 },
                 body: JSON.stringify(formData)
             })
+
+            // If sucessful, this will return a success object with the user object
+            // If not successful, this will return an error message
+            const responseData = await response.json();
+                        
+            if (response.ok) {
+                navigate("/");
+            } else {
+                setLoginError(responseData.message);
+            }
+            
         } catch(err) {
             console.err("Login Error", err);
         }
@@ -38,29 +53,39 @@ const LoginPage = () => {
                 <p className="text-neutral-500  text-center text-sm">Enter your credentials below to sign up.</p>
             </section>
 
+            {loginError && (
+                <section className="mb-4 self-start">
+                    <ul>
+                        <li className="list-disc mb-1"><p className="text-red-600">{loginError}</p></li>
+                    </ul>
+                </section>
+            )}
+
             <section className="max-w-96 w-full">
-                <form className="w-full mx-auto">
+                <form className="w-full mx-auto" onSubmit={emailLoginSubmission}>
                     <div className="flex flex-col gap-2">
                         <div className="grid grid-cols-4 items-center gap-4">
-                            <label htmlFor="email" className="text-sm font-medium text-right">Email</label>
+                            <label htmlFor="username" className="text-sm font-medium text-right">Email *</label>
                             <input 
                                 type="email" 
-                                id="email" 
-                                name="email" 
+                                id="username" 
+                                name="username" 
                                 minLength="1"
                                 placeholder="name@example.com"
+                                onChange={(e) => handleInputChange(e, formData, setFormData)}
                                 required
                                 className="input col-span-3"
                             />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
-                            <label htmlFor="password" className="text-sm font-medium text-right">Password</label>
+                            <label htmlFor="password" className="text-sm font-medium text-right">Password *</label>
                             <input 
                                 type="password" 
                                 id="password" 
                                 name="password" 
                                 minLength="1"
                                 placeholder="********"
+                                onChange={(e) => handleInputChange(e, formData, setFormData)}
                                 required
                                 className="input col-span-3"
                             />

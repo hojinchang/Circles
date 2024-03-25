@@ -10,8 +10,8 @@ const AppRouter = () => {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/" exact element={user ? <HomePage /> : <LoginPage />}></Route>
-                <Route path="/login" exact element={user ? <Navigate to="/" /> : <LoginPage />}></Route>
+                <Route path="/" exact element={<HomePage />}></Route>
+                <Route path="/login" exact element={<LoginPage />}></Route>
                 <Route path="/sign-up" exact element={<SignUpPage />}></Route>
             </Routes>
         </BrowserRouter>

@@ -6,6 +6,44 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcryptjs");
 
+
+// Username / Password local strategy authentication
+passport.use(
+    new LocalStrategy(async(username, password, done) => {
+        try {
+            const user = await User.findOne({ email: username });
+
+            if (!user) {
+                return done(null, false, { message: "Email doesn't exist in our system"});
+            }
+
+            // Compare hashed passwords
+            const match = await bcrypt.compare(password, user.password);
+            if (!match) {
+                return done(null, false, { message: "Incorrect password" });
+            }
+
+            return done(null, user);
+
+        } catch(err) {
+            return done(err);
+        }
+    })
+);
+
+passport.serializeUser((user, done) => {
+    done(null, user.id);
+});
+
+passport.deserializeUser(async(id, done) => {
+    try {
+        const user = await User.findById(id);
+        done(null, user);
+    } catch(err) {
+        done(err);
+    }
+});
+
 exports.sign_up_post = [
     body("firstName")
         .trim()
@@ -50,16 +88,8 @@ exports.sign_up_post = [
             const errors = validationResult(req);
             // if there are errors, redirect to sign up page
             if (!errors.isEmpty()) {
-                const formData = {
-                    firstName: req.body.firstName,
-                    lastName: req.body.lastName,
-                }
-
                 // Send a 400 bad request status code
-                return res.status(400).json({
-                    errors: errors.array(),
-                    formData: formData
-                });
+                return res.status(400).json({errors: errors.array()});
             }
 
             const registeredUser = await User.findOne({ email: req.body.email }).exec();
@@ -88,5 +118,53 @@ exports.sign_up_post = [
         } catch (err) {
             return next(err);
         }
+    }
+]
+
+exports.login_post = [
+    body("username")
+        .trim()
+        .isEmail()
+        .withMessage("Invalide email format")
+        .isLength({ min: 1 })
+        .withMessage("Email field must not be empty")
+        .normalizeEmail()
+        .escape(),
+    body("password")
+        .trim()
+        .isLength({ min: 1 })
+        .withMessage("Password field must not be empty")
+        .escape(),
+    
+    (req, res, next) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            // Send a 400 bad request status code
+            return res.status(400).json({errors: errors.array()});
+        }
+
+        next();
+    },
+
+    // Send a custom response depending of if the user is authenticated or not
+    (req, res, next) => {
+        passport.authenticate("local", (err, user, info) => {
+            if (err) {
+                return next(err);
+            }
+            // User not authenticated
+            if (!user) {
+                return res.status(401).json({ message: info.message })   // Send the error message from local strategy
+            }
+            
+            // User is authenticated so log them in
+            req.logIn(user, (err) => {
+                if (err) {
+                    return next(err);
+                }
+    
+                return res.status(200).json({ success: true, user });
+            })
+        })(req, res, next);
     }
 ]

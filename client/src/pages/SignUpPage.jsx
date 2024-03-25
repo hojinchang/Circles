@@ -83,7 +83,7 @@ const SignUpPage = () => {
                 <form className="w-full mx-auto" onSubmit={emailSignUpSubmission}>
                     <div className="flex flex-col gap-2">
                         <div className="grid grid-cols-4 items-center gap-4">
-                            <label htmlFor="firstName" className="text-sm font-medium text-right">First Name</label>
+                            <label htmlFor="firstName" className="text-sm font-medium text-right">First Name *</label>
                             <input 
                                 type="text" 
                                 id="firstName" 
@@ -97,7 +97,7 @@ const SignUpPage = () => {
                             />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
-                            <label htmlFor="lastName" className="text-sm font-medium text-right">Last Name</label>
+                            <label htmlFor="lastName" className="text-sm font-medium text-right">Last Name *</label>
                             <input 
                                 type="text" 
                                 id="lastName" 
@@ -111,7 +111,7 @@ const SignUpPage = () => {
                             />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
-                            <label htmlFor="email" className="text-sm font-medium text-right">Email</label>
+                            <label htmlFor="email" className="text-sm font-medium text-right">Email *</label>
                             <input 
                                 type="email" 
                                 id="email" 
@@ -125,7 +125,7 @@ const SignUpPage = () => {
                             />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
-                            <label htmlFor="password" className="text-sm font-medium text-right">Password</label>
+                            <label htmlFor="password" className="text-sm font-medium text-right">Password *</label>
                             <input 
                                 type="password" 
                                 id="password" 
@@ -139,7 +139,7 @@ const SignUpPage = () => {
                             />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
-                            <label htmlFor="passwordConfirm" className="text-sm font-medium text-right">Password Confirm</label>
+                            <label htmlFor="passwordConfirm" className="text-sm font-medium text-right">Password Confirm *</label>
                             <input 
                                 type="password" 
                                 id="passwordConfirm" 
