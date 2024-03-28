@@ -4,6 +4,7 @@ import { useCookies } from "react-cookie";
 
 import googleLogo from "../assets/images/Google__G__logo.svg";
 import { handleInputChange } from "../globals/utilityFunctions";
+import handleLogin from "../globals/login";
 
 const LoginPage = () => {
     const navigate = useNavigate();
@@ -17,57 +18,8 @@ const LoginPage = () => {
     // Cookies
     const [cookies, setCookie] = useCookies(["jwt"]);
     
-    const login = (e, loginType) => {
-        switch (loginType) {
-            case "local":
-                _loginSubmission(e, "login", JSON.stringify(formData));
-                break;
-            default:
-                _loginSubmission(e, "login-demo", JSON.stringify({}));
-                break;
-        }
-    }
 
-    // Post request to server for user authentication
-    const _loginSubmission = async(e, apiEndpoint, body) => {
-        e.preventDefault();
-        try {
-            const response = await fetch(`/api/user/${apiEndpoint}`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: body
-            })
-
-            // If sucessful, this will return a success object with the user object
-            // If not successful, this will return an error message
-            const responseData = await response.json();
-
-            // Save the JWT token in a cookie
-            if (response.ok) {              
-                const expiryDate = new Date();
-                // Set expiry date 1 day from now
-                expiryDate.setDate(expiryDate.getDate() + 1);
-
-                // Save the jwt token in a cookie
-                // The cookies are automatically sent with every HTTP request to the server
-                setCookie("jwt", responseData.token, {
-                    expires: expiryDate,
-                    path: "/",
-                });
-
-                navigate("/");
-            } else {
-                setLoginError(responseData.message);
-            }
-            
-        } catch(err) {
-            console.err("Login Error", err);
-        }
-    }
-
-    return(
+    return (
         <main className="flex flex-col justify-center items-center px-8 py-10 lg:py-24">
             <header className="mb-10 lg:mb-16">
                 <div className="flex justify-center items-center gap-4">
@@ -90,7 +42,7 @@ const LoginPage = () => {
             )}
 
             <section className="max-w-96 w-full">
-                <form className="w-full mx-auto" onSubmit={(e) => login(e, "local")}>
+                <form className="w-full mx-auto" onSubmit={(e) => handleLogin(e, "local", setCookie, setLoginError, navigate)}>
                     <div className="flex flex-col gap-2">
                         <div className="grid grid-cols-4 items-center gap-4">
                             <label htmlFor="username" className="text-sm font-medium text-right">Email *</label>
@@ -130,7 +82,7 @@ const LoginPage = () => {
                 <div className="flex-grow bg-neutral-300 h-0.5"></div> {/* Right bar */}
             </div>
             <section className="max-w-96 w-full flex flex-col gap-3 mb-4">
-                <form className="w-full mx-auto" onSubmit={(e) => login(e, "demo")}>
+                <form className="w-full mx-auto" onSubmit={(e) => handleLogin(e, "demo", setCookie, setLoginError, navigate)}>
                     <div>
                         <button type="submit" className="bg-slate-400 w-full px-6 py-2 font-medium rounded-md hover:bg-slate-500 transition ease duration-200">Demo Account</button>
                     </div>

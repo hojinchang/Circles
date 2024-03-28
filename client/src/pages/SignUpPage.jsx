@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 import googleLogo from "../assets/images/Google__G__logo.svg";
 import { handleInputChange } from "../globals/utilityFunctions";
+import handleLogin from "../globals/login";
 
 const SignUpPage = () => {
     const navigate = useNavigate();
@@ -15,6 +17,9 @@ const SignUpPage = () => {
     });
     const [formErrors, setFormErrors] = useState(null);
     const [formSubmitted, setFormSubmitted] = useState(false);
+
+    // Cookies
+    const [cookies, setCookie] = useCookies(["jwt"]);
 
     // Post request to server containing form data payload
     const emailSignUpSubmission = async(e) => {
@@ -70,7 +75,7 @@ const SignUpPage = () => {
             </section>
 
             {formErrors && formErrors.length > 0 && (
-                <section className="mb-4 self-start">
+                <section className="max-w-96 w-full mb-4">
                     <ul>
                         {formErrors.map((error, idx) => (
                             <li key={idx} className="list-disc mb-1"><p className="text-red-600">{error.msg}</p></li>
@@ -164,7 +169,7 @@ const SignUpPage = () => {
                 <div className="flex-grow bg-neutral-300 h-0.5"></div> {/* Right bar */}
             </div>
             <section className="max-w-96 w-full flex flex-col gap-3 mb-4">
-                <form className="w-full mx-auto">
+                <form className="w-full mx-auto" onSubmit={(e) => handleLogin(e, "demo", setCookie, setFormErrors, navigate)}>
                     <div>
                         <button type="submit" className="bg-slate-400 w-full px-6 py-2 font-medium rounded-md hover:bg-slate-500 transition ease duration-200">Demo Account</button>
                     </div>
