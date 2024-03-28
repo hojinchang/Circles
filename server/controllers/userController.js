@@ -10,6 +10,7 @@ const jwt = require("jsonwebtoken");
 
 // Username / Password local strategy authentication
 passport.use(
+    "local",
     new LocalStrategy(async(username, password, done) => {
         try {
             const user = await User.findOne({ email: username });
@@ -122,6 +123,7 @@ exports.sign_up_post = [
     }
 ]
 
+// Username / Password login authentication
 exports.login_post = [
     body("username")
         .trim()
@@ -175,7 +177,22 @@ exports.login_post = [
                     // {user, token} = {user: user, token: token}
                     return res.status(200).json({ success: true, user, token });
                 });
-            })
+            });
         })(req, res, next);
     }
 ]
+
+// Demo login authentication
+exports.demo_login_post = asyncHandler(async(req, res, next) => {
+   
+    const user = await User.findOne({ email: process.env.DEMO_USERNAME });
+    jwt.sign({user: user}, process.env.JWT_SECRET, (err, token) => {
+        if (err) {
+            return next(err);
+        }
+
+        res.set("Authorization", "Bearer " + token);
+
+        return res.status(200).json({ sucess: true, user, token })
+    });
+})

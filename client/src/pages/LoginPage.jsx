@@ -9,7 +9,7 @@ const LoginPage = () => {
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
-        email: '',
+        username: '',
         password: ''
     });
     const [loginError, setLoginError] = useState(null);
@@ -17,16 +17,27 @@ const LoginPage = () => {
     // Cookies
     const [cookies, setCookie] = useCookies(["jwt"]);
     
+    const login = (e, loginType) => {
+        switch (loginType) {
+            case "local":
+                _loginSubmission(e, "login", JSON.stringify(formData));
+                break;
+            default:
+                _loginSubmission(e, "login-demo", JSON.stringify({}));
+                break;
+        }
+    }
+
     // Post request to server for user authentication
-    const emailLoginSubmission = async(e) => {
+    const _loginSubmission = async(e, apiEndpoint, body) => {
         e.preventDefault();
         try {
-            const response = await fetch("/api/user/login", {
+            const response = await fetch(`/api/user/${apiEndpoint}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(formData)
+                body: body
             })
 
             // If sucessful, this will return a success object with the user object
@@ -44,7 +55,6 @@ const LoginPage = () => {
                 setCookie("jwt", responseData.token, {
                     expires: expiryDate,
                     path: "/",
-                    httpOnly: true,   // This setting is a security feature to ensure that the cookie isnt accessible via JavaScript
                 });
 
                 navigate("/");
@@ -72,7 +82,7 @@ const LoginPage = () => {
             </section>
 
             {loginError && (
-                <section className="mb-4 self-start">
+                <section className="max-w-96 w-full mb-4">
                     <ul>
                         <li className="list-disc mb-1"><p className="text-red-600">{loginError}</p></li>
                     </ul>
@@ -80,7 +90,7 @@ const LoginPage = () => {
             )}
 
             <section className="max-w-96 w-full">
-                <form className="w-full mx-auto" onSubmit={emailLoginSubmission}>
+                <form className="w-full mx-auto" onSubmit={(e) => login(e, "local")}>
                     <div className="flex flex-col gap-2">
                         <div className="grid grid-cols-4 items-center gap-4">
                             <label htmlFor="username" className="text-sm font-medium text-right">Email *</label>
@@ -120,7 +130,7 @@ const LoginPage = () => {
                 <div className="flex-grow bg-neutral-300 h-0.5"></div> {/* Right bar */}
             </div>
             <section className="max-w-96 w-full flex flex-col gap-3 mb-4">
-                <form className="w-full mx-auto">
+                <form className="w-full mx-auto" onSubmit={(e) => login(e, "demo")}>
                     <div>
                         <button type="submit" className="bg-slate-400 w-full px-6 py-2 font-medium rounded-md hover:bg-slate-500 transition ease duration-200">Demo Account</button>
                     </div>
