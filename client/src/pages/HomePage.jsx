@@ -5,7 +5,8 @@ import isAuth from "../globals/isAuth";
 
 const HomePage = () => {
     const navigate = useNavigate();
-   
+    
+    // On page load, determine if the user is authenticated
     useEffect(() => {
         isAuth("/api/", navigate);
     }, []);

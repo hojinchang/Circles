@@ -4,7 +4,6 @@ const requireAuth = (req, res, next) => {
     const token = req.cookies.jwt;
 
     if (!token) {
-        console.log("REDIRECTING!")
         return res.redirect("/login");
     }
 
@@ -15,7 +14,6 @@ const requireAuth = (req, res, next) => {
 
     } catch(err) {
         // if token is invalid or expired
-        console.log("ERROR")
         return res.redirect("/login");
     }
 }
