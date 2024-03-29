@@ -22,10 +22,6 @@ const _loginSubmission = async(e, apiEndpoint, body, setLoginError, navigate) =>
             body: body
         });
 
-        // // This is how you get the redirect status true/false and the redirect url
-        // console.log(response.redirected)
-        // console.log(response.url)
-
         // If sucessful, this will return a success object with the user object
         // If not successful, this will return an error message
         const responseData = await response.json();

@@ -171,7 +171,8 @@ exports.login_post = [
                 // Set the JWT token in an HTTP-only cookie
                 res.cookie('jwt', token, {
                     httpOnly: true,
-                    maxAge: 24 * 60 * 60 * 1000   // 24 hours 
+                    maxAge: 24 * 60 * 60 * 1000,   // 24 hours 
+                    path: "/"   // Set the cookie to be accessible from all paths
                 });
                 
                 return res.status(200).json({ success: true, user });
@@ -190,7 +191,8 @@ exports.demo_login_post = asyncHandler(async(req, res, next) => {
     // Set the JWT token in an HTTP-only cookie
     res.cookie('jwt', token, {
         httpOnly: true,
-        maxAge: 24 * 60 * 60 * 1000   // 24 hours 
+        maxAge: 24 * 60 * 60 * 1000,   // 24 hours 
+        path: "/"   // Set the cookie to be accessible from all paths
     });
     
     return res.status(200).json({ success: true, user });

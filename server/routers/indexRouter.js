@@ -1,12 +1,18 @@
-const express = require("express");
+const express = require("express")
+const jwt = require("jsonwebtoken");
 const router = express.Router();
 
-router.get('/', function(req, res, next) {
+const requireAuth = require("../middleware/requireAuth");
+
+router.get('/', requireAuth, function(req, res, next) {
     // res.redirect('/login');
     
-    console.log(req.cookies.jwt);
+    // res.clearCookie("jwt");
+    // console.log(req.cookies.jwt);
 
-    // console.log(req)
+
+    
+    return res.status(200).json({ success: true });
 });
 
 module.exports = router;
