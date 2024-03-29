@@ -165,18 +165,17 @@ exports.login_post = [
                 if (err) {
                     return next(err);
                 }
-                
-                jwt.sign({user: user}, process.env.JWT_SECRET, (err, token) => {
-                    if (err) {
-                        return next(err);
-                    }
 
-                    // Send the JWT token in the "Authorization" header
-                    res.set("Authorization", "Bearer " + token);
+                const token = jwt.sign({ user: user }, process.env.JWT_SECRET);
 
-                    // {user, token} = {user: user, token: token}
-                    return res.status(200).json({ success: true, user, token });
+                // Set the JWT token in an HTTP-only cookie
+                res.cookie('jwt', token, {
+                    httpOnly: true,
+                    maxAge: 24 * 60 * 60 * 1000   // 24 hours 
                 });
+                
+                return res.status(200).json({ success: true, user });
+                
             });
         })(req, res, next);
     }
@@ -186,13 +185,13 @@ exports.login_post = [
 exports.demo_login_post = asyncHandler(async(req, res, next) => {
    
     const user = await User.findOne({ email: process.env.DEMO_USERNAME });
-    jwt.sign({user: user}, process.env.JWT_SECRET, (err, token) => {
-        if (err) {
-            return next(err);
-        }
+    const token = jwt.sign({ user: user }, process.env.JWT_SECRET);
 
-        res.set("Authorization", "Bearer " + token);
-
-        return res.status(200).json({ sucess: true, user, token })
+    // Set the JWT token in an HTTP-only cookie
+    res.cookie('jwt', token, {
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000   // 24 hours 
     });
+    
+    return res.status(200).json({ success: true, user });
 })

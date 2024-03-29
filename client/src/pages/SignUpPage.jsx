@@ -18,9 +18,6 @@ const SignUpPage = () => {
     const [formErrors, setFormErrors] = useState(null);
     const [formSubmitted, setFormSubmitted] = useState(false);
 
-    // Cookies
-    const [cookies, setCookie] = useCookies(["jwt"]);
-
     // Post request to server containing form data payload
     const emailSignUpSubmission = async(e) => {
         e.preventDefault();
@@ -57,7 +54,6 @@ const SignUpPage = () => {
             setFormSubmitted(false);
         }
     }, [formSubmitted, formErrors]);
-
 
 
     return(
@@ -169,7 +165,7 @@ const SignUpPage = () => {
                 <div className="flex-grow bg-neutral-300 h-0.5"></div> {/* Right bar */}
             </div>
             <section className="max-w-96 w-full flex flex-col gap-3 mb-4">
-                <form className="w-full mx-auto" onSubmit={(e) => handleLogin(e, "demo", setCookie, setFormErrors, navigate)}>
+                <form className="w-full mx-auto" onSubmit={(e) => handleLogin(e, "demo", setFormErrors, navigate)}>
                     <div>
                         <button type="submit" className="bg-slate-400 w-full px-6 py-2 font-medium rounded-md hover:bg-slate-500 transition ease duration-200">Demo Account</button>
                     </div>
