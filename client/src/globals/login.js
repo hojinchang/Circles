@@ -1,16 +1,18 @@
-const handleLogin = (e, loginType, setLoginError, navigate) => {
+import { setAuthenticated } from "../features/authenticated/authenticatedSlice";
+
+const handleLogin = (e, loginType, setLoginError, dispatch, navigate) => {
     switch (loginType) {
         case "local":
-            _loginSubmission(e, "login", JSON.stringify(formData), setLoginError, navigate);
+            _loginSubmission(e, "login", JSON.stringify(formData), setLoginError, dispatch, navigate);
             break;
         default:
-            _loginSubmission(e, "login-demo", JSON.stringify({}), setLoginError, navigate);
+            _loginSubmission(e, "login-demo", JSON.stringify({}), setLoginError, dispatch, navigate);
             break;
     }
 }
 
 // Post request to server for user authentication
-const _loginSubmission = async(e, apiEndpoint, body, setLoginError, navigate) => {
+const _loginSubmission = async(e, apiEndpoint, body, setLoginError, dispatch, navigate) => {
 
     e.preventDefault();
     try {
@@ -27,9 +29,11 @@ const _loginSubmission = async(e, apiEndpoint, body, setLoginError, navigate) =>
         const responseData = await response.json();
 
         // Save the JWT token in a cookie
-        if (response.ok) {              
+        if (response.ok) {
+            dispatch(setAuthenticated(true));
             navigate("/");
         } else {
+            dispatch(setAuthenticated(false));
             setLoginError(responseData.message);
         }
         

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import axios from "axios";
+import { useSelector } from "react-redux";
 
 import HomePage from "../pages/HomePage";
 import LoginPage from "../pages/LoginPage";
@@ -10,12 +10,13 @@ import isAuth from "../globals/isAuth";
 
 const AppRouter = () => {
 
-    const [authenticated, setAuthenticated] = useState(false);
+    // const [authenticated, setAuthenticated] = useState(false);
+    const authenticated = useSelector(state => state.authenticated.value);
 
     useEffect(() => {
         const checkAuthentication = async() => {
             const isAuthenticated = await isAuth();
-            setAuthenticated(isAuthenticated);
+            // setAuthenticated(isAuthenticated);
         };
 
         checkAuthentication();
