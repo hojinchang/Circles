@@ -114,8 +114,8 @@ exports.sign_up_post = [
                 });
 
                 await user.save();
-                // Send a 200 OK status code
-                return res.status(200).json({ success: true });
+                // Send a 201 Created, request fulfilled and has resulted in a new resource being created
+                return res.status(201).json({ success: true });
             });
         } catch (err) {
             return next(err);

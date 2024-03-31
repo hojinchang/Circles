@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
 
 import googleLogo from "../assets/images/Google__G__logo.svg";
 import { handleInputChange } from "../globals/utilityFunctions";
