@@ -9,7 +9,6 @@ router.get("/", (req, res, next) => {
     // return res.status(401).json({ message: "Access Denied: No token provided." });
 
     const token = req.cookies.jwt;
-    console.log(token)
 
     // If token doesnt exist
     if (!token) {
