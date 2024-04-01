@@ -91,7 +91,7 @@ const SignUpPage = () => {
                                 name="firstName" 
                                 minLength="1"
                                 placeholder="John"
-                                onChange={(e) => handleInputChange(e, formData, setFormData)}
+                                onChange={(e) => handleInputChange(e, setFormData)}
                                 value={formData.firstName}
                                 required
                                 className="input col-span-3"
@@ -105,7 +105,7 @@ const SignUpPage = () => {
                                 name="lastName" 
                                 minLength="1"
                                 placeholder="Doe"
-                                onChange={(e) => handleInputChange(e, formData, setFormData)}
+                                onChange={(e) => handleInputChange(e, setFormData)}
                                 value={formData.lastName}
                                 required
                                 className="input col-span-3"
@@ -119,7 +119,7 @@ const SignUpPage = () => {
                                 name="email" 
                                 minLength="1"
                                 placeholder="name@example.com"
-                                onChange={(e) => handleInputChange(e, formData, setFormData)}
+                                onChange={(e) => handleInputChange(e, setFormData)}
                                 value={formData.email}
                                 required
                                 className="input col-span-3"
@@ -133,7 +133,7 @@ const SignUpPage = () => {
                                 name="password" 
                                 minLength="1"
                                 placeholder="********"
-                                onChange={(e) => handleInputChange(e, formData, setFormData)}
+                                onChange={(e) => handleInputChange(e, setFormData)}
                                 value={formData.password}
                                 required
                                 className="input col-span-3"
@@ -147,7 +147,7 @@ const SignUpPage = () => {
                                 name="passwordConfirm" 
                                 minLength="1"
                                 placeholder="********"
-                                onChange={(e) => handleInputChange(e, formData, setFormData)}
+                                onChange={(e) => handleInputChange(e, setFormData)}
                                 value={formData.passwordConfirm}
                                 required
                                 className="input col-span-3"

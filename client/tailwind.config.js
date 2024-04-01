@@ -18,6 +18,9 @@ export default {
           '700': '#3C78DC'
         }
       },
+      screens: {
+        'xs': '540px'
+      }
     },
   },
   plugins: [],

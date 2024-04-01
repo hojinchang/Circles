@@ -50,7 +50,7 @@ const LoginPage = () => {
                                 name="username" 
                                 minLength="1"
                                 placeholder="name@example.com"
-                                onChange={(e) => handleInputChange(e, formData, setFormData)}
+                                onChange={(e) => handleInputChange(e, setFormData)}
                                 required
                                 className="input col-span-3"
                             />
@@ -63,7 +63,7 @@ const LoginPage = () => {
                                 name="password" 
                                 minLength="1"
                                 placeholder="********"
-                                onChange={(e) => handleInputChange(e, formData, setFormData)}
+                                onChange={(e) => handleInputChange(e, setFormData)}
                                 required
                                 className="input col-span-3"
                             />
