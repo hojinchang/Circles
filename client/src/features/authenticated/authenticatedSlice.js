@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    value: false
+    isAuth: false
 }
 
 export const authenticatedSlice = createSlice({
@@ -9,7 +9,8 @@ export const authenticatedSlice = createSlice({
     initialState,
     reducers: {
         setAuthenticated: (state, action) => {
-            state.value = action.payload;
+            // Save the user authentication state into local storage to persist data on page reload
+            state.isAuth = action.payload;
         }
     }
 });

@@ -13,8 +13,8 @@ const handleLogin = (e, loginType, setLoginError, dispatch, navigate) => {
 
 // Post request to server for user authentication
 const _loginSubmission = async(e, apiEndpoint, body, setLoginError, dispatch, navigate) => {
-
     e.preventDefault();
+    
     try {
         const response = await fetch(`/api/user/${apiEndpoint}`, {
             method: "POST",

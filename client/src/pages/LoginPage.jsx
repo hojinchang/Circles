@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-// import { setAuthenticated } from "../features/authenticated/authenticatedSlice";
 
 import googleLogo from "../assets/images/Google__G__logo.svg";
 import { handleInputChange } from "../globals/utilityFunctions";

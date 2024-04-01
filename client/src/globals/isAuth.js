@@ -1,4 +1,5 @@
 import axios from "axios";
+import { isAuthAPIPath } from "./globalVariables";
 
 /*
     Send a get request to the server
@@ -7,7 +8,7 @@ import axios from "axios";
 */
 const isAuth = async() => {
     try {
-        const response = await axios.get("/api/isAuth");
+        const response = await axios.get(isAuthAPIPath);
         return true;
         
     } catch(err) {

@@ -1,37 +1,48 @@
 import { useState, useEffect } from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { setAuthenticated } from "../features/authenticated/authenticatedSlice";
 
 import HomePage from "../pages/HomePage";
 import LoginPage from "../pages/LoginPage";
 import SignUpPage from "../pages/SignUpPage";
+import Loading from "../components/Loading";
+import ProtectedRoute from "../components/ProtectedRoute";
 
 import isAuth from "../globals/isAuth";
 
 const AppRouter = () => {
+    const dispatch = useDispatch();
+    const [loading, setLoading] = useState(true);
 
-    // const [authenticated, setAuthenticated] = useState(false);
-    const authenticated = useSelector(state => state.authenticated.value);
-
+    // Check the authentication status on intial website load
     useEffect(() => {
         const checkAuthentication = async() => {
             const isAuthenticated = await isAuth();
-            // setAuthenticated(isAuthenticated);
+
+            (isAuthenticated)
+                ? dispatch( setAuthenticated(true) )
+                : dispatch( setAuthenticated(false) );
+
+            setLoading(false);
         };
 
         checkAuthentication();
-
     }, []);
+
+    if (loading) {
+        return (<Loading />);
+    }
     
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/" exact element={<HomePage />}></Route>
-                <Route path="/login" exact element={<LoginPage />}></Route>
-                <Route path="/sign-up" exact element={<SignUpPage />}></Route>
+                <Route path="/" element={<ProtectedRoute redirectToUnauth="/login"><HomePage /></ProtectedRoute>}></Route>
+                <Route path="/login" element={<ProtectedRoute redirectToAuth="/"><LoginPage /></ProtectedRoute>}></Route>
+                <Route path="/sign-up" element={<ProtectedRoute redirectToAuth="/"><SignUpPage /></ProtectedRoute>}></Route>
             </Routes>
         </BrowserRouter>
-    )
+    );
 }
 
 export default AppRouter;
