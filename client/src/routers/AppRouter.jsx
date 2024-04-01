@@ -8,6 +8,7 @@ import LoginPage from "../pages/LoginPage";
 import SignUpPage from "../pages/SignUpPage";
 import Loading from "../components/Loading";
 import ProtectedRoute from "../components/ProtectedRoute";
+import Footer from "../components/Footer";
 
 import isAuth from "../globals/isAuth";
 
@@ -41,6 +42,7 @@ const AppRouter = () => {
                 <Route path="/login" element={<ProtectedRoute redirectToAuth="/"><LoginPage /></ProtectedRoute>}></Route>
                 <Route path="/sign-up" element={<ProtectedRoute redirectToAuth="/"><SignUpPage /></ProtectedRoute>}></Route>
             </Routes>
+            <Footer className="" />
         </BrowserRouter>
     );
 }

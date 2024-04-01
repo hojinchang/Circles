@@ -5,7 +5,7 @@ import { handleInputChange } from "../globals/utilityFunctions";
 const HomePage = () => {
 
     const [postData, setPostData] = useState({ post: "" });
-
+    const postMaxLength = 400;
     
     return (
         <main className="p-8 max-w-3xl mx-auto xs:p-12">
@@ -32,9 +32,9 @@ const HomePage = () => {
                     </div>
                     <div className="flex justify-between w-full">
                         <p className="text-sm text-neutral-500">
-                            {postData.post.length} / {document.getElementById("post").maxLength} characters
+                            {postData.post.length} / {postMaxLength} characters
                         </p>
-                        <button type="submit" className="bg-slate-500 text-neutral-50 px-6 py-2 font-medium rounded-md hover:bg-slate-700 transition ease duration-200">Post</button>
+                        <button type="submit" className="bg-slate-500 text-neutral-50 px-6 py-2 font-medium text-sm rounded-md hover:bg-slate-700 transition ease duration-200">Post</button>
                     </div>
                 </form>
             </header>
