@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import Nav from "../components/Nav";
 import { handleInputChange } from "../globals/utilityFunctions";
 
 const HomePage = () => {
@@ -8,7 +9,7 @@ const HomePage = () => {
     const postMaxLength = 400;
     
     return (
-        <main className="p-8 max-w-3xl mx-auto xs:p-12">
+        <main className="p-8 max-w-3xl mx-auto h-full xs:p-12">
             <header className="flex flex-col gap-4">
                 <h1 className="text-4xl font-semibold">Home</h1>
                 <div>
@@ -38,6 +39,8 @@ const HomePage = () => {
                     </div>
                 </form>
             </header>
+
+            <Nav />
         </main>
     )
 };
