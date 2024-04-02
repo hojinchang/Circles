@@ -19,7 +19,6 @@ router.get("/", (req, res, next) => {
         // Token exists and is verified
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         req.user = decoded.user;
-        console.log("USER HAS BEEN AUTHENTICATED!")
         res.status(200).json({ message: "Authentication successful." });
 
     } catch(err) {

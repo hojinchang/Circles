@@ -11,8 +11,6 @@ import ProtectedRoute from "../components/ProtectedRoute";
 
 import isAuth from "../globals/isAuth";
 
-import { Suspense } from "react";
-
 const AppRouter = () => {
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(true);

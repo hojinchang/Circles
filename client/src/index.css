@@ -22,6 +22,10 @@
   @apply bg-neutral-200 font-bold;
 }
 
+.secondary-nav-item-container {
+  @apply flex justify-center align-middle gap-3 p-2 border border-neutral-300 rounded-lg;
+}
+
 .loading-wrapper {
   position: absolute;
   top: 50%;
