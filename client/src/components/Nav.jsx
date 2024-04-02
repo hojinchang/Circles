@@ -1,22 +1,37 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const Nav = () => {
     const [secondaryNavOpen, setSecondaryNavOpen] = useState(false);
+    const [user, setUser] = useState(null);
 
+    // Toggle show the secondary nav
     const toggleSecondaryNav = () => {
         setSecondaryNavOpen(!secondaryNavOpen);
     };
 
+    // Close the secondary nav when on desktop displays
     const isDesktop = (e) => {
         if (e.matches) setSecondaryNavOpen(false);
     }
 
+    // Check the width of the display
     useEffect(() => {
         const mediaQuery = window.matchMedia("(min-width: 1024px)");
         mediaQuery.addEventListener("change", isDesktop);
 
         return () => mediaQuery.removeEventListener("change", isDesktop);
+    }, []);
+
+    useEffect(() => {
+        const getUser = async() => {
+            try {
+                const response = await axios.get()
+            } catch(err) {
+                console.error("Error Getting User", err);
+            }
+        };
     }, []);
 
     return (

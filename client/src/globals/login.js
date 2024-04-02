@@ -1,12 +1,13 @@
 import { setAuthenticated } from "../features/authenticated/authenticatedSlice";
+import { localLoginAPIPath, demoLoginAPIPath } from "./globalVariables";
 
 const handleLogin = (e, loginType, setLoginError, dispatch, navigate) => {
     switch (loginType) {
         case "local":
-            _loginSubmission(e, "login", JSON.stringify(formData), setLoginError, dispatch, navigate);
+            _loginSubmission(e, localLoginAPIPath, JSON.stringify(formData), setLoginError, dispatch, navigate);
             break;
         default:
-            _loginSubmission(e, "login-demo", JSON.stringify({}), setLoginError, dispatch, navigate);
+            _loginSubmission(e, demoLoginAPIPath, JSON.stringify({}), setLoginError, dispatch, navigate);
             break;
     }
 }
@@ -16,7 +17,7 @@ const _loginSubmission = async(e, apiEndpoint, body, setLoginError, dispatch, na
     e.preventDefault();
     
     try {
-        const response = await fetch(`/api/user/${apiEndpoint}`, {
+        const response = await fetch(apiEndpoint, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
