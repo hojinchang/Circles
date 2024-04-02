@@ -7,15 +7,19 @@ import { isAuthAPIPath } from "./globalVariables";
     If the user is authenticated, the server saves the user in the request
 */
 const isAuth = async() => {
+    let isAuthenticated = null;
+
     try {
         const response = await axios.get(isAuthAPIPath);
-        return true;
+        isAuthenticated = true;
         
     } catch(err) {
         console.error("Error making API request:", err);
-        return false;
+        isAuthenticated = false;
     }
 
+
+    return isAuthenticated;
 }
 
 export default isAuth;

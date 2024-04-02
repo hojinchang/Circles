@@ -11,7 +11,7 @@ const HomePage = () => {
     return (
         <main className="p-8 max-w-3xl mx-auto h-full xs:p-12">
             <header className="flex flex-col gap-4">
-                <h1 className="text-4xl font-semibold">Home</h1>
+                <h1 className="text-4xl font-bold">Home</h1>
                 <div>
                     <p className="text-neutral-500 text-base mb-1">Welcome to your feed! Here you can connect with friends, share updates, and discover new content.</p>
                     <p className="text-neutral-500">Create a post by typing your thoughts in the input below and click the "Post" button.</p>
