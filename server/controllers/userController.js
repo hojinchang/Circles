@@ -121,7 +121,7 @@ exports.sign_up_post = [
             return next(err);
         }
     }
-]
+];
 
 // Username / Password login authentication
 exports.login_post = [
@@ -181,11 +181,10 @@ exports.login_post = [
             });
         })(req, res, next);
     }
-]
+];
 
 // Demo login authentication
 exports.demo_login_post = asyncHandler(async(req, res, next) => {
-   
     const user = await User.findOne({ email: process.env.DEMO_USERNAME });
     const token = jwt.sign({ user: user }, process.env.JWT_SECRET);
 
@@ -198,4 +197,13 @@ exports.demo_login_post = asyncHandler(async(req, res, next) => {
     });
     
     return res.status(200).json({ success: true, user });
-})
+});
+
+// Get the authenticated user
+exports.get_user = asyncHandler(async(req, res, next) => {
+    const user = await User.findOne({ _id: req.user.id });
+
+    user
+        ? res.status(200).json(user)
+        : res.status(404).json({ message: 'User not found' });
+});

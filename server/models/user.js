@@ -8,6 +8,9 @@ const UserSchema = new Schema({
     email: { type: String, required: true, minLength: 1, maxLength: 100 },
     password: { type: String, required: true, minLength: 1 },
     joinDate: { type: Date, default: Date.now }
+}, {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
 });
 
 UserSchema.virtual("fullName").get(function() {

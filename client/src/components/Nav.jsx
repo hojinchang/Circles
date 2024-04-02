@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
+import { getUserAPIPath } from "../globals/globalVariables";
+
 const Nav = () => {
     const [secondaryNavOpen, setSecondaryNavOpen] = useState(false);
     const [user, setUser] = useState(null);
@@ -27,11 +29,14 @@ const Nav = () => {
     useEffect(() => {
         const getUser = async() => {
             try {
-                const response = await axios.get()
+                const response = await axios.get(getUserAPIPath);
+                setUser(response.data);
             } catch(err) {
                 console.error("Error Getting User", err);
             }
         };
+
+        getUser();
     }, []);
 
     return (
@@ -39,8 +44,8 @@ const Nav = () => {
             <div className={`p-4 bg-neutral-50 fixed inset-0 transition-transform duration-500 transform ${secondaryNavOpen ? 'translate-y-0' : 'translate-y-full'} lg:static lg:translate-y-0 lg:p-0 lg:`}>
                 <nav className="flex flex-col gap-2 mx-auto max-w-sm h-full justify-center">
                     <div className="mb-4">
-                        <p className="font-medium text-center">Demo User</p>
-                        <p className="text-center text-neutral-500">demo@demo.com</p>
+                        <p className="font-medium text-center">{user && user.fullName}</p>
+                        <p className="text-center text-neutral-500">{user && user.email}</p>
                     </div>
                     <div>
                         <Link to="/" className="secondary-nav-item-container">
