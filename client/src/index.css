@@ -7,7 +7,7 @@
 }
 
 .nav-item-container {
-  @apply flex flex-col justify-center items-center py-2 rounded-lg lg:flex-row lg:p-2 lg:gap-4 lg:w-full lg:justify-start lg:transition lg:duration-200 lg:hover:bg-neutral-200;
+  @apply flex flex-col justify-center items-center py-2 rounded-lg lg:flex-row lg:px-4 lg:gap-4 lg:w-full lg:justify-start lg:transition lg:duration-200 lg:hover:bg-neutral-200;
 }
 
 .nav-icon {
