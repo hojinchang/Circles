@@ -7,7 +7,7 @@
 }
 
 .nav-item-container {
-  @apply flex flex-col justify-center items-center flex-1 py-2;
+  @apply flex flex-col justify-center items-center py-2 rounded-lg lg:flex-row lg:p-2 lg:gap-4 lg:w-full lg:justify-start lg:transition lg:duration-200 lg:hover:bg-neutral-200;
 }
 
 .nav-icon {
@@ -15,7 +15,7 @@
 }
 
 .nav-text {
-  @apply text-xs xs:text-sm;
+  @apply text-xs xs:text-sm lg:text-lg lg:font-medium;
 }
 
 .nav-active {
@@ -23,8 +23,10 @@
 }
 
 .secondary-nav-item-container {
-  @apply flex justify-center align-middle gap-3 p-2 border border-neutral-300 rounded-lg;
+  @apply flex justify-center align-middle gap-3 p-2 border border-neutral-300 rounded-lg lg:px-4 lg:transition lg:duration-200 lg:hover:bg-neutral-200;
 }
+
+
 
 .loading-wrapper {
   position: absolute;
