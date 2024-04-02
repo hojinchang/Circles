@@ -11,13 +11,15 @@ const isAuth = async() => {
 
     try {
         const response = await axios.get(isAuthAPIPath);
-        isAuthenticated = true;
-        
+        // If the response status is good
+        (response.status === 200) 
+            ? isAuthenticated = true
+            : isAuthenticated = false;
+            
     } catch(err) {
         console.error("Error making API request:", err);
         isAuthenticated = false;
     }
-
 
     return isAuthenticated;
 }

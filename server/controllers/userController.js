@@ -199,6 +199,19 @@ exports.demo_login_post = asyncHandler(async(req, res, next) => {
     return res.status(200).json({ success: true, user });
 });
 
+// Logout passport session and clear the JWT
+exports.logout = (req, res, next) => {
+    req.logout((err) => {
+
+        console.log("LOGGING OUT!");
+        if (err) return res.status(500).json({ message: "An error occurred during logout." });;
+
+        res.clearCookie("jwt", { httponly: true });
+        return res.status(200).json({ message: "Successfully logged out!" });
+    });
+};
+
+
 // Get the authenticated user
 exports.get_user = asyncHandler(async(req, res, next) => {
     const user = await User.findOne({ _id: req.user.id });

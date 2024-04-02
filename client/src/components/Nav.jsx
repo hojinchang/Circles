@@ -1,12 +1,16 @@
 import { useState, useEffect } from "react";
 import { NavLink, Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import axios from "axios";
 
-import { getUserAPIPath } from "../globals/globalVariables";
+import { setAuthenticated } from "../features/authenticated/authenticatedSlice";
+import { getUserAPIPath, logoutAPIPath } from "../globals/globalVariables";
+
 
 const Nav = () => {
     const [secondaryNavOpen, setSecondaryNavOpen] = useState(false);
     const [user, setUser] = useState(null);
+    const dispatch = useDispatch();
 
     // Toggle show the secondary nav
     const toggleSecondaryNav = () => {
@@ -30,7 +34,7 @@ const Nav = () => {
         const getUser = async() => {
             try {
                 const response = await axios.get(getUserAPIPath);
-                setUser(response.data);
+                if (response.status === 200) setUser(response.data);
             } catch(err) {
                 console.error("Error Getting User", err);
             }
@@ -38,6 +42,22 @@ const Nav = () => {
 
         getUser();
     }, []);
+
+
+    const logout = async(e) => {
+        e.preventDefault();
+
+        try {
+            const response = await axios.get(logoutAPIPath);
+
+            if (response.status === 200) dispatch( setAuthenticated(false) );
+            console.log("LOGGED OUT!");
+            
+        } catch(err) {
+            console.error("Error with server logout response", err);
+        }
+
+    }
 
     return (
         <div className="lg:p-16 lg:w-96 lg:min-h-full lg:border-r-2">
@@ -66,14 +86,14 @@ const Nav = () => {
                         </Link>
                     </div>
                     <div className="mt-4">
-                        <Link to="/" className="secondary-nav-item-container">
+                        <button className="secondary-nav-item-container w-full" onClick={logout}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M16 12.771h-3.091c-.542 0-.82-.188-1.055-.513l-1.244-1.674-2.029 2.199 1.008 1.562c.347.548.373.922.373 1.42v4.235h-1.962v-3.981c-.016-1.1-1.695-2.143-2.313-1.253l-1.176 1.659c-.261.372-.706.498-1.139.498h-3.372v-1.906l2.532-.001c.397 0 .741-.14.928-.586l1.126-2.75c.196-.41.46-.782.782-1.102l2.625-2.6-.741-.647c-.223-.195-.521-.277-.812-.227l-2.181.381-.342-1.599 2.992-.571c.561-.107 1.042.075 1.461.462l2.882 2.66c.456.414.924 1.136 1.654 2.215.135.199.323.477.766.477h2.328v1.642zm-2.982-5.042c1.02-.195 1.688-1.182 1.493-2.201-.172-.901-.96-1.528-1.845-1.528-1.186 0-2.07 1.078-1.85 2.234.196 1.021 1.181 1.69 2.202 1.495zm4.982-5.729v15l6 5v-20h-6z"/></svg>
                             <p className="font-medium">Logout</p>
-                        </Link>
+                        </button>
                     </div>
                 </nav>
             </div>
-            <nav className="flex justify-around items-center xl:gap-2 fixed bottom-0 left-0 right-0 bg-neutral-100 border border-neutral-400 shadow-inner lg:static lg:bg-transparent lg:flex-col lg:items-start lg:border-none lg:shadow-none lg:mt-12">
+            <nav className="flex justify-around items-center gap-2 fixed bottom-0 left-0 right-0 bg-neutral-100 border border-neutral-400 shadow-inner lg:static lg:bg-transparent lg:flex-col lg:items-start lg:border-none lg:shadow-none lg:mt-12">
                 <div className="lg:w-full">
                     <NavLink to="/" className={isActive => `nav-item-container ${isActive ? "nav-active" : ""}`}>
                         <svg className="nav-icon" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fillRule="evenodd" clipRule="evenodd"><path d="M22 11.414v12.586h-20v-12.586l-1.293 1.293-.707-.707 12-12 12 12-.707.707-1.293-1.293zm-6 11.586h5v-12.586l-9-9-9 9v12.586h5v-9h8v9zm-1-7.889h-6v7.778h6v-7.778z"/></svg>
