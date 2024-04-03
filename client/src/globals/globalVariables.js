@@ -1,29 +1,5 @@
-// Authorization API
-const isAuthAPIPath = "/api/isAuth";
+const postMaxLength = 400;
 
-// Sign up API
-const signUpAPIPath = "/api/user/sign-up";
-
-// Login API
-const localLoginAPIPath = "/api/user/login";
-const demoLoginAPIPath = "/api/user/login-demo";
-
-// Logout API
-const logoutAPIPath = "/api/user/logout";
-
-// User API
-const getUserAPIPath = "/api/user/";
-
-// Post API
-const createPostAPIPath = "/api/post/create";
-
-
-export { 
-    isAuthAPIPath,
-    signUpAPIPath,
-    localLoginAPIPath,
-    demoLoginAPIPath,
-    logoutAPIPath,
-    getUserAPIPath,
-    createPostAPIPath
-};
+export {
+    postMaxLength
+}

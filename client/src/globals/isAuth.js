@@ -1,5 +1,5 @@
 import axios from "axios";
-import { isAuthAPIPath } from "./globalVariables";
+import { isAuthAPIPath } from "./apiPaths";
 
 /*
     Send a get request to the server

@@ -2,31 +2,34 @@ import { useState, useRef } from "react";
 import axios from "axios";
 
 import Nav from "../components/Nav";
-import { handleInputChange } from "../globals/utilityFunctions";
-import { createPostAPIPath } from "../globals/globalVariables";
+import AddPostModal from "../components/AddPostModal";
+import { handleInputChange, handlePostFormSubmission } from "../globals/utilityFunctions";
+import { createPostAPIPath } from "../globals/apiPaths";
+import { postMaxLength } from "../globals/globalVariables";
 
 const HomePage = () => {
     const formRef = useRef(null);
     const [postData, setPostData] = useState({ post: "" });
-    const postMaxLength = 400;
 
-    const handleFormSubmission = async(e) => {
-        e.preventDefault();
-        try {
-            // When using axios, you dont need to JSON.stringify(data) your request body
-            const response = await axios.post(createPostAPIPath, postData);
-            formRef.current.reset();
-
-            if (response.status === 201) {
-                // Reset the post data state
-                setPostData({ post: "" });
-            }
-        } catch(err) {
-            console.error("Create Post Error", err);
-        }
-
-        setFormSubmitted(true);
+    const resetForm = () => {
+        setPostData({ post: "" });
     }
+
+    // const handleFormSubmission = async(e) => {
+    //     e.preventDefault();
+    //     try {
+    //         // When using axios, you dont need to JSON.stringify(data) your request body
+    //         const response = await axios.post(createPostAPIPath, postData);
+    //         formRef.current.reset();
+
+    //         if (response.status === 201) {
+    //             // Reset the post data state
+    //             resetForm();
+    //         }
+    //     } catch(err) {
+    //         console.error("Create Post Error", err);
+    //     }
+    // }
     
     return (
         <main className="flex min-h-screen">
@@ -39,7 +42,7 @@ const HomePage = () => {
                         <p className="text-neutral-500">Create a post by typing your thoughts in the input below and click the "Post" button.</p>
                     </div>
 
-                    <form ref={formRef} onSubmit={handleFormSubmission}>
+                    <form ref={formRef} onSubmit={(e) => { handlePostFormSubmission(e, postData, formRef, resetForm) }}>
                         <div>
                             <label htmlFor="post" className="sr-only">Post</label>
                             <textarea
@@ -62,6 +65,8 @@ const HomePage = () => {
                         </div>
                     </form>
                 </header>
+
+                <AddPostModal handlePostFormSubmission={handlePostFormSubmission} />
             </div>
         </main>
     )

@@ -5,7 +5,7 @@ import { useCookies } from "react-cookie";
 import googleLogo from "../assets/images/Google__G__logo.svg";
 import { handleInputChange } from "../globals/utilityFunctions";
 import handleLogin from "../globals/login";
-import { signUpAPIPath } from "../globals/globalVariables";
+import { signUpAPIPath } from "../globals/apiPaths";
 
 const SignUpPage = () => {
     const navigate = useNavigate();

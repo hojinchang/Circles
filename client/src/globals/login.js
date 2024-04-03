@@ -1,5 +1,5 @@
 import { setAuthenticated } from "../features/authenticated/authenticatedSlice";
-import { localLoginAPIPath, demoLoginAPIPath } from "./globalVariables";
+import { localLoginAPIPath, demoLoginAPIPath } from "./apiPaths";
 
 const handleLogin = (e, loginType, setLoginError, dispatch, navigate) => {
     switch (loginType) {

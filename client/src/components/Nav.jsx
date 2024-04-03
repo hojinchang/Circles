@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import axios from "axios";
 
 import { setAuthenticated } from "../features/authenticated/authenticatedSlice";
-import { getUserAPIPath, logoutAPIPath } from "../globals/globalVariables";
+import { getUserAPIPath, logoutAPIPath } from "../globals/apiPaths";
 
 
 const Nav = () => {
