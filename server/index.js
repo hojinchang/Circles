@@ -15,6 +15,7 @@ const authRouter = require("./routers/authRouter");
 // Load environment variables
 require("dotenv").config();
 const cache = apicache.middleware;
+const cacheMiddlware = cache("5 minutes");
 
 const app = express();
 
@@ -26,7 +27,6 @@ async function main() {
   await mongoose.connect(process.env.MONGODB_URI);
 }
 
-app.use(cache("5 minutes"));
 app.use(session({
   secret: "happy",
   resave: false, 
@@ -43,7 +43,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cookieParser());
 
 app.use("/", indexRouter);
-app.use("/user", userRouter);
+app.use("/user", cacheMiddlware, userRouter);
 app.use("/isAuth", authRouter);
 
 app.listen(5000, () => {

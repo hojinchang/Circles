@@ -30,11 +30,11 @@ const Nav = () => {
         return () => mediaQuery.removeEventListener("change", isDesktop);
     }, []);
 
+    // Get the user
     useEffect(() => {
         const getUser = async() => {
             try {
                 const response = await axios.get(getUserAPIPath);
-                console.log(response);
 
                 if (response.status === 200) setUser(response.data);
             } catch(err) {
@@ -45,15 +45,15 @@ const Nav = () => {
         getUser();
     }, []);
 
-
+    // Clientside logout function.
     const logout = async(e) => {
         e.preventDefault();
 
         try {
             const response = await axios.get(logoutAPIPath);
 
+            // If the logout is successful, set the authenicated global redux state to false
             if (response.status === 200) dispatch( setAuthenticated(false) );
-            console.log("LOGGED OUT!");
             
         } catch(err) {
             console.error("Error with server logout response", err);

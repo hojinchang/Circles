@@ -202,7 +202,6 @@ exports.demo_login_post = asyncHandler(async(req, res, next) => {
 // Logout passport session and clear the JWT
 exports.logout = (req, res, next) => {
     req.logout((err) => {
-
         if (err) return res.status(500).json({ message: "An error occurred during logout." });;
 
         res.clearCookie("jwt", { httponly: true });
