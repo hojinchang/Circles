@@ -3,7 +3,7 @@ import { useState, useRef } from "react";
 import { postMaxLength } from "../globals/globalVariables";
 import { handleInputChange } from "../globals/utilityFunctions";
 
-const AddPostModal = ({ handlePostFormSubmission, setShowCreatePostModal }) => {
+const AddPostModal = ({ handlePostFormSubmission, onCreatePostClick }) => {
     const formRef = useRef(null);
     const [postData, setPostData] = useState({ post: "" });
 
@@ -11,18 +11,27 @@ const AddPostModal = ({ handlePostFormSubmission, setShowCreatePostModal }) => {
         setPostData({ post: "" });
     }
 
-    const closeModal = () => {
-        setShowCreatePostModal(false);
-    }
-
     return (
         <>
-            <div className="absolute top-0 right-0 left-0 bottom-0 bg-black bg-opacity-80" onClick={closeModal}></div>
+            <div className="absolute top-0 right-0 left-0 bottom-0 bg-black bg-opacity-80" onClick={(e) => {
+                        e.stopPropagation();
+                        onCreatePostClick();
+                    }}></div>
             <div className="flex flex-col gap-1 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-6 rounded-xl bg-neutral-50 w-full max-w-lg">
-                <button className="absolute right-4 top-4 text-2xl text-neutral-500 transition duration-200 hover:text-neutral-950" onClick={closeModal}>&times;</button>
+                <button 
+                    className="absolute right-4 top-4 text-2xl text-neutral-500 transition duration-200 hover:text-neutral-950" 
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        onCreatePostClick();
+                    }}
+                    >&times;
+                </button>
                 <h3 className="text-lg font-bold">Create Post</h3>
                 <p className="text-neutral-500">Click "Post" when you're done.</p>
-                <form className="mt-1" ref={formRef} onSubmit={(e) => { handlePostFormSubmission(e, postData, formRef, resetForm); closeModal(); }}>
+                <form className="mt-1" ref={formRef} onSubmit={async(e) => {
+                    await handlePostFormSubmission(e, postData, formRef, resetForm); 
+                    onCreatePostClick(); 
+                }}>
                     <div>
                         <label htmlFor="post" className="sr-only">Post</label>
                         <textarea

@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 
+import ModalWrapper from "./ModalWrapper";
 import AddPostModal from "../components/AddPostModal";
 import { setAuthenticated } from "../features/authenticated/authenticatedSlice";
 import { getUserAPIPath, logoutAPIPath } from "../globals/apiPaths";
@@ -11,7 +12,7 @@ import { handlePostFormSubmission } from "../globals/utilityFunctions";
 
 const Nav = () => {
     const [secondaryNavOpen, setSecondaryNavOpen] = useState(false);
-    const [showCreatePostModal, setShowCreatePostModal] = useState(false);
+    const [createPostModalState, setCreatePostModalState] = useState("closed");
     const [user, setUser] = useState(null);
     const dispatch = useDispatch();
 
@@ -54,8 +55,15 @@ const Nav = () => {
     }, []);
 
     const onCreatePostClick = () => {
-        setShowCreatePostModal(!showCreatePostModal);
-        setSecondaryNavOpen(false);
+        if (createPostModalState === "open") {
+            setCreatePostModalState("closing");
+            setTimeout(() => {
+                setCreatePostModalState("closed");
+            }, 450);
+        } else if (createPostModalState === "closed") {
+            setSecondaryNavOpen(false);
+            setCreatePostModalState("open");
+        }
     }
 
     // Clientside logout function.
@@ -141,7 +149,11 @@ const Nav = () => {
                 </nav>
             </div>
 
-            {showCreatePostModal ? <AddPostModal handlePostFormSubmission={handlePostFormSubmission} setShowCreatePostModal={setShowCreatePostModal} /> : null }
+            {(createPostModalState !== "closed") && (
+                <ModalWrapper show={ createPostModalState === "open" }>
+                    <AddPostModal handlePostFormSubmission={ handlePostFormSubmission } onCreatePostClick={ onCreatePostClick } />
+                </ModalWrapper>
+            )}
         </>
     )
 }
