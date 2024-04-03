@@ -203,7 +203,6 @@ exports.demo_login_post = asyncHandler(async(req, res, next) => {
 exports.logout = (req, res, next) => {
     req.logout((err) => {
 
-        console.log("LOGGING OUT!");
         if (err) return res.status(500).json({ message: "An error occurred during logout." });;
 
         res.clearCookie("jwt", { httponly: true });

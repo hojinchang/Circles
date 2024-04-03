@@ -34,6 +34,8 @@ const Nav = () => {
         const getUser = async() => {
             try {
                 const response = await axios.get(getUserAPIPath);
+                console.log(response);
+
                 if (response.status === 200) setUser(response.data);
             } catch(err) {
                 console.error("Error Getting User", err);

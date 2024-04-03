@@ -5,6 +5,7 @@ const path = require("path");
 const flash = require("connect-flash");
 const session = require("express-session");
 const passport = require("passport");
+const apicache = require("apicache");
 
 // Router
 const indexRouter = require("./routers/indexRouter");
@@ -13,6 +14,7 @@ const authRouter = require("./routers/authRouter");
 
 // Load environment variables
 require("dotenv").config();
+const cache = apicache.middleware;
 
 const app = express();
 
@@ -24,6 +26,7 @@ async function main() {
   await mongoose.connect(process.env.MONGODB_URI);
 }
 
+app.use(cache("5 minutes"));
 app.use(session({
   secret: "happy",
   resave: false, 
