@@ -9,7 +9,7 @@ const demoLoginAPIPath = "/api/user/login-demo";
 const logoutAPIPath = "/api/user/logout";
 
 // User API
-const getUserAPIPath = "/api/user/get-user";
+const getUserAPIPath = "/api/user/";
 
 
 
