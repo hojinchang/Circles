@@ -61,13 +61,13 @@
   animation: sk-chase-dot-before 2.0s infinite ease-in-out both; 
 }
 
-.sk-chase-dot:nth-child(1) { animation-delay: -1.0.5s; }
+.sk-chase-dot:nth-child(1) { animation-delay: -1.0.3s; }
 .sk-chase-dot:nth-child(2) { animation-delay: -1.0s; }
 .sk-chase-dot:nth-child(3) { animation-delay: -0.9s; }
 .sk-chase-dot:nth-child(4) { animation-delay: -0.8s; }
 .sk-chase-dot:nth-child(5) { animation-delay: -0.7s; }
 .sk-chase-dot:nth-child(6) { animation-delay: -0.6s; }
-.sk-chase-dot:nth-child(1):before { animation-delay: -1.0.5s; }
+.sk-chase-dot:nth-child(1):before { animation-delay: -1.0.3s; }
 .sk-chase-dot:nth-child(2):before { animation-delay: -1.0s; }
 .sk-chase-dot:nth-child(3):before { animation-delay: -0.9s; }
 .sk-chase-dot:nth-child(4):before { animation-delay: -0.8s; }
@@ -92,20 +92,20 @@
 
 /* Modal Fade In */
 .fade-in {
-  animation: fadeIn ease 0.5s;
+  animation: fadeIn ease 0.3s;
 }
 
 @keyframes fadeIn {
-  0% {opacity:0;}
-  100% {opacity:1;}
+  0% {opacity: 0;}
+  100% {opacity: 1;}
 }
 
 /* Modal Fade Out */
 .fade-out {
-  animation: fadeOut ease 0.5s;
+  animation: fadeOut ease 0.3s;
 }
 
 @keyframes fadeOut {
-  0% {opacity:1;}
-  100% {opacity:0;}
+  0% {opacity: 1;}
+  100% {opacity: 0;}
 }

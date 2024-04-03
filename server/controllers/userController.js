@@ -209,12 +209,11 @@ exports.logout = (req, res, next) => {
     });
 };
 
-
 // Get the authenticated user
 exports.get_user = asyncHandler(async(req, res, next) => {
     const user = await User.findOne({ _id: req.user.id });
 
-    user
+    (user)
         ? res.status(200).json(user)
-        : res.status(404).json({ message: 'User not found' });
+        : res.status(404).json({ message: "User not found" });
 });

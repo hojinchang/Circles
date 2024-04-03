@@ -19,7 +19,7 @@ const AddPostModal = ({ handlePostFormSubmission, onCreatePostClick }) => {
                     }}></div>
             <div className="flex flex-col gap-1 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-6 rounded-xl bg-neutral-50 w-full max-w-lg">
                 <button 
-                    className="absolute right-4 top-4 text-2xl text-neutral-500 transition duration-200 hover:text-neutral-950" 
+                    className="leading-none absolute right-4 top-2 text-2xl text-neutral-500 transition duration-200 hover:text-neutral-950" 
                     onClick={(e) => {
                         e.stopPropagation();
                         onCreatePostClick();

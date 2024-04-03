@@ -2,6 +2,17 @@ const Post = require("../models/post");
 const asyncHandler = require("express-async-handler");
 const { body, validationResult } = require("express-validator");
 
+exports.post_get = asyncHandler(async(req, res, next) => {
+    const posts = await Post.find()
+                            .populate("user")
+                            .sort({ timeStamp: -1 })
+                            .exec();
+    
+    (posts)
+        ? res.status(200).json(posts)
+        : res.status(404).json({ message: "Posts not found" });
+});
+
 exports.create_post = [
     body("post")
         .trim()
@@ -26,4 +37,4 @@ exports.create_post = [
         await post.save();
         return res.status(201).json({ success: true });
     })
-] 
+];

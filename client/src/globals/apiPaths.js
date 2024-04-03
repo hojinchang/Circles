@@ -15,6 +15,7 @@ const logoutAPIPath = "/api/user/logout";
 const getUserAPIPath = "/api/user/";
 
 // Post API
+const getPostAPIPath = "/api/post/";
 const createPostAPIPath = "/api/post/create";
 
 
@@ -25,5 +26,6 @@ export {
     demoLoginAPIPath,
     logoutAPIPath,
     getUserAPIPath,
+    getPostAPIPath,
     createPostAPIPath
 };

@@ -29,6 +29,9 @@ const PostSchema = new Schema({
     timeStamp: { type: Date, default: Date.now },
     likes: { type: Number, default: 0 },
     comments: [CommentSchema]
+}, {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
 });
 
 PostSchema.virtual("timeStampFormatted").get(function() {
