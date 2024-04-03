@@ -1,8 +1,6 @@
 import { useState, useRef } from "react";
-import axios from "axios";
 
 import Nav from "../components/Nav";
-import AddPostModal from "../components/AddPostModal";
 import { handleInputChange, handlePostFormSubmission } from "../globals/utilityFunctions";
 import { postMaxLength } from "../globals/globalVariables";
 
@@ -12,12 +10,6 @@ const HomePage = () => {
 
     const resetForm = () => {
         setPostData({ post: "" });
-    }
-
-    const disableSubmitButton = (postData) => {
-        if (postData.post.length === 0) {
-
-        }
     }
 
     return (
@@ -60,8 +52,6 @@ const HomePage = () => {
                         </div>
                     </form>
                 </header>
-
-                <AddPostModal handlePostFormSubmission={handlePostFormSubmission} />
             </div>
         </main>
     )
