@@ -4,7 +4,6 @@ import axios from "axios";
 import Nav from "../components/Nav";
 import AddPostModal from "../components/AddPostModal";
 import { handleInputChange, handlePostFormSubmission } from "../globals/utilityFunctions";
-import { createPostAPIPath } from "../globals/apiPaths";
 import { postMaxLength } from "../globals/globalVariables";
 
 const HomePage = () => {
@@ -15,22 +14,12 @@ const HomePage = () => {
         setPostData({ post: "" });
     }
 
-    // const handleFormSubmission = async(e) => {
-    //     e.preventDefault();
-    //     try {
-    //         // When using axios, you dont need to JSON.stringify(data) your request body
-    //         const response = await axios.post(createPostAPIPath, postData);
-    //         formRef.current.reset();
+    const disableSubmitButton = (postData) => {
+        if (postData.post.length === 0) {
 
-    //         if (response.status === 201) {
-    //             // Reset the post data state
-    //             resetForm();
-    //         }
-    //     } catch(err) {
-    //         console.error("Create Post Error", err);
-    //     }
-    // }
-    
+        }
+    }
+
     return (
         <main className="flex min-h-screen">
             <Nav />
@@ -61,7 +50,13 @@ const HomePage = () => {
                             <p className="text-sm text-neutral-500">
                                 {postData.post.length} / {postMaxLength} characters
                             </p>
-                            <button type="submit" className="bg-slate-500 text-neutral-50 px-6 py-2 font-medium text-sm rounded-md hover:bg-slate-700 transition ease duration-200">Post</button>
+                            <button 
+                                type="submit" 
+                                className={`px-6 py-2 font-medium text-sm rounded-md transition ease duration-200 ${
+                                    postData.post.length === 0 ? 'bg-slate-200 text-neutral-400 cursor-not-allowed' : 'bg-slate-500 text-neutral-50 hover:bg-slate-700'
+                                }`}
+                                disabled={postData.post.length === 0}
+                            >Post</button>
                         </div>
                     </form>
                 </header>
