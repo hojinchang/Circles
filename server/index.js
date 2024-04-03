@@ -11,6 +11,7 @@ const apicache = require("apicache");
 const indexRouter = require("./routers/indexRouter");
 const userRouter = require("./routers/userRouter");
 const authRouter = require("./routers/authRouter");
+const postRouter = require("./routers/postRouter");
 
 // Load environment variables
 require("dotenv").config();
@@ -45,6 +46,7 @@ app.use(cookieParser());
 app.use("/", indexRouter);
 app.use("/user", cacheMiddlware, userRouter);
 app.use("/isAuth", authRouter);
+app.use("/post", cacheMiddlware, postRouter);
 
 app.listen(5000, () => {
     console.log("Sever started on port 5000");

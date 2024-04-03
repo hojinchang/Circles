@@ -91,7 +91,7 @@ exports.sign_up_post = [
             // if there are errors, redirect to sign up page
             if (!errors.isEmpty()) {
                 // Send a 400 bad request status code
-                return res.status(400).json({errors: errors.array()});
+                return res.status(400).json({ errors: errors.array() });
             }
 
             const registeredUser = await User.findOne({ email: req.body.email }).exec();
@@ -143,7 +143,7 @@ exports.login_post = [
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             // Send a 400 bad request status code
-            return res.status(400).json({errors: errors.array()});
+            return res.status(400).json({ errors: errors.array() });
         }
 
         next();
@@ -176,7 +176,7 @@ exports.login_post = [
                     path: "/"   // Set the cookie to be accessible from all paths
                 });
                 
-                return res.status(200).json({ success: true, user });
+                return res.status(200).json({ success: true });
                 
             });
         })(req, res, next);
@@ -196,7 +196,7 @@ exports.demo_login_post = asyncHandler(async(req, res, next) => {
         path: "/"   // Set the cookie to be accessible from all paths
     });
     
-    return res.status(200).json({ success: true, user });
+    return res.status(200).json({ success: true });
 });
 
 // Logout passport session and clear the JWT

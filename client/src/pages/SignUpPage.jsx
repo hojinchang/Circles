@@ -5,6 +5,7 @@ import { useCookies } from "react-cookie";
 import googleLogo from "../assets/images/Google__G__logo.svg";
 import { handleInputChange } from "../globals/utilityFunctions";
 import handleLogin from "../globals/login";
+import { signUpAPIPath } from "../globals/globalVariables";
 
 const SignUpPage = () => {
     const navigate = useNavigate();
@@ -23,7 +24,7 @@ const SignUpPage = () => {
         e.preventDefault();
         try {
             // Have to make requests to /api/.. as we are using a proxy
-            const response = await fetch("/api/user/sign-up", {
+            const response = await fetch(signUpAPIPath, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
