@@ -13,8 +13,9 @@ const timeFormatSettings = {
 // Comments schema
 const CommentSchema = new Schema({
     user: { type: Schema.Types.ObjectId, ref: "User", required: true },
-    post: { type: String, required: true, minLength: 1, maxLength: 280 },
+    post: { type: String, minLength: 1, maxLength: 280, required: true },
     timeStamp: { type: Date, default: Date.now },
+    likes: { type: Number, default: 0 }
 });
 
 CommentSchema.virtual("timeStampFormatted").get(function() {
@@ -24,10 +25,10 @@ CommentSchema.virtual("timeStampFormatted").get(function() {
 // Posts schema
 const PostSchema = new Schema({
     user: { type: Schema.Types.ObjectId, ref: "User", required: true },
-    post: { type: String, required: true, minLength: 1, maxLength: 280 },
+    post: { type: String, minLength: 1, maxLength: 280, required: true },
     timeStamp: { type: Date, default: Date.now, required: true },
-    comments: [CommentSchema],
-    likes: [{ type: Schema.Types.ObjectId, ref: "User" }]
+    likes: { type: Number, default: 0 },
+    comments: [CommentSchema]
 });
 
 PostSchema.virtual("timeStampFormatted").get(function() {

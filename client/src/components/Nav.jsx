@@ -36,7 +36,12 @@ const Nav = () => {
             try {
                 const response = await axios.get(getUserAPIPath);
 
-                if (response.status === 200) setUser(response.data);
+                if (response.status === 200) {
+                    setUser(response.data);
+                } else {
+                    dispatch( setAuthenticated(false) );
+                    console.error("Unexpected status code:", response.status);
+                }
             } catch(err) {
                 console.error("Error Getting User", err);
             }
