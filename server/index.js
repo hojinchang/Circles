@@ -46,7 +46,7 @@ app.use(cookieParser());
 app.use("/", indexRouter);
 app.use("/user", cacheMiddlware, userRouter);
 app.use("/isAuth", authRouter);
-app.use("/post", cacheMiddlware, postRouter);
+app.use("/post", postRouter);
 
 app.listen(5000, () => {
     console.log("Sever started on port 5000");

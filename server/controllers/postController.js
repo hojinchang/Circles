@@ -18,15 +18,10 @@ exports.create_post = [
             return res.status(400).json({ errors: errors.array() });
         }
 
-        console.log(req.body)
-
         const post = new Post({
             user: req.user,
             post: req.body.post,
         });
-
-        console.log("SAVING A POST");
-        console.log(post)
 
         await post.save();
         return res.status(201).json({ success: true });
