@@ -192,7 +192,7 @@ exports.demo_login_post = asyncHandler(async(req, res, next) => {
     res.cookie('jwt', token, {
         httpOnly: true,
         // maxAge: 24 * 60 * 60 * 1000,   // 24 hours 
-        maxAge: 60 * 60 * 1000,
+        maxAge: 1000 * 60,
         path: "/"   // Set the cookie to be accessible from all paths
     });
     

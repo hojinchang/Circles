@@ -1,7 +1,5 @@
 const Post = ({ post }) => {
     
-    // console.log(post)
-
     return (
         <article className="flex flex-col gap-2 p-4 border border-neutral-300 rounded-lg relative">
             <button className="absolute right-0 top-0 p-4 rounded-md hover:bg-neutral-300">
@@ -40,9 +38,9 @@ const Post = ({ post }) => {
                 </div>
             </div>
 
-            <div className="flex flex-col g-2 items-start p-2 border border-neutral-300 rounded-md w-24 shadow-md">
-                <button>Edit</button>
-                <button>Delete</button>
+            <div className="flex flex-col g-2 p-2 border border-neutral-300 rounded-md w-24 shadow-md">
+                <button className="hover:bg-neutral-300 w-full rounded-sm transition duration-200">Edit</button>
+                <button className="hover:bg-neutral-300 w-full rounded-sm transition duration-200">Delete</button>
             </div>
         </article>
     )

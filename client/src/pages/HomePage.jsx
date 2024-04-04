@@ -1,4 +1,7 @@
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom"
+import { useDispatch } from "react-redux";
+
 
 import Nav from "../components/Nav";
 import Post from "../components/Post";
@@ -9,6 +12,9 @@ const HomePage = () => {
     const formRef = useRef(null);
     const [postFormData, setPostFormData] = useState({ post: "" });
     const [posts, setPosts] = useState([]);
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
 
     const resetForm = () => {
         setPostFormData({ post: "" });
@@ -16,7 +22,7 @@ const HomePage = () => {
 
     // Get all of the posts on inital page load
     useEffect(() => {
-        getPosts(setPosts);
+        getPosts(setPosts, navigate, dispatch);
     }, []);
 
     return (
@@ -30,7 +36,7 @@ const HomePage = () => {
                         <p className="text-neutral-500">Create a post by typing your thoughts in the input below and click the "Post" button.</p>
                     </div>
 
-                    <form ref={formRef} onSubmit={(e) => { handlePostFormSubmission(e, postFormData, formRef, resetForm, setPosts) }}>
+                    <form ref={formRef} onSubmit={(e) => { handlePostFormSubmission(e, postFormData, formRef, resetForm, setPosts, navigate, dispatch) }}>
                         <div>
                             <label htmlFor="post" className="sr-only">Post</label>
                             <textarea

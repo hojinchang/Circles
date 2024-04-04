@@ -1,4 +1,6 @@
 import { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 import { postMaxLength } from "../globals/globalVariables";
 import { handleInputChange, handlePostFormSubmission } from "../globals/utilityFunctions";
@@ -6,6 +8,8 @@ import { handleInputChange, handlePostFormSubmission } from "../globals/utilityF
 const AddPostModal = ({ onCreatePostClick, setPosts }) => {
     const formRef = useRef(null);
     const [postData, setPostData] = useState({ post: "" });
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const resetForm = () => {
         setPostData({ post: "" });
@@ -32,7 +36,7 @@ const AddPostModal = ({ onCreatePostClick, setPosts }) => {
                 <h3 className="text-lg font-bold">Create Post</h3>
                 <p className="text-neutral-500">Click "Post" when you're done.</p>
                 <form className="mt-1" ref={formRef} onSubmit={async(e) => {
-                    await handlePostFormSubmission(e, postData, formRef, resetForm, setPosts); 
+                    await handlePostFormSubmission(e, postData, formRef, resetForm, setPosts, navigate, dispatch); 
                     onCreatePostClick(); 
                 }}>
                     <div>
