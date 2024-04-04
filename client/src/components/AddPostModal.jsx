@@ -12,7 +12,7 @@ const AddPostModal = ({ onCreatePostClick, setPosts }) => {
     }
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-80"
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-80 z-10"
             onClick={(e) => {
                 e.stopPropagation();
                 onCreatePostClick();

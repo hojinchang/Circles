@@ -83,7 +83,7 @@ const Nav = ({ setPosts }) => {
     return (
         <>
             <div className="lg:p-16 lg:w-96 lg:min-h-full lg:border-r-2 relative">
-                <div className={`p-4 bg-neutral-50 fixed inset-0 transition-transform duration-500 transform ${secondaryNavOpen ? 'translate-y-0' : 'translate-y-full'} lg:static lg:translate-y-0 lg:p-0 lg:`}>
+                <div className={`p-4 bg-neutral-50 fixed inset-0 transition-transform duration-500 transform ${secondaryNavOpen ? 'translate-y-0' : 'translate-y-full'} lg:static lg:translate-y-0 lg:p-0 z-10`}>
                     <nav className="flex flex-col gap-2 mx-auto max-w-sm h-full justify-center">
                         <div className="mb-4">
                             <p className="font-medium text-center">{user && user.fullName}</p>
@@ -123,7 +123,7 @@ const Nav = ({ setPosts }) => {
                         </div>
                     </nav>
                 </div>
-                <nav className="flex justify-around items-center gap-2 fixed bottom-0 left-0 right-0 bg-neutral-100 border border-neutral-400 shadow-inner lg:static lg:bg-transparent lg:flex-col lg:items-start lg:border-none lg:shadow-none lg:mt-12">
+                <nav className="flex justify-around items-center gap-2 fixed bottom-0 left-0 right-0 z-10 bg-neutral-100 border border-neutral-400 shadow-inner lg:static lg:bg-transparent lg:flex-col lg:items-start lg:border-none lg:shadow-none lg:mt-12">
                     <div className="lg:w-full">
                         <NavLink to="/" className={isActive => `nav-item-container ${isActive ? "nav-active" : ""}`}>
                             <svg className="nav-icon" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fillRule="evenodd" clipRule="evenodd" aria-hidden="true">
