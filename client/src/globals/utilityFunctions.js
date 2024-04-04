@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { createPostAPIPath } from "./apiPaths";
+import { createPostAPIPath, getPostAPIPath } from "./apiPaths";
 
 // dynamically set the formData state as the user types into the input
 const handleInputChange = (e, setFormData) => {
@@ -11,7 +11,7 @@ const handleInputChange = (e, setFormData) => {
     }));
 }
 
-const handlePostFormSubmission = async(e, postData, formRef, resetForm) => {
+const handlePostFormSubmission = async(e, postData, formRef, resetForm, setPosts) => {
     e.preventDefault();
     try {
         // When using axios, you dont need to JSON.stringify(data) your request body
@@ -19,6 +19,7 @@ const handlePostFormSubmission = async(e, postData, formRef, resetForm) => {
         formRef.current.reset();
 
         if (response.status === 201) {
+            getPosts(setPosts);
             // Reset the post data state
             resetForm();
         }
@@ -27,7 +28,24 @@ const handlePostFormSubmission = async(e, postData, formRef, resetForm) => {
     }
 }
 
+const getPosts = async(setPosts) => {
+    try {
+        const response = await axios.get(getPostAPIPath);
+
+        if (response.status === 200) {
+            setPosts(response.data);
+        } else {
+            console.error("Unexpected status code:", response.status);
+        }
+
+    } catch(err) {
+        console.error("Error Getting Posts", err);
+    }
+}
+
+
 export {
     handleInputChange,
-    handlePostFormSubmission
+    handlePostFormSubmission,
+    getPosts
 }

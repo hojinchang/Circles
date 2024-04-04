@@ -1,10 +1,9 @@
 import { useState, useEffect, useRef } from "react";
-import axios from "axios";
 
 import Nav from "../components/Nav";
-import { handleInputChange, handlePostFormSubmission } from "../globals/utilityFunctions";
+import Post from "../components/Post";
+import { handleInputChange, handlePostFormSubmission, getPosts } from "../globals/utilityFunctions";
 import { postMaxLength } from "../globals/globalVariables";
-import { getPostAPIPath } from "../globals/apiPaths";
 
 const HomePage = () => {
     const formRef = useRef(null);
@@ -13,30 +12,16 @@ const HomePage = () => {
 
     const resetForm = () => {
         setPostFormData({ post: "" });
-    }
+    };
 
+    // Get all of the posts on inital page load
     useEffect(() => {
-        const getPosts = async() => {
-            try {
-                const response = await axios.get(getPostAPIPath);
-
-                if (response.status === 200) {
-                    setPosts(response.data);
-                } else {
-                    console.error("Unexpected status code:", response.status);
-                }
-
-            } catch(err) {
-                console.error("Error Getting Posts", err);
-            }
-        }
-
-        getPosts();
+        getPosts(setPosts);
     }, []);
 
     return (
         <main className="flex min-h-screen">
-            <Nav />
+            <Nav setPosts={ setPosts }/>
             <div className="p-8 max-w-3xl mx-auto h-full xs:p-12">
                 <header className="flex flex-col gap-4">
                     <h1 className="text-4xl font-bold">Home</h1>
@@ -45,7 +30,7 @@ const HomePage = () => {
                         <p className="text-neutral-500">Create a post by typing your thoughts in the input below and click the "Post" button.</p>
                     </div>
 
-                    <form ref={formRef} onSubmit={(e) => { handlePostFormSubmission(e, postFormData, formRef, resetForm) }}>
+                    <form ref={formRef} onSubmit={(e) => { handlePostFormSubmission(e, postFormData, formRef, resetForm, setPosts) }}>
                         <div>
                             <label htmlFor="post" className="sr-only">Post</label>
                             <textarea
@@ -75,18 +60,9 @@ const HomePage = () => {
                     </form>
                 </header>
 
-                <section>
+                <section className="flex flex-col gap-8 mt-16">
                     {posts.length > 0 && posts.map((post) => (
-                        // console.log(post)
-
-                        <article key={post.id}>
-                            <div>
-                                <p>{post.user.fullName}</p>
-                                <p>{post.user.email}</p>
-                                <p>{post.post}</p>
-                                <p>{post.timeStampFormatted}</p>
-                            </div>
-                        </article>
+                        <Post key={post.id} post={post} />
                     ))}
                 </section>
             </div>

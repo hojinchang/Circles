@@ -1,9 +1,9 @@
 import { useState, useRef } from "react";
 
 import { postMaxLength } from "../globals/globalVariables";
-import { handleInputChange } from "../globals/utilityFunctions";
+import { handleInputChange, handlePostFormSubmission } from "../globals/utilityFunctions";
 
-const AddPostModal = ({ handlePostFormSubmission, onCreatePostClick }) => {
+const AddPostModal = ({ onCreatePostClick, setPosts }) => {
     const formRef = useRef(null);
     const [postData, setPostData] = useState({ post: "" });
 
@@ -12,12 +12,15 @@ const AddPostModal = ({ handlePostFormSubmission, onCreatePostClick }) => {
     }
 
     return (
-        <>
-            <div className="absolute top-0 right-0 left-0 bottom-0 bg-black bg-opacity-80" onClick={(e) => {
-                        e.stopPropagation();
-                        onCreatePostClick();
-                    }}></div>
-            <div className="flex flex-col gap-1 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-6 rounded-xl bg-neutral-50 w-full max-w-lg">
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-80"
+            onClick={(e) => {
+                e.stopPropagation();
+                onCreatePostClick();
+                }}
+        >
+            <div className="flex flex-col gap-1 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-6 rounded-xl bg-neutral-50 w-full max-w-lg"
+                onClick={(e) => e.stopPropagation()}
+            >
                 <button 
                     className="leading-none absolute right-4 top-2 text-2xl text-neutral-500 transition duration-200 hover:text-neutral-950" 
                     onClick={(e) => {
@@ -29,7 +32,7 @@ const AddPostModal = ({ handlePostFormSubmission, onCreatePostClick }) => {
                 <h3 className="text-lg font-bold">Create Post</h3>
                 <p className="text-neutral-500">Click "Post" when you're done.</p>
                 <form className="mt-1" ref={formRef} onSubmit={async(e) => {
-                    await handlePostFormSubmission(e, postData, formRef, resetForm); 
+                    await handlePostFormSubmission(e, postData, formRef, resetForm, setPosts); 
                     onCreatePostClick(); 
                 }}>
                     <div>
@@ -60,7 +63,7 @@ const AddPostModal = ({ handlePostFormSubmission, onCreatePostClick }) => {
                     </div>
                 </form>
             </div>
-        </>
+        </div>  
     )
 }
 
