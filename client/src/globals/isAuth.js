@@ -7,21 +7,18 @@ import { isAuthAPIPath } from "./apiPaths";
     If the user is authenticated, the server saves the user in the request
 */
 const isAuth = async() => {
-    let isAuthenticated = null;
+    let authUser = null;
 
     try {
         const response = await axios.get(isAuthAPIPath);
         // If the response status is good
-        (response.status === 200) 
-            ? isAuthenticated = true
-            : isAuthenticated = false;
+        if (response.status === 200) authUser = response.data.user;
             
     } catch(err) {
         console.error("Error Authenticating User", err);
-        isAuthenticated = false;
     }
 
-    return isAuthenticated;
+    return authUser;
 }
 
 export default isAuth;

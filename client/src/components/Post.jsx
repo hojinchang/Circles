@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom"
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import escapeHtml from 'escape-html';
 
 import DeletePostModal from "./DeletePostModal";
 import ModalWrapper from "./ModalWrapper";
@@ -12,6 +13,9 @@ const Post = ({ post }) => {
     const [optionFadeOut, setOptionFadeOut] = useState(false);
     const [deleteModalFadeOut, setDeleteModalFadeOut] = useState(false);
     const postRef = useRef(null);
+
+    // Get the current user ID from Redux
+    const currentUserId = useSelector(state => state.authenticated.isAuth);
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -40,22 +44,25 @@ const Post = ({ post }) => {
     
     return (
         <article ref={postRef} className="flex flex-col gap-2 p-4 border border-neutral-300 rounded-lg relative">
-            <button className="absolute right-0 top-0 p-4 rounded-md hover:bg-neutral-300" onClick={ () => handlePopups( optionOpen, setOptionOpen, setOptionFadeOut ) }>
-                <svg className="w-4 h-4 text-neutral-700" fill="currentColor" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 41.91 41.91" xmlSpace="preserve">
-                    <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-                    <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
-                    <g id="SVGRepo_iconCarrier"> <g> <g> 
-                        <path d="M11.214,20.956c0,3.091-2.509,5.589-5.607,5.589C2.51,26.544,0,24.046,0,20.956c0-3.082,2.511-5.585,5.607-5.585 C8.705,15.371,11.214,17.874,11.214,20.956z"></path> 
-                        <path d="M26.564,20.956c0,3.091-2.509,5.589-5.606,5.589c-3.097,0-5.607-2.498-5.607-5.589c0-3.082,2.511-5.585,5.607-5.585 C24.056,15.371,26.564,17.874,26.564,20.956z"></path> 
-                        <path d="M41.915,20.956c0,3.091-2.509,5.589-5.607,5.589c-3.097,0-5.606-2.498-5.606-5.589c0-3.082,2.511-5.585,5.606-5.585 C39.406,15.371,41.915,17.874,41.915,20.956z"></path> 
-                    </g> </g> </g>
-                </svg>
-            </button>
+            {(post.user.id === currentUserId) && (
+                <button className="absolute right-0 top-0 p-4 rounded-md hover:bg-neutral-300" onClick={ () => handlePopups( optionOpen, setOptionOpen, setOptionFadeOut ) }>
+                    <svg className="w-4 h-4 text-neutral-700" fill="currentColor" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 41.91 41.91" xmlSpace="preserve">
+                        <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                        <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
+                        <g id="SVGRepo_iconCarrier"> <g> <g> 
+                            <path d="M11.214,20.956c0,3.091-2.509,5.589-5.607,5.589C2.51,26.544,0,24.046,0,20.956c0-3.082,2.511-5.585,5.607-5.585 C8.705,15.371,11.214,17.874,11.214,20.956z"></path> 
+                            <path d="M26.564,20.956c0,3.091-2.509,5.589-5.606,5.589c-3.097,0-5.607-2.498-5.607-5.589c0-3.082,2.511-5.585,5.607-5.585 C24.056,15.371,26.564,17.874,26.564,20.956z"></path> 
+                            <path d="M41.915,20.956c0,3.091-2.509,5.589-5.607,5.589c-3.097,0-5.606-2.498-5.606-5.589c0-3.082,2.511-5.585,5.606-5.585 C39.406,15.371,41.915,17.874,41.915,20.956z"></path> 
+                        </g> </g> </g>
+                    </svg>
+                </button>
+            )}
             <div>
                 <p>{post.user.fullName}</p>
                 <p className="text-neutral-500">{post.user.email}</p>
             </div>
-            <p className="text-lg font-normal">{post.post}</p>
+            {/* <p className="text-lg font-normal">{post.post}</p> */}
+            <p className="text-lg font-normal" dangerouslySetInnerHTML={{ __html: escapeHtml(post.post) }}></p>
             <p className="text-neutral-500">{post.timeStampFormatted}</p>
             <div className="flex gap-6">
                 <div className="flex items-center gap-2">

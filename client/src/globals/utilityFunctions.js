@@ -8,7 +8,7 @@ import { setPosts } from "../features/posts/postsSlice";
 // If user isnt authenticated, set the global authenticated state to false and redirect
 const removeAuthandRedirect = (errorContext, err, navigate, dispatch) => {
     navigate("/login");
-    dispatch(setAuthenticated(false));
+    dispatch( setAuthenticated(null) );
     console.error(errorContext, err);
 }
 

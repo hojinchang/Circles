@@ -176,8 +176,7 @@ exports.login_post = [
                     path: "/"   // Set the cookie to be accessible from all paths
                 });
                 
-                return res.status(200).json({ success: true });
-                
+                return res.status(200).json({ success: true, user: user.id });
             });
         })(req, res, next);
     }
@@ -196,7 +195,7 @@ exports.demo_login_post = asyncHandler(async(req, res, next) => {
         path: "/"   // Set the cookie to be accessible from all paths
     });
     
-    return res.status(200).json({ success: true });
+    return res.status(200).json({ success: true, user: user.id });
 });
 
 // Logout passport session and clear the JWT

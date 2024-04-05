@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const isAuth = (req, res, next) => {
 
     const token = req.cookies.jwt;
-
+    
     // If token doesnt exist
     if (!token) {
         return res.status(401).json({ message: "No token" });

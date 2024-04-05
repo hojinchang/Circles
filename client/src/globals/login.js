@@ -30,10 +30,10 @@ const _loginSubmission = async(e, apiEndpoint, body, setLoginError, dispatch, na
 
         // Save the JWT token in a cookie
         if (response.ok) {
-            dispatch(setAuthenticated(true));
+            dispatch( setAuthenticated(responseData.user) );
             navigate("/");
         } else {
-            dispatch(setAuthenticated(false));
+            dispatch(setAuthenticated(null));
             setLoginError(responseData.message);
         }
         

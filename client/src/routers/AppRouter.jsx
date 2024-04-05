@@ -18,11 +18,11 @@ const AppRouter = () => {
     // Check the authentication status on intial website load
     useEffect(() => {
         const checkAuthentication = async() => {
-            const isAuthenticated = await isAuth();
+            const authUser = await isAuth();
 
-            (isAuthenticated)
-                ? dispatch( setAuthenticated(true) )
-                : dispatch( setAuthenticated(false) );
+            (authUser)
+                ? dispatch( setAuthenticated(authUser) )
+                : dispatch( setAuthenticated(null) );
 
             setLoading(false);
         };

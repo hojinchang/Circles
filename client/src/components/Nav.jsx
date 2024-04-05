@@ -34,8 +34,8 @@ const Nav = () => {
         try {
             const response = await axios.get(logoutAPIPath);
 
-            // If the logout is successful, set the authenicated global redux state to false
-            if (response.status === 200) dispatch( setAuthenticated(false) );
+            // If the logout is successful, set the authenicated global redux state to null
+            if (response.status === 200) dispatch( setAuthenticated(null) );
             
         } catch(err) {
             console.error("Error with server logout response", err);

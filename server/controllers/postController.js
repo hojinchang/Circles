@@ -1,7 +1,7 @@
 const Post = require("../models/post");
 const asyncHandler = require("express-async-handler");
 const { body, validationResult } = require("express-validator");
-const escape = require("escape-html");
+const sanitizeHtml = require('sanitize-html');
 
 // Get all posts
 exports.post_get = asyncHandler(async(req, res, next) => {
@@ -22,8 +22,8 @@ exports.create_post = [
         .isLength({ min: 1 })
         .withMessage("Post content is required")
         .isLength({ max: 400 })
-        .withMessage("Post cannot exceed 400 characters")
-        .escape(),
+        .withMessage("Post cannot exceed 400 characters"),
+        // .escape(),
     
     asyncHandler(async(req, res, next) => {
         const errors = validationResult(req);
@@ -32,9 +32,11 @@ exports.create_post = [
             return res.status(400).json({ errors: errors.array() });
         }
 
+        const sanitizedPost = sanitizeHtml(req.body.post);
+
         const post = new Post({
             user: req.user,
-            post: req.body.post,
+            post: sanitizedPost,
         });
 
         await post.save();
