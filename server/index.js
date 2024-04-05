@@ -47,7 +47,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cookieParser());
 
 app.use("/", indexRouter);
-app.use("/user", cacheMiddlware, userRouter);
+app.use("/user", userRouter);
 app.use("/isAuth", authRouter);
 app.use("/post", isAuth, postRouter);
 

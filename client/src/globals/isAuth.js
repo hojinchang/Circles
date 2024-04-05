@@ -17,7 +17,7 @@ const isAuth = async() => {
             : isAuthenticated = false;
             
     } catch(err) {
-        console.error("Error making API request:", err);
+        console.error("Error Authenticating User", err);
         isAuthenticated = false;
     }
 

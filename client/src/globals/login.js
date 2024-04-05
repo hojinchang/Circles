@@ -1,15 +1,14 @@
 import { setAuthenticated } from "../features/authenticated/authenticatedSlice";
 import { localLoginAPIPath, demoLoginAPIPath } from "./apiPaths";
 
-const handleLogin = (e, loginType, setLoginError, dispatch, navigate) => {
-    switch (loginType) {
-        case "local":
-            _loginSubmission(e, localLoginAPIPath, JSON.stringify(formData), setLoginError, dispatch, navigate);
-            break;
-        default:
-            _loginSubmission(e, demoLoginAPIPath, JSON.stringify({}), setLoginError, dispatch, navigate);
-            break;
-    }
+const handleLogin = (e, loginType, formData, setLoginError, dispatch, navigate) => {
+    let apiPath;
+    (loginType === "local")
+        ? apiPath = localLoginAPIPath
+        : apiPath = demoLoginAPIPath;
+
+    _loginSubmission(e, apiPath, JSON.stringify(formData), setLoginError, dispatch, navigate);
+    
 }
 
 // Post request to server for user authentication

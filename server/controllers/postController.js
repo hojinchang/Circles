@@ -1,6 +1,7 @@
 const Post = require("../models/post");
 const asyncHandler = require("express-async-handler");
 const { body, validationResult } = require("express-validator");
+const escape = require("escape-html");
 
 // Get all posts
 exports.post_get = asyncHandler(async(req, res, next) => {

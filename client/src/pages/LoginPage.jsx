@@ -40,7 +40,7 @@ const LoginPage = () => {
             )}
 
             <section className="max-w-96 w-full">
-                <form className="w-full mx-auto" onSubmit={(e) => handleLogin(e, "local", setLoginError, dispatch, navigate)}>
+                <form className="w-full mx-auto" onSubmit={(e) => handleLogin(e, "local", formData, setLoginError, dispatch, navigate)}>
                     <div className="flex flex-col gap-2">
                         <div className="grid grid-cols-4 items-center gap-4">
                             <label htmlFor="username" className="text-sm font-medium text-right">Email *</label>
@@ -80,7 +80,7 @@ const LoginPage = () => {
                 <div className="flex-grow bg-neutral-300 h-0.5"></div> {/* Right bar */}
             </div>
             <section className="max-w-96 w-full flex flex-col gap-3 mb-4">
-                <form className="w-full mx-auto" onSubmit={(e) => handleLogin(e, "demo", setLoginError, dispatch, navigate)}>
+                <form className="w-full mx-auto" onSubmit={(e) => handleLogin(e, "demo", {}, setLoginError, dispatch, navigate)}>
                     <div>
                         <button type="submit" className="bg-slate-400 w-full px-6 py-2 font-medium rounded-md hover:bg-slate-500 transition ease duration-200">Demo Account</button>
                     </div>
