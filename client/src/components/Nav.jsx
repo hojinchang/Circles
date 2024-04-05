@@ -10,7 +10,7 @@ import { getUserAPIPath, logoutAPIPath } from "../globals/apiPaths";
 import { handlePopups } from "../globals/utilityFunctions";
 
 
-const Nav = ({ setPosts }) => {
+const Nav = () => {
     const [secondaryNavOpen, setSecondaryNavOpen] = useState(false);
     const [user, setUser] = useState(null);
     const [postModalOpen, setPostModalOpen] = useState(false);
@@ -159,7 +159,7 @@ const Nav = ({ setPosts }) => {
 
             {postModalOpen && (
                 <ModalWrapper fadeOut={fadeOut} toggleModal={ () => handlePopups( postModalOpen, setPostModalOpen, setFadeOut ) }>
-                    <AddPostModal toggleModal={ () => handlePopups( postModalOpen, setPostModalOpen, setFadeOut ) } setPosts={ setPosts } />
+                    <AddPostModal toggleModal={ () => handlePopups( postModalOpen, setPostModalOpen, setFadeOut ) } />
                 </ModalWrapper>
 
             )}

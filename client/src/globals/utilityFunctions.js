@@ -2,6 +2,7 @@ import axios from "axios";
 
 import { createPostAPIPath, getPostAPIPath } from "./apiPaths";
 import { setAuthenticated } from "../features/authenticated/authenticatedSlice";
+import { setPosts } from "../features/posts/postsSlice";
 
 
 // If user isnt authenticated, set the global authenticated state to false and redirect
@@ -26,7 +27,6 @@ const handlePostFormSubmission = async(
     postData, 
     formRef, 
     resetForm, 
-    setPosts, 
     navigate, 
     dispatch
 ) => {
@@ -38,7 +38,8 @@ const handlePostFormSubmission = async(
 
         // If the response is good, save the posts into the posts state
         if (response.status === 201) {
-            getPosts(setPosts);
+            // Update the global redux posts state with the new post
+            getPosts(navigate, dispatch);
             // Reset the post data state
             resetForm();
         }
@@ -49,31 +50,32 @@ const handlePostFormSubmission = async(
 }
 
 // Send get request to server to get all of the posts
-const getPosts = async(setPosts, navigate, dispatch) => {
+const getPosts = async(navigate, dispatch) => {
     try {
         const response = await axios.get(getPostAPIPath);
 
         if (response.status === 200) {
-            setPosts(response.data);
+            // Save the posts into the posts global redux state
+            dispatch( setPosts(response.data) );
         } else {
             console.error("Unexpected status code:", response.status);
         }
-
     } catch(err) {
         // If user isnt authenticated
         removeAuthandRedirect("Error Getting Posts", err, navigate, dispatch);
     }
-}
+} 
 
+// Send a delete request to server for a specific post id
 const deletePost = async(postID, navigate, dispatch) => {
     try {
-        const response = axios.delete(getPostAPIPath + `/${postID}`);
+        const response = await axios.delete(getPostAPIPath + `/${postID}`);
         
-        // if (response.status === 200) {
-        //     setPosts(response.data);
-        // } else {
-        //     console.error("Unexpected status code:", response.status);
-        // }
+        if (response.status === 200) {
+            getPosts(navigate, dispatch);
+        } else {
+            console.error("Unexpected status code:", response.status);
+        }
 
     } catch(err) {
         // If user isnt authenticated

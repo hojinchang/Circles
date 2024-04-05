@@ -16,6 +16,7 @@ const Post = ({ post }) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
+    // Wrapper function to delete specific post given id
     const deletePostHandler = () => {
         deletePost(post.id, navigate, dispatch);
     }
@@ -27,7 +28,7 @@ const Post = ({ post }) => {
                 setOptionFadeOut(true);
                 setTimeout(() => {
                     setOptionOpen(false);
-                }, 300);
+                }, 275);
             }
         };
 

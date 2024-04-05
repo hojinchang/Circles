@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom"
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 
 import Nav from "../components/Nav";
@@ -11,23 +11,23 @@ import { postMaxLength } from "../globals/globalVariables";
 const HomePage = () => {
     const formRef = useRef(null);
     const [postFormData, setPostFormData] = useState({ post: "" });
-    const [posts, setPosts] = useState([]);
+    const posts = useSelector(state => state.posts.posts);
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-
+    // Reset the form after submission
     const resetForm = () => {
         setPostFormData({ post: "" });
     };
 
     // Get all of the posts on inital page load
     useEffect(() => {
-        getPosts(setPosts, navigate, dispatch);
+        getPosts(navigate, dispatch);
     }, []);
 
     return (
         <main className="flex min-h-screen">
-            <Nav setPosts={ setPosts }/>
+            <Nav />
             <div className="p-8 max-w-3xl mx-auto h-full xs:p-12">
                 <header className="flex flex-col gap-4">
                     <h1 className="text-4xl font-bold">Home</h1>
@@ -36,7 +36,7 @@ const HomePage = () => {
                         <p className="text-neutral-500">Create a post by typing your thoughts in the input below and click the "Post" button.</p>
                     </div>
 
-                    <form ref={formRef} onSubmit={(e) => { handlePostFormSubmission(e, postFormData, formRef, resetForm, setPosts, navigate, dispatch) }}>
+                    <form ref={formRef} onSubmit={(e) => { handlePostFormSubmission(e, postFormData, formRef, resetForm, navigate, dispatch) }}>
                         <div>
                             <label htmlFor="post" className="sr-only">Post</label>
                             <textarea
