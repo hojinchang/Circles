@@ -7,12 +7,12 @@ import { handleInputChange, handlePostFormSubmission } from "../globals/utilityF
 
 const AddPostModal = ({ toggleModal }) => {
     const formRef = useRef(null);
-    const [postData, setPostData] = useState({ post: "" });
+    const [postFormData, setPostFormData] = useState({ post: "" });
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const resetForm = () => {
-        setPostData({ post: "" });
+        setPostFormData({ post: "" });
     }
 
     return (
@@ -30,7 +30,7 @@ const AddPostModal = ({ toggleModal }) => {
                 <h3 className="text-lg font-bold">Create Post</h3>
                 <p className="text-neutral-500">Click "Post" when you're done.</p>
                 <form className="mt-1" ref={formRef} onSubmit={async(e) => {
-                    await handlePostFormSubmission(e, postData, formRef, resetForm, navigate, dispatch); 
+                    await handlePostFormSubmission(e, postFormData, formRef, resetForm, navigate, dispatch); 
                     toggleModal(); 
                 }}>
                     <div>
@@ -43,20 +43,20 @@ const AddPostModal = ({ toggleModal }) => {
                             rows="4"
                             maxLength={postMaxLength}
                             placeholder="Share your thoughts..."
-                            onChange={(e) => handleInputChange(e, setPostData)}
+                            onChange={(e) => handleInputChange(e, setPostFormData)}
                             required
                         ></textarea>
                     </div>
                     <div className="flex justify-between w-full">
                         <p className="text-sm text-neutral-500">
-                            {postData.post.length} / {postMaxLength} characters
+                            {postFormData.post.length} / {postMaxLength} characters
                         </p>
                         <button 
                             type="submit" 
                             className={`px-6 py-2 font-medium text-sm rounded-md transition ease duration-200 ${
-                                postData.post.length === 0 ? 'bg-slate-200 text-neutral-400 cursor-not-allowed' : 'bg-slate-500 text-neutral-50 hover:bg-slate-700'
+                                postFormData.post.length === 0 ? 'bg-slate-200 text-neutral-400 cursor-not-allowed' : 'bg-slate-700 text-neutral-50 hover:bg-slate-500'
                             }`}
-                            disabled={postData.post.length === 0}
+                            disabled={postFormData.post.length === 0}
                         >Post</button>
                     </div>
                 </form>

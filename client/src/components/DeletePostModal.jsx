@@ -1,7 +1,8 @@
 const DeletePostModal = ({ toggleModal, deletePost }) => {
 
     return (
-        <div className="modal"
+        <div 
+            className="modal"
             onClick={(e) => e.stopPropagation()}
         >
             <h3 className="text-lg font-bold">Confirm Delete</h3>
@@ -14,7 +15,9 @@ const DeletePostModal = ({ toggleModal, deletePost }) => {
                         deletePost();
                         toggleModal();
                     }}
-                >Delete Post</button>
+                >
+                    Delete Post
+                </button>
             </div>
         </div>
     );

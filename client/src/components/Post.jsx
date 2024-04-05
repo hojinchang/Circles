@@ -4,13 +4,16 @@ import { useDispatch, useSelector } from "react-redux";
 import escapeHtml from 'escape-html';
 
 import DeletePostModal from "./DeletePostModal";
+import EditPostModal from "./EditPostModal";
 import ModalWrapper from "./ModalWrapper";
 import { handlePopups, deletePost } from "../globals/utilityFunctions";
 
 const Post = ({ post }) => {
     const [optionOpen, setOptionOpen] = useState(false);
+    const [updateModalOpen, setUpdateModalOpen] = useState(false);
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [optionFadeOut, setOptionFadeOut] = useState(false);
+    const [updateModalFadeOut, setUpdateModalFadeOut] = useState(false);
     const [deleteModalFadeOut, setDeleteModalFadeOut] = useState(false);
     const postRef = useRef(null);
 
@@ -93,15 +96,31 @@ const Post = ({ post }) => {
 
             {optionOpen && (
                 <div className={`flex flex-col absolute right-0 top-12 z-10 g-2 border bg-neutral-50 border-neutral-300 rounded-md w-24 shadow-md ${optionFadeOut ? 'fade-out' : 'fade-in'}`}>
-                    <button className="py-1 text-sm hover:bg-neutral-300 w-full rounded-sm transition duration-200">Edit</button>
+                    <button 
+                        className="py-1 text-sm hover:bg-neutral-300 w-full rounded-sm transition duration-200"
+                        onClick={() => {
+                            handlePopups( updateModalOpen, setUpdateModalOpen, setUpdateModalFadeOut );
+                            handlePopups( optionOpen, setOptionOpen, setOptionFadeOut );
+                        }}
+                    >
+                        Edit
+                    </button>
                     <button 
                         className="py-1 text-sm hover:bg-neutral-300 w-full rounded-sm transition duration-200" 
                         onClick={() => {
                             handlePopups( deleteModalOpen, setDeleteModalOpen, setDeleteModalFadeOut );
-                            handlePopups( optionOpen, setOptionOpen, setOptionFadeOut )
+                            handlePopups( optionOpen, setOptionOpen, setOptionFadeOut );
                         }}
-                    >Delete</button>
+                    >
+                        Delete
+                    </button>
                 </div>
+            )}
+
+            {updateModalOpen && (
+                <ModalWrapper fadeOut={ updateModalFadeOut } toggleModal={ () => handlePopups( updateModalOpen, setUpdateModalOpen, setUpdateModalFadeOut ) } >
+                    <EditPostModal postId={post.id} toggleModal={ () => handlePopups( updateModalOpen, setUpdateModalOpen, setUpdateModalFadeOut ) } />
+                </ModalWrapper>
             )}
 
             {deleteModalOpen && (

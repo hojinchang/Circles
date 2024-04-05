@@ -4,7 +4,7 @@ const { body, validationResult } = require("express-validator");
 const sanitizeHtml = require('sanitize-html');
 
 // Get all posts
-exports.post_get = asyncHandler(async(req, res, next) => {
+exports.posts_get = asyncHandler(async(req, res, next) => {
     const posts = await Post.find()
                             .populate("user")
                             .sort({ timeStamp: -1 })
@@ -44,6 +44,17 @@ exports.create_post = [
     })
 ];
 
+exports.post_get = asyncHandler(async(req, res, next) => {
+    const postId = req.params.id;
+    const post = await Post.findById(postId);
+
+    res.status(200).json({ success: true, post: post });
+});
+
+// Update a post
+exports.post_update = [
+
+]
 // Delete post
 exports.post_delete =  asyncHandler(async(req, res, next) => {
     const postId = req.params.id;

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { createPostAPIPath, getPostAPIPath } from "./apiPaths";
+import { createPostAPIPath, getPostsAPIPath } from "./apiPaths";
 import { setAuthenticated } from "../features/authenticated/authenticatedSlice";
 import { setPosts } from "../features/posts/postsSlice";
 
@@ -44,7 +44,7 @@ const handlePostFormSubmission = async(
             resetForm();
         }
     } catch(err) {
-        // If user isnt authenticated
+        // If user isnt authenpostIdticated
         removeAuthandRedirect("Create Post Error", err, navigate, dispatch)
     }
 }
@@ -52,7 +52,7 @@ const handlePostFormSubmission = async(
 // Send get request to server to get all of the posts
 const getPosts = async(navigate, dispatch) => {
     try {
-        const response = await axios.get(getPostAPIPath);
+        const response = await axios.get(getPostsAPIPath);
 
         if (response.status === 200) {
             // Save the posts into the posts global redux state
@@ -62,14 +62,31 @@ const getPosts = async(navigate, dispatch) => {
         }
     } catch(err) {
         // If user isnt authenticated
-        removeAuthandRedirect("Error Getting Posts", err, navigate, dispatch);
+        removeAuthandRedirect("Error Retrieving Posts", err, navigate, dispatch);
     }
 } 
 
-// Send a delete request to server for a specific post id
-const deletePost = async(postID, navigate, dispatch) => {
+// Retrieve a specific post
+const getPost = async(postId, setPost, navigate, dispatch) => {
     try {
-        const response = await axios.delete(getPostAPIPath + `/${postID}`);
+        const response = await axios.get(getPostsAPIPath + `/${postId}`);
+
+        if (response.status === 200) {
+            setPost(response.data.post);
+        } else {
+            console.error("Unexpected status code:", response.status);
+        }
+
+    } catch(err) {
+        // If user isnt authenticated
+        removeAuthandRedirect(`Error Retrieving Post ${postId}`, err, navigate, dispatch);
+    }
+}
+
+// Send a delete request to server for a specific post id
+const deletePost = async(postId, navigate, dispatch) => {
+    try {
+        const response = await axios.delete(getPostsAPIPath + `/${postId}`);
         
         if (response.status === 200) {
             getPosts(navigate, dispatch);
@@ -103,6 +120,7 @@ export {
     handleInputChange,
     handlePostFormSubmission,
     getPosts,
+    getPost,
     deletePost,
     handlePopups
 }
