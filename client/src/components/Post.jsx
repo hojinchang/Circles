@@ -1,8 +1,10 @@
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom"
+import { useDispatch } from "react-redux";
 
 import DeletePostModal from "./DeletePostModal";
 import ModalWrapper from "./ModalWrapper";
-import { handlePopups } from "../globals/utilityFunctions";
+import { handlePopups, deletePost } from "../globals/utilityFunctions";
 
 const Post = ({ post }) => {
     const [optionOpen, setOptionOpen] = useState(false);
@@ -10,6 +12,13 @@ const Post = ({ post }) => {
     const [optionFadeOut, setOptionFadeOut] = useState(false);
     const [deleteModalFadeOut, setDeleteModalFadeOut] = useState(false);
     const postRef = useRef(null);
+
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    const deletePostHandler = () => {
+        deletePost(post.id, navigate, dispatch);
+    }
 
     // Close options when clicked outside of the post article
     useEffect(() => {
@@ -69,17 +78,19 @@ const Post = ({ post }) => {
             {optionOpen && (
                 <div className={`flex flex-col absolute right-0 top-12 z-10 g-2 border bg-neutral-50 border-neutral-300 rounded-md w-24 shadow-md ${optionFadeOut ? 'fade-out' : 'fade-in'}`}>
                     <button className="py-1 text-sm hover:bg-neutral-300 w-full rounded-sm transition duration-200">Edit</button>
-                    <button className="py-1 text-sm hover:bg-neutral-300 w-full rounded-sm transition duration-200" onClick={() => {
-                        handlePopups( deleteModalOpen, setDeleteModalOpen, setDeleteModalFadeOut );
-                        handlePopups( optionOpen, setOptionOpen, setOptionFadeOut )
-                    }}
+                    <button 
+                        className="py-1 text-sm hover:bg-neutral-300 w-full rounded-sm transition duration-200" 
+                        onClick={() => {
+                            handlePopups( deleteModalOpen, setDeleteModalOpen, setDeleteModalFadeOut );
+                            handlePopups( optionOpen, setOptionOpen, setOptionFadeOut )
+                        }}
                     >Delete</button>
                 </div>
             )}
 
             {deleteModalOpen && (
                 <ModalWrapper fadeOut={ deleteModalFadeOut } toggleModal={ () => handlePopups( deleteModalOpen, setDeleteModalOpen, setDeleteModalFadeOut ) }>
-                    <DeletePostModal toggleModal={ () => handlePopups( deleteModalOpen, setDeleteModalOpen, setDeleteModalFadeOut ) } />
+                    <DeletePostModal toggleModal={ () => handlePopups( deleteModalOpen, setDeleteModalOpen, setDeleteModalFadeOut ) } deletePost={ deletePostHandler } />
                 </ModalWrapper>
             )}
         </article>

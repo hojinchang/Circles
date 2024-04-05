@@ -4,6 +4,13 @@ import { createPostAPIPath, getPostAPIPath } from "./apiPaths";
 import { setAuthenticated } from "../features/authenticated/authenticatedSlice";
 
 
+// If user isnt authenticated, set the global authenticated state to false and redirect
+const removeAuthandRedirect = (errorContext, err, navigate, dispatch) => {
+    navigate("/login");
+    dispatch(setAuthenticated(false));
+    console.error(errorContext, err);
+}
+
 // dynamically set the formData state as the user types into the input
 const handleInputChange = (e, setFormData) => {
     const { name, value } = e.target;
@@ -37,9 +44,7 @@ const handlePostFormSubmission = async(
         }
     } catch(err) {
         // If user isnt authenticated
-        navigate("/login");
-        dispatch(setAuthenticated(false));
-        console.error("Create Post Error", err);
+        removeAuthandRedirect("Create Post Error", err, navigate, dispatch)
     }
 }
 
@@ -56,12 +61,27 @@ const getPosts = async(setPosts, navigate, dispatch) => {
 
     } catch(err) {
         // If user isnt authenticated
-        navigate("/login");
-        dispatch(setAuthenticated(false));
-        console.error("Error Getting Posts", err);
+        removeAuthandRedirect("Error Getting Posts", err, navigate, dispatch);
     }
 }
 
+const deletePost = async(postID, navigate, dispatch) => {
+    try {
+        const response = axios.delete(getPostAPIPath + `/${postID}`);
+        
+        // if (response.status === 200) {
+        //     setPosts(response.data);
+        // } else {
+        //     console.error("Unexpected status code:", response.status);
+        // }
+
+    } catch(err) {
+        // If user isnt authenticated
+        removeAuthandRedirect("Error Deleting Post", err, navigate, dispatch);
+    }
+}
+
+// This function handles the fade in/out of the popup modals
 const handlePopups = (isOpen, setIsOpen, setFadeOut) => {
     // If the option is open, set the fade out animation
     if (isOpen) {
@@ -76,9 +96,11 @@ const handlePopups = (isOpen, setIsOpen, setFadeOut) => {
     }
 }
 
+
 export {
     handleInputChange,
     handlePostFormSubmission,
     getPosts,
+    deletePost,
     handlePopups
 }
