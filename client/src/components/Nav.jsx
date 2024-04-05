@@ -58,7 +58,7 @@ const Nav = ({ setPosts }) => {
             setCreatePostModalState("closing");
             setTimeout(() => {
                 setCreatePostModalState("closed");
-            }, 250);
+            }, 275);
         } else if (createPostModalState === "closed") {
             setSecondaryNavOpen(false);
             setCreatePostModalState("open");

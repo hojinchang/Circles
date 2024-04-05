@@ -16,7 +16,7 @@ const AddPostModal = ({ onCreatePostClick, setPosts }) => {
     }
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-80 z-10"
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-80 z-20"
             onClick={(e) => {
                 e.stopPropagation();
                 onCreatePostClick();
@@ -47,7 +47,7 @@ const AddPostModal = ({ onCreatePostClick, setPosts }) => {
                             name="post"
                             cols="20" 
                             rows="4"
-                            maxLength="400"
+                            maxLength={postMaxLength}
                             placeholder="Share your thoughts..."
                             onChange={(e) => handleInputChange(e, setPostData)}
                             required

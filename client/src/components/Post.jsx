@@ -1,8 +1,46 @@
+import { useState, useEffect, useRef } from "react";
+
 const Post = ({ post }) => {
+    const [optionOpen, setOptionOpen] = useState(false);
+    const [fadeOut, setFadeOut] = useState(false);
+    const postRef = useRef(null);
+
+    // Open/close the options using the options button
+    const onOptionsClick = () => {
+        // If the option is open, set the fade out animation
+        if (optionOpen) {
+            setFadeOut(true);
+            setTimeout(() => {
+                setOptionOpen(false);
+            }, 300);
+        } else {
+            // Else, just toggle it on
+            setOptionOpen(true);
+            setFadeOut(false);
+        }
+
+    }
+
+    // Close options when clicked outside
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (postRef.current && !postRef.current.contains(e.target)) {
+                setFadeOut(true);
+                setTimeout(() => {
+                    setOptionOpen(false);
+                }, 300);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [postRef]);
     
     return (
-        <article className="flex flex-col gap-2 p-4 border border-neutral-300 rounded-lg relative">
-            <button className="absolute right-0 top-0 p-4 rounded-md hover:bg-neutral-300">
+        <article ref={postRef} className="flex flex-col gap-2 p-4 border border-neutral-300 rounded-lg relative">
+            <button className="absolute right-0 top-0 p-4 rounded-md hover:bg-neutral-300" onClick={onOptionsClick}>
                 <svg className="w-4 h-4 text-neutral-700" fill="currentColor" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 41.91 41.91" xmlSpace="preserve">
                     <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
                     <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
@@ -38,10 +76,13 @@ const Post = ({ post }) => {
                 </div>
             </div>
 
-            <div className="flex flex-col g-2 p-2 border border-neutral-300 rounded-md w-24 shadow-md">
-                <button className="hover:bg-neutral-300 w-full rounded-sm transition duration-200">Edit</button>
-                <button className="hover:bg-neutral-300 w-full rounded-sm transition duration-200">Delete</button>
-            </div>
+            {optionOpen && (
+                <div className={`flex flex-col absolute right-0 top-12 z-10 g-2 border bg-neutral-50 border-neutral-300 rounded-md w-24 shadow-md ${fadeOut ? 'fade-out' : 'fade-in'}`}>
+                    <button className="py-1 text-sm hover:bg-neutral-300 w-full rounded-sm transition duration-200">Edit</button>
+                    <button className="py-1 text-sm hover:bg-neutral-300 w-full rounded-sm transition duration-200">Delete</button>
+                </div>
+            )}
+        
         </article>
     )
 }
