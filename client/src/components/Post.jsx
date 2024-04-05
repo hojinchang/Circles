@@ -25,6 +25,11 @@ const Post = ({ post }) => {
         deletePost(post.id, navigate, dispatch);
     }
 
+    // Convert special characters to HTML tags and convert newline to <br>
+    const formatContent = (content) => {
+        return escapeHtml(content).replace(/\n/g, '<br>');
+    };
+
     // Close options when clicked outside of the post article
     useEffect(() => {
         const handleClickOutside = (e) => {
@@ -61,8 +66,11 @@ const Post = ({ post }) => {
                 <p>{post.user.fullName}</p>
                 <p className="text-neutral-500">{post.user.email}</p>
             </div>
-            {/* <p className="text-lg font-normal">{post.post}</p> */}
-            <p className="text-lg font-normal" dangerouslySetInnerHTML={{ __html: escapeHtml(post.post) }}></p>
+            {/* 
+                CLient side escaping.
+                Use dangerouslySetInnerHTML to convert special characters into their HTML entitites
+            */}
+            <p className="text-lg font-normal" dangerouslySetInnerHTML={{ __html: formatContent(post.post) }}></p>
             <p className="text-neutral-500">{post.timeStampFormatted}</p>
             <div className="flex gap-6">
                 <div className="flex items-center gap-2">
