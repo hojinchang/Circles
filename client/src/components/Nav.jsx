@@ -11,8 +11,9 @@ import { getUserAPIPath, logoutAPIPath } from "../globals/apiPaths";
 
 const Nav = ({ setPosts }) => {
     const [secondaryNavOpen, setSecondaryNavOpen] = useState(false);
-    const [createPostModalState, setCreatePostModalState] = useState("closed");
     const [user, setUser] = useState(null);
+    const [postModalOpen, setPostModalOpen] = useState(false);
+    const [fadeOut, setFadeOut] = useState(false);
     const dispatch = useDispatch();
 
     // Toggle show the secondary nav
@@ -23,6 +24,34 @@ const Nav = ({ setPosts }) => {
     // Close the secondary nav when on desktop displays
     const isDesktop = (e) => {
         if (e.matches) setSecondaryNavOpen(false);
+    }
+
+    // Handle the opening/closing of the create post modal
+    const onCreatePostClick = () => {
+        if (postModalOpen) {
+            setFadeOut(true);
+            setTimeout(() => {
+               setPostModalOpen(false); 
+            }, 300);
+        } else {
+            setPostModalOpen(true);
+            setFadeOut(false);
+        }
+    }
+
+    // Clientside logout function.
+    const logout = async(e) => {
+        e.preventDefault();
+
+        try {
+            const response = await axios.get(logoutAPIPath);
+
+            // If the logout is successful, set the authenicated global redux state to false
+            if (response.status === 200) dispatch( setAuthenticated(false) );
+            
+        } catch(err) {
+            console.error("Error with server logout response", err);
+        }
     }
 
     // Check the width of the display
@@ -53,32 +82,6 @@ const Nav = ({ setPosts }) => {
         getUser();
     }, []);
 
-    const onCreatePostClick = () => {
-        if (createPostModalState === "open") {
-            setCreatePostModalState("closing");
-            setTimeout(() => {
-                setCreatePostModalState("closed");
-            }, 275);
-        } else if (createPostModalState === "closed") {
-            setSecondaryNavOpen(false);
-            setCreatePostModalState("open");
-        }
-    }
-
-    // Clientside logout function.
-    const logout = async(e) => {
-        e.preventDefault();
-
-        try {
-            const response = await axios.get(logoutAPIPath);
-
-            // If the logout is successful, set the authenicated global redux state to false
-            if (response.status === 200) dispatch( setAuthenticated(false) );
-            
-        } catch(err) {
-            console.error("Error with server logout response", err);
-        }
-    }
 
     return (
         <>
@@ -106,7 +109,7 @@ const Nav = ({ setPosts }) => {
                             </NavLink>
                         </div>
                         <div>
-                            <button className="secondary-nav-item-container w-full" onClick={onCreatePostClick}>
+                            <button className="secondary-nav-item-container w-full" onClick={ onCreatePostClick }>
                                 <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fillRule="evenodd" clipRule="evenodd" aria-hidden="true">
                                     <path d="M8.071 21.586l-7.071 1.414 1.414-7.071 14.929-14.929 5.657 5.657-14.929 14.929zm-.493-.921l-4.243-4.243-1.06 5.303 5.303-1.06zm9.765-18.251l-13.3 13.301 4.242 4.242 13.301-13.3-4.243-4.243z"/>
                                 </svg>
@@ -114,7 +117,7 @@ const Nav = ({ setPosts }) => {
                             </button>
                         </div>
                         <div className="mt-4">
-                            <button className="secondary-nav-item-container w-full" onClick={logout}>
+                            <button className="secondary-nav-item-container w-full" onClick={ logout }>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
                                     <path d="M16 12.771h-3.091c-.542 0-.82-.188-1.055-.513l-1.244-1.674-2.029 2.199 1.008 1.562c.347.548.373.922.373 1.42v4.235h-1.962v-3.981c-.016-1.1-1.695-2.143-2.313-1.253l-1.176 1.659c-.261.372-.706.498-1.139.498h-3.372v-1.906l2.532-.001c.397 0 .741-.14.928-.586l1.126-2.75c.196-.41.46-.782.782-1.102l2.625-2.6-.741-.647c-.223-.195-.521-.277-.812-.227l-2.181.381-.342-1.599 2.992-.571c.561-.107 1.042.075 1.461.462l2.882 2.66c.456.414.924 1.136 1.654 2.215.135.199.323.477.766.477h2.328v1.642zm-2.982-5.042c1.02-.195 1.688-1.182 1.493-2.201-.172-.901-.96-1.528-1.845-1.528-1.186 0-2.07 1.078-1.85 2.234.196 1.021 1.181 1.69 2.202 1.495zm4.982-5.729v15l6 5v-20h-6z"/>
                                 </svg>
@@ -166,10 +169,11 @@ const Nav = ({ setPosts }) => {
                 </nav>
             </div>
 
-            {(createPostModalState !== "closed") && (
-                <ModalWrapper show={ createPostModalState === "open" }>
-                    <AddPostModal onCreatePostClick={ onCreatePostClick } setPosts={ setPosts } />
+            {postModalOpen && (
+                <ModalWrapper fadeOut={fadeOut} toggleModal={ onCreatePostClick }>
+                    <AddPostModal toggleModal={ onCreatePostClick } setPosts={ setPosts } />
                 </ModalWrapper>
+
             )}
         </>
     )

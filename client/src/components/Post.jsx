@@ -1,5 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 
+import DeletePostModal from "./DeletePostModal";
+import ModalWrapper from "./ModalWrapper";
+
 const Post = ({ post }) => {
     const [optionOpen, setOptionOpen] = useState(false);
     const [fadeOut, setFadeOut] = useState(false);
@@ -82,7 +85,10 @@ const Post = ({ post }) => {
                     <button className="py-1 text-sm hover:bg-neutral-300 w-full rounded-sm transition duration-200">Delete</button>
                 </div>
             )}
-        
+
+            {/* <ModalWrapper >
+                <DeletePostModal />
+            </ModalWrapper> */}
         </article>
     )
 }

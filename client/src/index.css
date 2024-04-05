@@ -26,6 +26,10 @@
   @apply flex justify-center align-middle gap-3 p-2 border border-neutral-300 rounded-lg lg:px-4 lg:transition lg:duration-200 lg:hover:bg-neutral-200;
 }
 
+.modal {
+  @apply flex flex-col gap-1 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-6 rounded-xl bg-neutral-50 w-full max-w-lg;
+}
+
 
 
 .loading-wrapper {

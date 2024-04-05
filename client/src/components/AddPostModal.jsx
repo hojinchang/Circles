@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { postMaxLength } from "../globals/globalVariables";
 import { handleInputChange, handlePostFormSubmission } from "../globals/utilityFunctions";
 
-const AddPostModal = ({ onCreatePostClick, setPosts }) => {
+const AddPostModal = ({ toggleModal, setPosts }) => {
     const formRef = useRef(null);
     const [postData, setPostData] = useState({ post: "" });
     const navigate = useNavigate();
@@ -16,20 +16,14 @@ const AddPostModal = ({ onCreatePostClick, setPosts }) => {
     }
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-80 z-20"
-            onClick={(e) => {
-                e.stopPropagation();
-                onCreatePostClick();
-                }}
-        >
-            <div className="flex flex-col gap-1 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-6 rounded-xl bg-neutral-50 w-full max-w-lg"
-                onClick={(e) => e.stopPropagation()}
+            <div className="modal"
+                onClick={(e) => e.stopPropagation()}   // This prevents clicking of inside the modal to close the modal
             >
                 <button 
                     className="leading-none absolute right-4 top-2 text-2xl text-neutral-500 transition duration-200 hover:text-neutral-950" 
                     onClick={(e) => {
                         e.stopPropagation();
-                        onCreatePostClick();
+                        toggleModal();
                     }}
                     >&times;
                 </button>
@@ -37,7 +31,7 @@ const AddPostModal = ({ onCreatePostClick, setPosts }) => {
                 <p className="text-neutral-500">Click "Post" when you're done.</p>
                 <form className="mt-1" ref={formRef} onSubmit={async(e) => {
                     await handlePostFormSubmission(e, postData, formRef, resetForm, setPosts, navigate, dispatch); 
-                    onCreatePostClick(); 
+                    toggleModal(); 
                 }}>
                     <div>
                         <label htmlFor="post" className="sr-only">Post</label>
@@ -67,7 +61,6 @@ const AddPostModal = ({ onCreatePostClick, setPosts }) => {
                     </div>
                 </form>
             </div>
-        </div>  
     )
 }
 
