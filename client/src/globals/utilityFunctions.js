@@ -13,6 +13,7 @@ const handleInputChange = (e, setFormData) => {
     }));
 }
 
+// Send post request to server when form is submitted
 const handlePostFormSubmission = async(
     e, 
     postData, 
@@ -35,12 +36,14 @@ const handlePostFormSubmission = async(
             resetForm();
         }
     } catch(err) {
+        // If user isnt authenticated
         navigate("/login");
         dispatch(setAuthenticated(false));
         console.error("Create Post Error", err);
     }
 }
 
+// Send get request to server to get all of the posts
 const getPosts = async(setPosts, navigate, dispatch) => {
     try {
         const response = await axios.get(getPostAPIPath);
@@ -52,15 +55,30 @@ const getPosts = async(setPosts, navigate, dispatch) => {
         }
 
     } catch(err) {
+        // If user isnt authenticated
         navigate("/login");
         dispatch(setAuthenticated(false));
         console.error("Error Getting Posts", err);
     }
 }
 
+const handlePopups = (isOpen, setIsOpen, setFadeOut) => {
+    // If the option is open, set the fade out animation
+    if (isOpen) {
+        setFadeOut(true);
+        setTimeout(() => {
+            setIsOpen(false);
+        }, 275);
+    } else {
+        // Else, just toggle it on
+        setIsOpen(true);
+        setFadeOut(false);
+    }
+}
 
 export {
     handleInputChange,
     handlePostFormSubmission,
-    getPosts
+    getPosts,
+    handlePopups
 }

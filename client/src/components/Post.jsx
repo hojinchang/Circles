@@ -2,33 +2,20 @@ import { useState, useEffect, useRef } from "react";
 
 import DeletePostModal from "./DeletePostModal";
 import ModalWrapper from "./ModalWrapper";
+import { handlePopups } from "../globals/utilityFunctions";
 
 const Post = ({ post }) => {
     const [optionOpen, setOptionOpen] = useState(false);
-    const [fadeOut, setFadeOut] = useState(false);
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+    const [optionFadeOut, setOptionFadeOut] = useState(false);
+    const [deleteModalFadeOut, setDeleteModalFadeOut] = useState(false);
     const postRef = useRef(null);
 
-    // Open/close the options using the options button
-    const onOptionsClick = () => {
-        // If the option is open, set the fade out animation
-        if (optionOpen) {
-            setFadeOut(true);
-            setTimeout(() => {
-                setOptionOpen(false);
-            }, 300);
-        } else {
-            // Else, just toggle it on
-            setOptionOpen(true);
-            setFadeOut(false);
-        }
-
-    }
-
-    // Close options when clicked outside
+    // Close options when clicked outside of the post article
     useEffect(() => {
         const handleClickOutside = (e) => {
             if (postRef.current && !postRef.current.contains(e.target)) {
-                setFadeOut(true);
+                setOptionFadeOut(true);
                 setTimeout(() => {
                     setOptionOpen(false);
                 }, 300);
@@ -43,7 +30,7 @@ const Post = ({ post }) => {
     
     return (
         <article ref={postRef} className="flex flex-col gap-2 p-4 border border-neutral-300 rounded-lg relative">
-            <button className="absolute right-0 top-0 p-4 rounded-md hover:bg-neutral-300" onClick={onOptionsClick}>
+            <button className="absolute right-0 top-0 p-4 rounded-md hover:bg-neutral-300" onClick={ () => handlePopups( optionOpen, setOptionOpen, setOptionFadeOut ) }>
                 <svg className="w-4 h-4 text-neutral-700" fill="currentColor" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 41.91 41.91" xmlSpace="preserve">
                     <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
                     <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
@@ -80,15 +67,21 @@ const Post = ({ post }) => {
             </div>
 
             {optionOpen && (
-                <div className={`flex flex-col absolute right-0 top-12 z-10 g-2 border bg-neutral-50 border-neutral-300 rounded-md w-24 shadow-md ${fadeOut ? 'fade-out' : 'fade-in'}`}>
+                <div className={`flex flex-col absolute right-0 top-12 z-10 g-2 border bg-neutral-50 border-neutral-300 rounded-md w-24 shadow-md ${optionFadeOut ? 'fade-out' : 'fade-in'}`}>
                     <button className="py-1 text-sm hover:bg-neutral-300 w-full rounded-sm transition duration-200">Edit</button>
-                    <button className="py-1 text-sm hover:bg-neutral-300 w-full rounded-sm transition duration-200">Delete</button>
+                    <button className="py-1 text-sm hover:bg-neutral-300 w-full rounded-sm transition duration-200" onClick={() => {
+                        handlePopups( deleteModalOpen, setDeleteModalOpen, setDeleteModalFadeOut );
+                        handlePopups( optionOpen, setOptionOpen, setOptionFadeOut )
+                    }}
+                    >Delete</button>
                 </div>
             )}
 
-            {/* <ModalWrapper >
-                <DeletePostModal />
-            </ModalWrapper> */}
+            {deleteModalOpen && (
+                <ModalWrapper fadeOut={ deleteModalFadeOut } toggleModal={ () => handlePopups( deleteModalOpen, setDeleteModalOpen, setDeleteModalFadeOut ) }>
+                    <DeletePostModal toggleModal={ () => handlePopups( deleteModalOpen, setDeleteModalOpen, setDeleteModalFadeOut ) } />
+                </ModalWrapper>
+            )}
         </article>
     )
 }

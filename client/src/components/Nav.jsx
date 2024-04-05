@@ -7,6 +7,7 @@ import ModalWrapper from "./ModalWrapper";
 import AddPostModal from "../components/AddPostModal";
 import { setAuthenticated } from "../features/authenticated/authenticatedSlice";
 import { getUserAPIPath, logoutAPIPath } from "../globals/apiPaths";
+import { handlePopups } from "../globals/utilityFunctions";
 
 
 const Nav = ({ setPosts }) => {
@@ -24,19 +25,6 @@ const Nav = ({ setPosts }) => {
     // Close the secondary nav when on desktop displays
     const isDesktop = (e) => {
         if (e.matches) setSecondaryNavOpen(false);
-    }
-
-    // Handle the opening/closing of the create post modal
-    const onCreatePostClick = () => {
-        if (postModalOpen) {
-            setFadeOut(true);
-            setTimeout(() => {
-               setPostModalOpen(false); 
-            }, 300);
-        } else {
-            setPostModalOpen(true);
-            setFadeOut(false);
-        }
     }
 
     // Clientside logout function.
@@ -109,7 +97,7 @@ const Nav = ({ setPosts }) => {
                             </NavLink>
                         </div>
                         <div>
-                            <button className="secondary-nav-item-container w-full" onClick={ onCreatePostClick }>
+                            <button className="secondary-nav-item-container w-full" onClick={ () => handlePopups(postModalOpen, setPostModalOpen, setFadeOut) }>
                                 <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fillRule="evenodd" clipRule="evenodd" aria-hidden="true">
                                     <path d="M8.071 21.586l-7.071 1.414 1.414-7.071 14.929-14.929 5.657 5.657-14.929 14.929zm-.493-.921l-4.243-4.243-1.06 5.303 5.303-1.06zm9.765-18.251l-13.3 13.301 4.242 4.242 13.301-13.3-4.243-4.243z"/>
                                 </svg>
@@ -170,8 +158,8 @@ const Nav = ({ setPosts }) => {
             </div>
 
             {postModalOpen && (
-                <ModalWrapper fadeOut={fadeOut} toggleModal={ onCreatePostClick }>
-                    <AddPostModal toggleModal={ onCreatePostClick } setPosts={ setPosts } />
+                <ModalWrapper fadeOut={fadeOut} toggleModal={ () => handlePopups( postModalOpen, setPostModalOpen, setFadeOut ) }>
+                    <AddPostModal toggleModal={ () => handlePopups( postModalOpen, setPostModalOpen, setFadeOut ) } setPosts={ setPosts } />
                 </ModalWrapper>
 
             )}
