@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom"
+import { useNavigate, Link } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux";
 
 
@@ -26,10 +26,10 @@ const HomePage = () => {
     }, []);
 
     return (
-        <main className="flex min-h-screen">
+        <main className="main">
             <Nav />
-            <div className="p-8 pb-24 max-w-3xl mx-auto h-full xs:p-12 xs:pb-28 lg:p-8">
-                <header className="flex flex-col gap-4">
+            <div className="p-8 pb-24 max-w-3xl mx-auto w-full h-full xs:p-12 xs:pb-28 lg:p-8">
+                <section className="flex flex-col gap-4">
                     <h1 className="text-4xl font-bold">Home</h1>
                     <div>
                         <p className="text-neutral-500 text-base mb-1">Welcome to your feed! Here you can connect with friends, share updates, and discover new content.</p>
@@ -64,11 +64,13 @@ const HomePage = () => {
                             >Post</button>
                         </div>
                     </form>
-                </header>
+                </section>
 
                 <section className="flex flex-col gap-8 mt-16">
                     {posts.length > 0 && posts.map((post) => (
-                        <Post key={post.id} post={post} />
+                        <Link key={post.id} to={`/post/${post.id}`}>
+                            <Post post={post} />
+                        </Link>
                     ))}
                 </section>
             </div>

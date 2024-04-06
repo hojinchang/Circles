@@ -43,9 +43,15 @@ exports.create_post = [
     })
 ];
 
+// Get the specified post
 exports.post_get = asyncHandler(async(req, res, next) => {
     const postId = req.params.id;
-    const post = await Post.findById(postId);
+    const post = await Post.findById(postId)
+                            .populate("user")
+                            .exec();
+
+
+    console.log(post)
 
     res.status(200).json({ success: true, post: post });
 });
