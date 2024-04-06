@@ -83,6 +83,23 @@ const getPost = async(postId, setPost, navigate, dispatch) => {
     }
 }
 
+// Like a specific post
+const likePost = async(postId, navigate, dispatch) => {
+    try {
+        const response = await axios.put(getPostsAPIPath + `/like/${postId}`);
+
+        if (response.status === 200) {
+            getPosts(navigate, dispatch);
+        } else {
+            console.error("Unexpected status code:", response.status);
+        }
+    } catch(err) {
+        // If user isnt authenticated
+        removeAuthandRedirect(`Error Liking Post ${postId}`, err, navigate, dispatch);
+    }
+}
+
+
 // Send a delete request to server for a specific post id
 const deletePost = async(postId, navigate, dispatch) => {
     try {
@@ -140,6 +157,7 @@ export {
     getPosts,
     getPost,
     updatePost,
+    likePost,
     deletePost,
     handlePopups
 }

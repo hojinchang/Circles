@@ -6,7 +6,7 @@ import escapeHtml from 'escape-html';
 import DeletePostModal from "./DeletePostModal";
 import EditPostModal from "./EditPostModal";
 import ModalWrapper from "./ModalWrapper";
-import { handlePopups, deletePost } from "../globals/utilityFunctions";
+import { handlePopups, deletePost, likePost } from "../globals/utilityFunctions";
 
 const Post = ({ post }) => {
     const [optionOpen, setOptionOpen] = useState(false);
@@ -49,7 +49,7 @@ const Post = ({ post }) => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, [postRef]);
-    
+
     return (
         <article ref={postRef} className="flex flex-col gap-2 p-4 border border-neutral-300 rounded-lg relative">
             {(post.user.id === currentUserId) && (
@@ -77,12 +77,12 @@ const Post = ({ post }) => {
             <p className="text-neutral-500">{post.timeStampFormatted}</p>
             <div className="flex gap-6">
                 <div className="flex items-center gap-2">
-                    <button>
+                    <button onClick={() => likePost(post.id, navigate, dispatch)}>
                         <svg className="w-5 h-5 text-neutral-700 transition duration-200 hover:text-neutral-400" role="img" fill="none" stroke="currentColor" strokeWidth="2" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="-1 -1 26 26" aria-label="Like button" >
                             <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z"/>
                         </svg>
                     </button>
-                    <span>{post.likes}</span>
+                    <span>{post.likes.length}</span>
                 </div>
                 <div className="flex items-center gap-2">
                     <button>

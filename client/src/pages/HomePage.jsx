@@ -28,7 +28,7 @@ const HomePage = () => {
     return (
         <main className="flex min-h-screen">
             <Nav />
-            <div className="p-8 max-w-3xl mx-auto h-full xs:p-12">
+            <div className="p-8 pb-24 max-w-3xl mx-auto h-full xs:p-12 xs:pb-28 lg:p-8">
                 <header className="flex flex-col gap-4">
                     <h1 className="text-4xl font-bold">Home</h1>
                     <div>

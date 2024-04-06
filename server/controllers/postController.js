@@ -74,6 +74,27 @@ exports.post_update = [
         res.status(200).json({ success: true });
     })
 ]
+
+// Like a post
+exports.post_like = asyncHandler(async(req, res, next) => {
+    const postId = req.params.id;
+    const userId = req.user.id;
+
+    const post = await Post.findById(postId);
+    // If the user has already likes the post
+    if (post.likes.includes(userId)) {
+        // Find the index of the user in the likes array
+        const idx = post.likes.findIndex(idx => idx === userId);
+        // Delete the user from the likes array
+        post.likes.splice(idx, 1);
+    } else {
+        post.likes.push(userId);
+    }
+
+    await post.save();
+    return res.status(200).json({ success: true });
+});
+
 // Delete post
 exports.post_delete =  asyncHandler(async(req, res, next) => {
     const postId = req.params.id;

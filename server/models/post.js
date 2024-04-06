@@ -15,7 +15,7 @@ const CommentSchema = new Schema({
     user: { type: Schema.Types.ObjectId, ref: "User", required: true },
     post: { type: String, minLength: 1, maxLength: 280, required: true },
     timeStamp: { type: Date, default: Date.now },
-    likes: { type: Number, default: 0 }
+    likes:  [{ type: Schema.Types.ObjectId, ref: "User" }]
 });
 
 CommentSchema.virtual("timeStampFormatted").get(function() {
@@ -27,7 +27,7 @@ const PostSchema = new Schema({
     user: { type: Schema.Types.ObjectId, ref: "User", required: true },
     post: { type: String, minLength: 1, maxLength: 280, required: true },
     timeStamp: { type: Date, default: Date.now },
-    likes: { type: Number, default: 0 },
+    likes: [{ type: Schema.Types.ObjectId, ref: "User" }],
     comments: [CommentSchema]
 }, {
     toJSON: { virtuals: true },
