@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 
 import Nav from "../components/Nav";
 import Post from "../components/Post";
-import { getPost } from "../globals/utilityFunctions";
+import { handleInputChange, getPost } from "../globals/utilityFunctions";
 import { postMaxLength } from "../globals/globalVariables";
 
 const PostPage = () => {
@@ -15,6 +15,11 @@ const PostPage = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
+    // Reset the form after submission
+    const resetForm = () => {
+        setPostFormData({ post: "" });
+    };
+
     useEffect(() => {
         getPost(id, setPost, navigate, dispatch);
     }, []);
@@ -22,8 +27,8 @@ const PostPage = () => {
     return (
         <main className="main">
             <Nav />
-            <div className="p-8 pb-24 max-w-3xl mx-auto w-full h-full xs:p-12 xs:pb-28 lg:p-8">
-                {post && 
+            {post && 
+                <div className="p-8 pb-24 max-w-3xl mx-auto w-full h-full xs:p-12 xs:pb-28 lg:p-8">
                     <section className="flex flex-col gap-4">
                         <Post post={post} />
 
@@ -56,9 +61,9 @@ const PostPage = () => {
                             </div>
                         </form>
                     </section>
-                }
-                <hr className="my-8 border-neutral-400"/>
-            </div>
+                    <hr className="my-8 border-neutral-400"/>
+                </div>
+            }
         </main>
     )
 }

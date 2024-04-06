@@ -77,7 +77,14 @@ const Post = ({ post }) => {
             <p className="text-neutral-500">{post.timeStampFormatted}</p>
             <div className="flex gap-6">
                 <div className="flex items-center gap-2">
-                    <button onClick={() => likePost(post.id, navigate, dispatch)}>
+                    <button 
+                        className="z-100" 
+                        onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            likePost(post.id, navigate, dispatch)
+                        }}
+                    >
                         <svg 
                             className="w-5 h-5 text-neutral-700 transition duration-200 hover:text-neutral-400" 
                             role="img" 
