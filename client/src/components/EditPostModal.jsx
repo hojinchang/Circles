@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux";
 
 import { postMaxLength } from "../globals/globalVariables";
-import { handleInputChange, getPost } from "../globals/utilityFunctions";
+import { handleInputChange, getPost, updatePost } from "../globals/utilityFunctions";
 
 const EditPostModal = ({ postId, toggleModal }) => {
     const [post, setPost] = useState(null);
@@ -35,13 +35,18 @@ const EditPostModal = ({ postId, toggleModal }) => {
                         className="leading-none absolute right-4 top-2 text-2xl text-neutral-500 transition duration-200 hover:text-neutral-950" 
                         onClick={(e) => {
                             e.stopPropagation();
-                            toggleModal();
                         }}
                     >&times;
                 </button>
                     <h3 className="text-lg font-bold">Edit Post</h3>
                     <p className="text-neutral-500">Update your post.</p>
-                    <form className="mt-1">
+                    <form 
+                        className="mt-1" 
+                        onSubmit={async(e) => {
+                            await updatePost(e, post.id, postFormData, navigate, dispatch);
+                            toggleModal();
+                        }}
+                    >
                         <div>
                             <label htmlFor="post" className="sr-only">Post</label>
                             <textarea

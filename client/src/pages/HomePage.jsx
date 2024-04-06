@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import Nav from "../components/Nav";
 import Post from "../components/Post";
-import { handleInputChange, handlePostFormSubmission, getPosts } from "../globals/utilityFunctions";
+import { handleInputChange, createPost, getPosts } from "../globals/utilityFunctions";
 import { postMaxLength } from "../globals/globalVariables";
 
 const HomePage = () => {
@@ -36,7 +36,7 @@ const HomePage = () => {
                         <p className="text-neutral-500">Create a post by typing your thoughts in the input below and click the "Post" button.</p>
                     </div>
 
-                    <form ref={formRef} onSubmit={(e) => { handlePostFormSubmission(e, postFormData, formRef, resetForm, navigate, dispatch) }}>
+                    <form ref={formRef} onSubmit={(e) => { createPost(e, postFormData, formRef, resetForm, navigate, dispatch) }}>
                         <div>
                             <label htmlFor="post" className="sr-only">Post</label>
                             <textarea

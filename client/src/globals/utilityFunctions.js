@@ -22,7 +22,7 @@ const handleInputChange = (e, setFormData) => {
 }
 
 // Send post request to server when form is submitted
-const handlePostFormSubmission = async(
+const createPost = async(
     e, 
     postData, 
     formRef, 
@@ -45,7 +45,7 @@ const handlePostFormSubmission = async(
         }
     } catch(err) {
         // If user isnt authenpostIdticated
-        removeAuthandRedirect("Create Post Error", err, navigate, dispatch)
+        removeAuthandRedirect("Create Post Error", err, navigate, dispatch);
     }
 }
 
@@ -100,6 +100,24 @@ const deletePost = async(postId, navigate, dispatch) => {
     }
 }
 
+const updatePost = async(e, postId, postData, navigate, dispatch) => {
+    e.preventDefault();
+
+    try {
+        const response = await axios.put(getPostsAPIPath + `/${postId}`, postData);
+        // If the response is good, save the posts into the posts state
+        if (response.status === 200) {
+            // Update the global redux posts state with the new post
+            getPosts(navigate, dispatch);
+        }
+
+    } catch(err) {
+        // If user isnt authenpostIdticated
+        removeAuthandRedirect("Create Post Error", err, navigate, dispatch);
+    }
+}
+
+
 // This function handles the fade in/out of the popup modals
 const handlePopups = (isOpen, setIsOpen, setFadeOut) => {
     // If the option is open, set the fade out animation
@@ -118,9 +136,10 @@ const handlePopups = (isOpen, setIsOpen, setFadeOut) => {
 
 export {
     handleInputChange,
-    handlePostFormSubmission,
+    createPost,
     getPosts,
     getPost,
+    updatePost,
     deletePost,
     handlePopups
 }

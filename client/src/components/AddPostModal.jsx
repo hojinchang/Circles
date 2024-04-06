@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
 import { postMaxLength } from "../globals/globalVariables";
-import { handleInputChange, handlePostFormSubmission } from "../globals/utilityFunctions";
+import { handleInputChange, createPost } from "../globals/utilityFunctions";
 
 const AddPostModal = ({ toggleModal }) => {
     const formRef = useRef(null);
@@ -29,10 +29,14 @@ const AddPostModal = ({ toggleModal }) => {
                 </button>
                 <h3 className="text-lg font-bold">Create Post</h3>
                 <p className="text-neutral-500">Click "Post" when you're done.</p>
-                <form className="mt-1" ref={formRef} onSubmit={async(e) => {
-                    await handlePostFormSubmission(e, postFormData, formRef, resetForm, navigate, dispatch); 
-                    toggleModal(); 
-                }}>
+                <form 
+                    className="mt-1" 
+                    ref={formRef} 
+                    onSubmit={async(e) => {
+                        await createPost(e, postFormData, formRef, resetForm, navigate, dispatch);
+                        toggleModal(); 
+                    }}
+                >
                     <div>
                         <label htmlFor="post" className="sr-only">Post</label>
                         <textarea
