@@ -35,6 +35,7 @@ const EditPostModal = ({ postId, toggleModal }) => {
                         className="leading-none absolute right-4 top-2 text-2xl text-neutral-500 transition duration-200 hover:text-neutral-950" 
                         onClick={(e) => {
                             e.stopPropagation();
+                            toggleModal();
                         }}
                     >&times;
                 </button>
