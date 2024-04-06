@@ -82,9 +82,9 @@ exports.post_like = asyncHandler(async(req, res, next) => {
 
     const post = await Post.findById(postId);
     // If the user has already likes the post
-    if (post.likes.includes(userId)) {
+    if (post.likes.map(String).includes(userId)) {   // Convert likes ObjectId to strings
         // Find the index of the user in the likes array
-        const idx = post.likes.findIndex(idx => idx === userId);
+        const idx = post.likes.map(String).findIndex(idx => idx === userId);
         // Delete the user from the likes array
         post.likes.splice(idx, 1);
     } else {
