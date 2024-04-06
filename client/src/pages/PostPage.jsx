@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useParams, useNavigate, Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 import Nav from "../components/Nav";
 import Post from "../components/Post";
@@ -12,6 +12,8 @@ const PostPage = () => {
     const [postFormData, setPostFormData] = useState({ post: "" });
     const { id } = useParams();
 
+    const postGlobal = useSelector(state => state.posts.posts.find(post => post.id === id));
+
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -22,16 +24,23 @@ const PostPage = () => {
 
     useEffect(() => {
         getPost(id, setPost, navigate, dispatch);
-    }, []);
+    }, [postGlobal]);
 
     return (
         <main className="main">
             <Nav />
-            {post && 
+            {post ?
                 <div className="p-8 pb-24 max-w-3xl mx-auto w-full h-full xs:p-12 xs:pb-28 lg:p-8">
                     <section className="flex flex-col gap-4">
+                        <div className="flex gap-4 items-center">
+                            <Link to="/">
+                                <svg width="24" height="24" clipRule="evenodd" fillRule="evenodd" strokeLinejoin="round" strokeMiterlimit="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="m9.474 5.209s-4.501 4.505-6.254 6.259c-.147.146-.22.338-.22.53s.073.384.22.53c1.752 1.754 6.252 6.257 6.252 6.257.145.145.336.217.527.217.191-.001.383-.074.53-.221.293-.293.294-.766.004-1.057l-4.976-4.976h14.692c.414 0 .75-.336.75-.75s-.336-.75-.75-.75h-14.692l4.978-4.979c.289-.289.287-.761-.006-1.054-.147-.147-.339-.221-.53-.221-.191-.001-.38.071-.525.215z" fillRule="nonzero"/>
+                                </svg>
+                            </Link>
+                            <p>Home</p>
+                        </div>
                         <Post post={post} />
-
                         <form>
                             <div>
                                 <label htmlFor="post" className="sr-only">Post</label>
@@ -62,6 +71,10 @@ const PostPage = () => {
                         </form>
                     </section>
                     <hr className="my-8 border-neutral-400"/>
+                </div>
+                :
+                <div>
+                    <h1>Post not found</h1>
                 </div>
             }
         </main>

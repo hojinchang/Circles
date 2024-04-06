@@ -5,6 +5,12 @@ import { setAuthenticated } from "../features/authenticated/authenticatedSlice";
 import { setPosts } from "../features/posts/postsSlice";
 
 
+// Stop clicks from propagating and triggering other click events
+const stopPropagation = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+}
+
 // If user isnt authenticated, set the global authenticated state to false and redirect
 const removeAuthandRedirect = (errorContext, err, navigate, dispatch) => {
     navigate("/login");
@@ -38,8 +44,6 @@ const createPost = async(
 
         // If the response is good, save the posts into the posts state
         if (response.status === 201) {
-            // Update the global redux posts state with the new post
-            getPosts(navigate, dispatch);
             // Reset the post data state
             resetForm();
         }
@@ -87,12 +91,6 @@ const getPost = async(postId, setPost, navigate, dispatch) => {
 const likePost = async(postId, navigate, dispatch) => {
     try {
         const response = await axios.put(getPostsAPIPath + `/like/${postId}`);
-
-        if (response.status === 200) {
-            getPosts(navigate, dispatch);
-        } else {
-            console.error("Unexpected status code:", response.status);
-        }
     } catch(err) {
         // If user isnt authenticated
         removeAuthandRedirect(`Error Liking Post ${postId}`, err, navigate, dispatch);
@@ -152,6 +150,7 @@ const handlePopups = (isOpen, setIsOpen, setFadeOut) => {
 
 
 export {
+    stopPropagation,
     handleInputChange,
     createPost,
     getPosts,

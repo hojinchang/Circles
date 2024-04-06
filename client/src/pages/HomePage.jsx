@@ -20,10 +20,10 @@ const HomePage = () => {
         setPostFormData({ post: "" });
     };
 
-    // Get all of the posts on inital page load
+    // Get all of the posts on inital page load and whenever the posts Redux state updates
     useEffect(() => {
         getPosts(navigate, dispatch);
-    }, []);
+    }, [posts]);
 
     return (
         <main className="main">

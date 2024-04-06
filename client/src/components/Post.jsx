@@ -6,7 +6,7 @@ import escapeHtml from 'escape-html';
 import DeletePostModal from "./DeletePostModal";
 import EditPostModal from "./EditPostModal";
 import ModalWrapper from "./ModalWrapper";
-import { handlePopups, deletePost, likePost } from "../globals/utilityFunctions";
+import { stopPropagation, handlePopups, deletePost, likePost } from "../globals/utilityFunctions";
 
 const Post = ({ post }) => {
     const [optionOpen, setOptionOpen] = useState(false);
@@ -53,7 +53,13 @@ const Post = ({ post }) => {
     return (
         <article ref={postRef} className="flex flex-col gap-2 p-4 border border-neutral-300 rounded-lg relative">
             {(post.user.id === currentUserId) && (
-                <button className="absolute right-0 top-0 p-4 rounded-md hover:bg-neutral-300" onClick={ () => handlePopups( optionOpen, setOptionOpen, setOptionFadeOut ) }>
+                <button 
+                    className="absolute right-0 top-0 p-4 rounded-md hover:bg-neutral-300" 
+                    onClick={ (e) => {
+                        stopPropagation(e);
+                        handlePopups( optionOpen, setOptionOpen, setOptionFadeOut );
+                    }}
+                >
                     <svg className="w-4 h-4 text-neutral-700" fill="currentColor" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 41.91 41.91" xmlSpace="preserve">
                         <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
                         <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
@@ -80,8 +86,7 @@ const Post = ({ post }) => {
                     <button 
                         className="z-100" 
                         onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
+                            stopPropagation(e);
                             likePost(post.id, navigate, dispatch)
                         }}
                     >
@@ -110,7 +115,8 @@ const Post = ({ post }) => {
                 <div className={`flex flex-col absolute right-0 top-12 z-10 g-2 border bg-neutral-50 border-neutral-300 rounded-md w-24 shadow-md ${optionFadeOut ? 'fade-out' : 'fade-in'}`}>
                     <button 
                         className="py-1 text-sm hover:bg-neutral-300 w-full rounded-sm transition duration-200"
-                        onClick={() => {
+                        onClick={(e) => {
+                            stopPropagation(e);
                             handlePopups( updateModalOpen, setUpdateModalOpen, setUpdateModalFadeOut );
                             handlePopups( optionOpen, setOptionOpen, setOptionFadeOut );
                         }}
@@ -119,7 +125,8 @@ const Post = ({ post }) => {
                     </button>
                     <button 
                         className="py-1 text-sm hover:bg-neutral-300 w-full rounded-sm transition duration-200" 
-                        onClick={() => {
+                        onClick={(e) => {
+                            stopPropagation(e);
                             handlePopups( deleteModalOpen, setDeleteModalOpen, setDeleteModalFadeOut );
                             handlePopups( optionOpen, setOptionOpen, setOptionFadeOut );
                         }}

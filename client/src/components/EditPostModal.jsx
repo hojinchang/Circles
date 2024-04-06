@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux";
 
 import { postMaxLength } from "../globals/globalVariables";
-import { handleInputChange, getPost, updatePost } from "../globals/utilityFunctions";
+import { stopPropagation, handleInputChange, getPost, updatePost } from "../globals/utilityFunctions";
 
 const EditPostModal = ({ postId, toggleModal }) => {
     const [post, setPost] = useState(null);
@@ -22,19 +22,18 @@ const EditPostModal = ({ postId, toggleModal }) => {
             setPostFormData({ post: post.post });
         }
     }, [post]);
-    
 
     return (
         <>
             {post &&
                 <div 
-                    className="modal"
-                    onClick={(e) => e.stopPropagation()}
+                    className="modal z-20"
+                    onClick={(e) => stopPropagation(e) }
                 >
                     <button 
                         className="leading-none absolute right-4 top-2 text-2xl text-neutral-500 transition duration-200 hover:text-neutral-950" 
                         onClick={(e) => {
-                            e.stopPropagation();
+                            stopPropagation(e);
                             toggleModal();
                         }}
                     >&times;
@@ -68,10 +67,11 @@ const EditPostModal = ({ postId, toggleModal }) => {
                                 {postFormData.post.length} / {postMaxLength} characters
                             </p>
                             <button
-                            type="submit"
+                                type="submit"
                                 className={`px-6 py-2 font-medium rounded-md transition ease duration-200 ${
                                     postFormData.post.length === 0 ? 'bg-slate-200 text-neutral-400 cursor-not-allowed' : 'bg-slate-700 text-neutral-50 hover:bg-slate-500'
                                 }`}
+                                onClick={(e) => e.stopPropagation()}
                             >
                                 Update Post
                             </button>
