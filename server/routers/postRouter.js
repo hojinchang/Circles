@@ -10,18 +10,21 @@ router.get("/", postController.posts_get);
 router.post("/create", postController.post_create);
 
 // Get a specific post
-router.get("/:id", postController.post_get);
+router.get("/:postId", postController.post_get);
 
 // Update the content of a specific post
-router.put("/:id", postController.post_update);
+router.put("/:postId", postController.post_update);
 
-// Like the specific post
-router.put("/like/:id", postController.post_like);
+// Like a specific post
+router.put("/:postId/like", postController.post_like);
 
 // Delete a specific post
-router.delete("/:id", postController.post_delete);
+router.delete("/:postId", postController.post_delete);
 
 // Create a comment
-router.post("/comment/:id", postController.comment_create);
+router.post("/:postId/comment", postController.comment_create);
+
+// Like a specific comment
+router.put("/:postId/comment/:commentId/like", postController.comment_like);
 
 module.exports = router;

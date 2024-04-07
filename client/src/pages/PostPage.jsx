@@ -4,14 +4,15 @@ import { useDispatch, useSelector } from "react-redux";
 
 import Nav from "../components/Nav";
 import Post from "../components/Post";
+import Comment from "../components/Comment";
 import { handleInputChange, getPosts, createComment } from "../globals/utilityFunctions";
 import { postMaxLength } from "../globals/globalVariables";
 
 const PostPage = () => {
     const [postFormData, setPostFormData] = useState({ post: "" });
-    const { id } = useParams();
+    const { postId } = useParams();
     
-    const postGlobal = useSelector(state => state.posts.posts.find(post => post.id === id));
+    const postGlobal = useSelector(state => state.posts.posts.find(post => post.id === postId));
     
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -41,7 +42,7 @@ const PostPage = () => {
                             <p>Home</p>
                         </div>
                         <Post post={postGlobal} />
-                        <form ref={formRef} onSubmit={(e) => { createComment(e, id, postFormData, formRef, resetForm, navigate, dispatch) }}>
+                        <form ref={formRef} onSubmit={(e) => { createComment(e, postId, postFormData, formRef, resetForm, navigate, dispatch) }}>
                             <div>
                                 <label htmlFor="post" className="sr-only">Post</label>
                                 <textarea
@@ -74,7 +75,7 @@ const PostPage = () => {
                     <section className="flex flex-col gap-4">
                         {postGlobal.comments.length > 0 
                             ? (postGlobal.comments.map((comment) => {
-                                return <Post key={comment.id} post={comment} />
+                                return <Comment key={comment.id} postId={postId} comment={comment} />
                             }))
                             : <p className="text-neutral-500 text-center">This post has no comments.</p>
                         }

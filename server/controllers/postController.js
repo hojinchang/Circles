@@ -11,6 +11,10 @@ exports.posts_get = asyncHandler(async(req, res, next) => {
                             .sort({ timeStamp: -1 })
                             .exec();
     
+    if (!posts) {
+        return res.status(404).json({ message: 'Posts not found' });
+    }
+    
     (posts)
         ? res.status(200).json(posts)
         : res.status(404).json({ message: "Posts not found" });
@@ -46,11 +50,15 @@ exports.post_create = [
 
 // Get the specified post
 exports.post_get = asyncHandler(async(req, res, next) => {
-    const postId = req.params.id;
+    const postId = req.params.postId;
     const post = await Post.findById(postId)
                             .populate("user")
                             .populate("comments.user")
                             .exec();
+
+    if (!post) {
+        return res.status(404).json({ message: 'Post not found' });
+    }
 
     res.status(200).json({ success: true, post: post });
 });
@@ -73,7 +81,7 @@ exports.post_update = [
         
         const sanitizedPost = sanitizeHtml(req.body.post);
         
-        const postId = req.params.id;
+        const postId = req.params.postId;
         await Post.findByIdAndUpdate(postId, { post: sanitizedPost });
 
         res.status(200).json({ success: true });
@@ -82,10 +90,14 @@ exports.post_update = [
 
 // Like a post
 exports.post_like = asyncHandler(async(req, res, next) => {
-    const postId = req.params.id;
+    const postId = req.params.postId;
     const userId = req.user.id;
 
     const post = await Post.findById(postId);
+    if (!post) {
+        return res.status(404).json({ message: 'Post not found' });
+    }
+
     // If the user has already likes the post
     if (post.likes.map(String).includes(userId)) {   // Convert likes ObjectId to strings
         // Find the index of the user in the likes array
@@ -102,7 +114,7 @@ exports.post_like = asyncHandler(async(req, res, next) => {
 
 // Delete post
 exports.post_delete =  asyncHandler(async(req, res, next) => {
-    const postId = req.params.id;
+    const postId = req.params.postId;
     await Post.findByIdAndDelete(postId);
 
     res.status(200).json({ success: true });
@@ -126,7 +138,7 @@ exports.comment_create = [
 
         const sanitizedComment = sanitizeHtml(req.body.post);
         const userId = req.user.id;
-        const postId = req.params.id;
+        const postId = req.params.postId;
 
         // Find the specific post
         const post = await Post.findById(postId);
@@ -147,3 +159,35 @@ exports.comment_create = [
         res.status(201).json({ success: true });
     })
 ]
+
+exports.comment_like = asyncHandler(async(req, res, next) =>  {
+    const postId = req.params.postId;
+    const commentId = req.params.commentId;
+    const userId = req.user.id;
+
+    const post = await Post.findById(postId);
+    if (!post) {
+        return res.status(404).json({ message: 'Post not found' });
+    }
+
+    const comment = post.comments.id(commentId);
+    if (!comment) {
+        return res.status(404).json({ message: 'Comment not found' });
+    }
+
+    // If the user has already likes the post
+    if (comment.likes.map(String).includes(userId)) {   // Convert likes ObjectId to strings
+        // Find the index of the user in the likes array
+        const idx = comment.likes.map(String).findIndex(idx => idx === userId);
+        // Delete the user from the likes array
+        comment.likes.splice(idx, 1);
+    } else {
+        comment.likes.push(userId);
+    }
+
+    // Save the post
+    await post.save();
+
+    res.status(200).json({ success: true });
+
+});

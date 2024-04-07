@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { createPostAPIPath, getPostsAPIPath, createCommentAPIPath } from "./apiPaths";
+import { createPostAPIPath, getPostsAPIPath } from "./apiPaths";
 import { setAuthenticated } from "../features/authenticated/authenticatedSlice";
 import { setPosts } from "../features/posts/postsSlice";
 
@@ -26,7 +26,6 @@ const handleInputChange = (e, setFormData) => {
         [name]: value
     }));
 }
-
 
 // Send a post request to create a resource (post or comment)
 const createResource = async(e, path, data, formRef, resetForm, navigate, dispatch) => {
@@ -54,7 +53,7 @@ const createPost = async (e, postData, formRef, resetForm, navigate, dispatch) =
 
 // Send a post request to create a comment
 const createComment = async (e, postId, postData, formRef, resetForm, navigate, dispatch) => {
-    await createResource(e, createCommentAPIPath + `/${postId}`, postData, formRef, resetForm, navigate, dispatch);
+    await createResource(e, getPostsAPIPath + `/${postId}/comment`, postData, formRef, resetForm, navigate, dispatch);
 };
 
 
@@ -92,20 +91,38 @@ const getPost = async(postId, setPost, navigate, dispatch) => {
     }
 }
 
-// Like a specific post
-const likePost = async(postId, navigate, dispatch) => {
+// Like a post or a comment
+const likeResource = async(resourceType, resourceId, subresourceId, navigate, dispatch) => {
     try {
-        const response = await axios.put(getPostsAPIPath + `/like/${postId}`);
+        let apiPath = "";
+        if (resourceType === "post") {
+            apiPath = getPostsAPIPath + `/${resourceId}/like`;
+        } else if (resourceType === "comment") {
+            apiPath = getPostsAPIPath + `/${resourceId}/comment/${subresourceId}/like`;
+        }
+
+        const response = await axios.put(apiPath);
 
         if (response.status === 200) {
             getPosts(navigate, dispatch);
         } else {
             console.error("Unexpected status code:", response.status);
         }
+
     } catch(err) {
-        // If user isnt authenticated
-        removeAuthandRedirect(`Error Liking Post ${postId}`, err, navigate, dispatch);
+        // If user isn't authenticated
+        removeAuthandRedirect(`Error Liking ${resourceType} ${resourceId}`, err, navigate, dispatch);
     }
+}
+
+// Like a specific post
+const likePost = async(postId, navigate, dispatch) => {
+    await likeResource("post", postId, null, navigate, dispatch);
+}
+
+// Like a specific comment
+const likeComment = async(postId, commentId, navigate, dispatch) => {
+    await likeResource("comment", postId, commentId, navigate, dispatch);
 }
 
 // Send a delete request to server for a specific post id
@@ -168,6 +185,7 @@ export {
     getPost,
     updatePost,
     likePost,
+    likeComment,
     deletePost,
     handlePopups
 }

@@ -17,7 +17,6 @@ const getUserAPIPath = "/api/user/";
 // Post API
 const getPostsAPIPath = "/api/post/";
 const createPostAPIPath = "/api/post/create";
-const createCommentAPIPath = "/api/post/comment";
 
 export { 
     isAuthAPIPath,
@@ -28,5 +27,4 @@ export {
     getUserAPIPath,
     getPostsAPIPath,
     createPostAPIPath,
-    createCommentAPIPath
 };
