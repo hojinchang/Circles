@@ -5,7 +5,7 @@ import escapeHtml from 'escape-html';
 
 import DeletePostModal from "./modals/DeletePostModal";
 import EditPostModal from "./modals/EditPostModal";
-import ModalWrapper from "./ModalWrapper";
+import ModalWrapper from "./modals/ModalWrapper";
 import { stopPropagation, handlePopups, deletePost, likePost } from "../globals/utilityFunctions";
 
 const Post = ({ post }) => {

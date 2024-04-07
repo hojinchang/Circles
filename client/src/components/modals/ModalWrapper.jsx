@@ -1,4 +1,4 @@
-import { stopPropagation } from "../globals/utilityFunctions";
+import { stopPropagation } from "../../globals/utilityFunctions";
 
 const ModalWrapper = ({ fadeOut, toggleModal, children }) => {
 

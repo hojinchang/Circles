@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 
-import ModalWrapper from "./ModalWrapper";
+import ModalWrapper from "./modals/ModalWrapper";
 import AddPostModal from "./modals/AddPostModal";
 import { setAuthenticated } from "../features/authenticated/authenticatedSlice";
 import { getUserAPIPath, logoutAPIPath } from "../globals/apiPaths";
@@ -73,7 +73,7 @@ const Nav = () => {
 
     return (
         <>
-            <div className="lg:p-16 lg:w-96 lg:min-h-full lg:border-r-2 relative">
+            <div className="lg:p-16 lg:w-96 lg:h-screen lg:border-r-2 overflow-auto">
                 <div className={`p-4 bg-neutral-50 fixed inset-0 transition-transform duration-500 transform ${secondaryNavOpen ? 'translate-y-0' : 'translate-y-full'} lg:static lg:translate-y-0 lg:p-0 z-10`}>
                     <nav className="flex flex-col gap-2 mx-auto max-w-sm h-full justify-center">
                         <div className="mb-4">

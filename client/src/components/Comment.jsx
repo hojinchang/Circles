@@ -5,7 +5,7 @@ import escapeHtml from 'escape-html';
 
 import DeleteCommentModal from "./modals/DeleteCommentModal";
 import EditCommentModal from "./modals/EditCommentModal";
-import ModalWrapper from "./ModalWrapper";
+import ModalWrapper from "./modals/ModalWrapper";
 import { stopPropagation, handlePopups, deleteComment, likeComment } from "../globals/utilityFunctions";
 
 const Comment = ({ postId, comment }) => {

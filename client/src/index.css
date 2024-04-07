@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .main {
-  @apply flex min-h-screen;
+  @apply flex h-screen;
 }
 
 .input {
