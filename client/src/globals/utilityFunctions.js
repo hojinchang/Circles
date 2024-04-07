@@ -47,13 +47,13 @@ const createResource = async(e, path, data, formRef, resetForm, navigate, dispat
 };
 
 // Send post request to server when form is submitted
-const createPost = async (e, postData, formRef, resetForm, navigate, dispatch) => {
-    await createResource(e, createPostAPIPath, postData, formRef, resetForm, navigate, dispatch);
+const createPost = async (e, formData, formRef, resetForm, navigate, dispatch) => {
+    await createResource(e, createPostAPIPath, formData, formRef, resetForm, navigate, dispatch);
 };
 
 // Send a post request to create a comment
-const createComment = async (e, postId, postData, formRef, resetForm, navigate, dispatch) => {
-    await createResource(e, getPostsAPIPath + `/${postId}/comment`, postData, formRef, resetForm, navigate, dispatch);
+const createComment = async (e, postId, formData, formRef, resetForm, navigate, dispatch) => {
+    await createResource(e, getPostsAPIPath + `/${postId}/comment`, formData, formRef, resetForm, navigate, dispatch);
 };
 
 
@@ -164,23 +164,40 @@ const deleteComment = async(postId, commentId, navigate, dispatch) => {
     await deleteResource("comment", postId, commentId, navigate, dispatch);
 }
 
-
-// Send a put request to server to update a specific post
-const updatePost = async(e, postId, postData, navigate, dispatch) => {
+const updateResource = async(e, resourceType, resourceId, subresourceId, formData, navigate, dispatch) => {
     e.preventDefault();
 
     try {
-        const response = await axios.put(getPostsAPIPath + `/${postId}`, postData);
-        // If the response is good, save the posts into the posts state
+        let apiPath = "";
+        if (resourceType === "post") {
+            apiPath = getPostsAPIPath + `/${resourceId}`;
+        } else if (resourceType === "comment") {
+            apiPath = getPostsAPIPath + `/${resourceId}/comment/${subresourceId}`
+        }
+
+        const response = await axios.put(apiPath, formData);
+
+        // If good, update the posts redux state
         if (response.status === 200) {
-            // Update the global redux posts state with the new post
             getPosts(navigate, dispatch);
+        } else {
+            console.error("Unexpected status code:", response.status);
         }
 
     } catch(err) {
-        // If user isnt authenpostIdticated
-        removeAuthandRedirect("Create Post Error", err, navigate, dispatch);
+        // If user isn't authenticated
+        removeAuthandRedirect("Create Resource Error", err, navigate, dispatch);
     }
+}
+
+// Send a put request to server to update a specific post
+const updatePost = async(e, postId, formData, navigate, dispatch) => {
+    await updateResource(e, "post", postId, null, formData, navigate, dispatch);
+}
+
+// Send a put request to server to update a specific comment
+const updateComment = async(e, postId, commentId, formData, navigate, dispatch) => {
+    await updateResource(e, "comment", postId, commentId, formData, navigate, dispatch);
 }
 
 // This function handles the fade in/out of the popup modals
@@ -211,5 +228,6 @@ export {
     deletePost,
     deleteComment,
     updatePost,
+    updateComment,
     handlePopups
 }

@@ -140,7 +140,7 @@ const Post = ({ post }) => {
 
             {updateModalOpen && (
                 <ModalWrapper fadeOut={ updateModalFadeOut } toggleModal={ () => handlePopups( updateModalOpen, setUpdateModalOpen, setUpdateModalFadeOut ) } >
-                    <EditPostModal postId={post.id} toggleModal={ () => handlePopups( updateModalOpen, setUpdateModalOpen, setUpdateModalFadeOut ) } />
+                    <EditPostModal post={post} toggleModal={ () => handlePopups( updateModalOpen, setUpdateModalOpen, setUpdateModalFadeOut ) } />
                 </ModalWrapper>
             )}
 

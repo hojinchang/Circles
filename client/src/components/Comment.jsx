@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import escapeHtml from 'escape-html';
 
 import DeleteCommentModal from "./DeleteCommentModal";
-import EditPostModal from "./EditPostModal";
+import EditCommentModal from "./EditCommentModal";
 import ModalWrapper from "./ModalWrapper";
 import { stopPropagation, handlePopups, deleteComment, likeComment } from "../globals/utilityFunctions";
 
@@ -130,7 +130,7 @@ const Comment = ({ postId, comment }) => {
 
             {updateModalOpen && (
                 <ModalWrapper fadeOut={ updateModalFadeOut } toggleModal={ () => handlePopups( updateModalOpen, setUpdateModalOpen, setUpdateModalFadeOut ) } >
-                    <EditPostModal postId={postId} toggleModal={ () => handlePopups( updateModalOpen, setUpdateModalOpen, setUpdateModalFadeOut ) } />
+                    <EditCommentModal postId={postId} comment={comment} toggleModal={ () => handlePopups( updateModalOpen, setUpdateModalOpen, setUpdateModalFadeOut ) } />
                 </ModalWrapper>
             )}
 

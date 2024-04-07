@@ -11,13 +11,11 @@ exports.posts_get = asyncHandler(async(req, res, next) => {
                             .sort({ timeStamp: -1 })
                             .exec();
     
-    if (!posts) {
-        return res.status(404).json({ message: 'Posts not found' });
-    }
-    
     (posts)
         ? res.status(200).json(posts)
         : res.status(404).json({ message: "Posts not found" });
+
+    return;
 });
 
 // Create a post post request
@@ -56,11 +54,38 @@ exports.post_get = asyncHandler(async(req, res, next) => {
                             .populate("comments.user")
                             .exec();
 
-    if (!post) {
-        return res.status(404).json({ message: 'Post not found' });
+    (post)
+        ? res.status(200).json({ success: true, post: post })
+        : res.status(404).json({ message: 'Post not found' })
+
+    return;
+});
+
+// Like a post
+exports.post_like = asyncHandler(async(req, res, next) => {
+    const userId = req.user.id;
+    const post = req.post;
+
+    // If the user has already likes the post
+    if (post.likes.map(String).includes(userId)) {   // Convert likes ObjectId to strings
+        // Find the index of the user in the likes array
+        const idx = post.likes.map(String).findIndex(idx => idx === userId);
+        // Delete the user from the likes array
+        post.likes.splice(idx, 1);
+    } else {
+        post.likes.push(userId);
     }
 
-    res.status(200).json({ success: true, post: post });
+    await post.save();
+    return res.status(200).json({ success: true });
+});
+
+// Delete post
+exports.post_delete =  asyncHandler(async(req, res, next) => {
+    const postId = req.params.postId;
+    await Post.findByIdAndDelete(postId);
+
+    res.status(200).json({ success: true });
 });
 
 // Update a post
@@ -88,38 +113,6 @@ exports.post_update = [
     })
 ]
 
-// Like a post
-exports.post_like = asyncHandler(async(req, res, next) => {
-    const postId = req.params.postId;
-    const userId = req.user.id;
-
-    const post = await Post.findById(postId);
-    if (!post) {
-        return res.status(404).json({ message: 'Post not found' });
-    }
-
-    // If the user has already likes the post
-    if (post.likes.map(String).includes(userId)) {   // Convert likes ObjectId to strings
-        // Find the index of the user in the likes array
-        const idx = post.likes.map(String).findIndex(idx => idx === userId);
-        // Delete the user from the likes array
-        post.likes.splice(idx, 1);
-    } else {
-        post.likes.push(userId);
-    }
-
-    await post.save();
-    return res.status(200).json({ success: true });
-});
-
-// Delete post
-exports.post_delete =  asyncHandler(async(req, res, next) => {
-    const postId = req.params.postId;
-    await Post.findByIdAndDelete(postId);
-
-    res.status(200).json({ success: true });
-});
-
 // Create a comment
 exports.comment_create = [
     body("post")
@@ -138,13 +131,7 @@ exports.comment_create = [
 
         const sanitizedComment = sanitizeHtml(req.body.post);
         const userId = req.user.id;
-        const postId = req.params.postId;
-
-        // Find the specific post
-        const post = await Post.findById(postId);
-        if (!post) {
-            return res.status(404).json({ message: 'Post not found' });
-        }
+        const post = req.post;
 
         // Create a new comment object
         const comment = {
@@ -160,23 +147,23 @@ exports.comment_create = [
     })
 ]
 
+// Get a specific comment from a specific post
+exports.comment_get = asyncHandler(async(req, res, next) => {
+    const post = req.post;
+    const comment = req.comment;
+
+    (comment)
+        ? res.status(200).json({ success:true, post: post })
+        : res.status(404).json({ message: "Comment not found" });
+    
+        return;
+});
+
 // Like a comment
-exports.comment_like = asyncHandler(async(req, res, next) =>  {
-    const postId = req.params.postId;
-    const commentId = req.params.commentId;
+exports.comment_like = asyncHandler(async(req, res, next) => {
     const userId = req.user.id;
-
-    // Find the specific post
-    const post = await Post.findById(postId);
-    if (!post) {
-        return res.status(404).json({ message: "Post not found" });
-    }
-
-    // Find the specified comment of the post
-    const comment = post.comments.id(commentId);
-    if (!comment) {
-        return res.status(404).json({ message: "Comment not found" });
-    }
+    const post = req.post;
+    const comment = req.comment;
 
     // If the user has already likes the post
     if (comment.likes.map(String).includes(userId)) {   // Convert likes ObjectId to strings
@@ -194,14 +181,10 @@ exports.comment_like = asyncHandler(async(req, res, next) =>  {
     res.status(200).json({ success: true });
 });
 
+// Delete a comment
 exports.comment_delete = asyncHandler(async(req, res, next) =>  {
-    const postId = req.params.postId;
     const commentId = req.params.commentId;
-
-    const post = await Post.findById(postId);
-    if (!post) {
-        return res.status(404).json({ message: "Post not found" });
-    }
+    const post = req.post;
 
     // Find the index of the specific comment and delete it from the comments array
     const commentIdx = post.comments.findIndex(comment => comment.id === commentId);
@@ -211,3 +194,31 @@ exports.comment_delete = asyncHandler(async(req, res, next) =>  {
 
     res.status(200).json({ sucess: true });
 });
+
+// Update a post
+exports.comment_update = [
+    body("post")
+        .trim()
+        .isLength({ min: 1 })
+        .withMessage("Post content is required")
+        .isLength({ max: 400 })
+        .withMessage("Post cannot exceed 400 characters"),
+    
+    asyncHandler(async(req, res, next) => {
+        const errors = validationResult(req);
+        
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        
+        const sanitizedPost = sanitizeHtml(req.body.post);
+        
+        const post = req.post;
+        const comment = req.comment;
+
+        comment.post = sanitizedPost;
+        await post.save();
+
+        res.status(200).json({ success: true });
+    })
+]
