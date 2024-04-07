@@ -9,11 +9,11 @@ import { handleInputChange, createPost, getPosts } from "../globals/utilityFunct
 import { postMaxLength } from "../globals/globalVariables";
 
 const HomePage = () => {
-    const formRef = useRef(null);
     const [postFormData, setPostFormData] = useState({ post: "" });
     const posts = useSelector(state => state.posts.posts);
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const formRef = useRef(null);
 
     // Reset the form after submission
     const resetForm = () => {
@@ -23,7 +23,8 @@ const HomePage = () => {
     // Get all of the posts on inital page load and whenever the posts Redux state updates
     useEffect(() => {
         getPosts(navigate, dispatch);
-    }, [posts]);
+    }, []);
+
 
     return (
         <main className="main">
@@ -65,13 +66,14 @@ const HomePage = () => {
                         </div>
                     </form>
                 </section>
-
+                
+                {/* If posts exist, create a new section and output the posts */}
                 <section className="flex flex-col gap-8 mt-16">
-                    {posts.length > 0 && posts.map((post) => (
-                        <Link key={post.id} to={`/post/${post.id}`}>
-                            <Post post={post} />
-                        </Link>
-                    ))}
+                {posts.length > 0 && posts.map((post) => (
+                    <Link key={post.id} to={`/post/${post.id}`}>
+                        <Post post={post} />
+                    </Link>
+                ))}
                 </section>
             </div>
         </main>

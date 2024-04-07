@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { createPostAPIPath, getPostsAPIPath } from "./apiPaths";
+import { createPostAPIPath, getPostsAPIPath, createCommentAPIPath } from "./apiPaths";
 import { setAuthenticated } from "../features/authenticated/authenticatedSlice";
 import { setPosts } from "../features/posts/postsSlice";
 
@@ -27,31 +27,36 @@ const handleInputChange = (e, setFormData) => {
     }));
 }
 
-// Send post request to server when form is submitted
-const createPost = async(
-    e, 
-    postData, 
-    formRef, 
-    resetForm, 
-    navigate, 
-    dispatch
-) => {
+
+// Send a post request to create a resource (post or comment)
+const createResource = async(e, path, data, formRef, resetForm, navigate, dispatch) => {
     e.preventDefault();
+
     try {
-        // When using axios, you dont need to JSON.stringify(data) your request body
-        const response = await axios.post(createPostAPIPath, postData);
+        const response = await axios.post(path, data);
         formRef.current.reset();
 
-        // If the response is good, save the posts into the posts state
         if (response.status === 201) {
-            // Reset the post data state
+            // Update the global redux posts state with the new post/comment
+            getPosts(navigate, dispatch);
             resetForm();
         }
     } catch(err) {
-        // If user isnt authenpostIdticated
-        removeAuthandRedirect("Create Post Error", err, navigate, dispatch);
+        // If user isn't authenticated
+        removeAuthandRedirect("Create Resource Error", err, navigate, dispatch);
     }
-}
+};
+
+// Send post request to server when form is submitted
+const createPost = async (e, postData, formRef, resetForm, navigate, dispatch) => {
+    await createResource(e, createPostAPIPath, postData, formRef, resetForm, navigate, dispatch);
+};
+
+// Send a post request to create a comment
+const createComment = async (e, postId, postData, formRef, resetForm, navigate, dispatch) => {
+    await createResource(e, createCommentAPIPath + `/${postId}`, postData, formRef, resetForm, navigate, dispatch);
+};
+
 
 // Send get request to server to get all of the posts
 const getPosts = async(navigate, dispatch) => {
@@ -91,12 +96,17 @@ const getPost = async(postId, setPost, navigate, dispatch) => {
 const likePost = async(postId, navigate, dispatch) => {
     try {
         const response = await axios.put(getPostsAPIPath + `/like/${postId}`);
+
+        if (response.status === 200) {
+            getPosts(navigate, dispatch);
+        } else {
+            console.error("Unexpected status code:", response.status);
+        }
     } catch(err) {
         // If user isnt authenticated
         removeAuthandRedirect(`Error Liking Post ${postId}`, err, navigate, dispatch);
     }
 }
-
 
 // Send a delete request to server for a specific post id
 const deletePost = async(postId, navigate, dispatch) => {
@@ -115,6 +125,7 @@ const deletePost = async(postId, navigate, dispatch) => {
     }
 }
 
+// Send a put request to server to update a specific post
 const updatePost = async(e, postId, postData, navigate, dispatch) => {
     e.preventDefault();
 
@@ -131,7 +142,6 @@ const updatePost = async(e, postId, postData, navigate, dispatch) => {
         removeAuthandRedirect("Create Post Error", err, navigate, dispatch);
     }
 }
-
 
 // This function handles the fade in/out of the popup modals
 const handlePopups = (isOpen, setIsOpen, setFadeOut) => {
@@ -153,6 +163,7 @@ export {
     stopPropagation,
     handleInputChange,
     createPost,
+    createComment,
     getPosts,
     getPost,
     updatePost,

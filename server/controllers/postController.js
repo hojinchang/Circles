@@ -7,6 +7,7 @@ const sanitizeHtml = require('sanitize-html');
 exports.posts_get = asyncHandler(async(req, res, next) => {
     const posts = await Post.find()
                             .populate("user")
+                            .populate("comments.user")
                             .sort({ timeStamp: -1 })
                             .exec();
     
@@ -16,7 +17,7 @@ exports.posts_get = asyncHandler(async(req, res, next) => {
 });
 
 // Create a post post request
-exports.create_post = [
+exports.post_create = [
     body("post")
         .trim()
         .isLength({ min: 1 })
@@ -34,7 +35,7 @@ exports.create_post = [
         const sanitizedPost = sanitizeHtml(req.body.post);
 
         const post = new Post({
-            user: req.user,
+            user: req.user.id,
             post: sanitizedPost,
         });
 
@@ -48,10 +49,8 @@ exports.post_get = asyncHandler(async(req, res, next) => {
     const postId = req.params.id;
     const post = await Post.findById(postId)
                             .populate("user")
+                            .populate("comments.user")
                             .exec();
-
-
-    console.log(post)
 
     res.status(200).json({ success: true, post: post });
 });
@@ -108,3 +107,43 @@ exports.post_delete =  asyncHandler(async(req, res, next) => {
 
     res.status(200).json({ success: true });
 });
+
+// Create a comment
+exports.comment_create = [
+    body("post")
+        .trim()
+        .isLength({ min: 1 })
+        .withMessage("Post content is required")
+        .isLength({ max: 400 })
+        .withMessage("Post cannot exceed 400 characters"),
+    
+    asyncHandler(async(req, res, next) => {
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        const sanitizedComment = sanitizeHtml(req.body.post);
+        const userId = req.user.id;
+        const postId = req.params.id;
+
+        // Find the specific post
+        const post = await Post.findById(postId);
+        if (!post) {
+            return res.status(404).json({ message: 'Post not found' });
+        }
+
+        // Create a new comment object
+        const comment = {
+            user: userId,
+            post: sanitizedComment
+        }
+
+        // Push comment object to comments array in post schema
+        post.comments.push(comment);
+        await post.save();
+
+        res.status(201).json({ success: true });
+    })
+]

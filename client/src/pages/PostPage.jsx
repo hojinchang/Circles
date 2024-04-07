@@ -1,35 +1,35 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import Nav from "../components/Nav";
 import Post from "../components/Post";
-import { handleInputChange, getPost } from "../globals/utilityFunctions";
+import { handleInputChange, getPosts, createComment } from "../globals/utilityFunctions";
 import { postMaxLength } from "../globals/globalVariables";
 
 const PostPage = () => {
-    const [post, setPost] = useState(null);
     const [postFormData, setPostFormData] = useState({ post: "" });
     const { id } = useParams();
-
+    
     const postGlobal = useSelector(state => state.posts.posts.find(post => post.id === id));
-
+    
     const navigate = useNavigate();
     const dispatch = useDispatch();
-
+    const formRef = useRef(null);
+    
     // Reset the form after submission
     const resetForm = () => {
         setPostFormData({ post: "" });
     };
 
     useEffect(() => {
-        getPost(id, setPost, navigate, dispatch);
-    }, [postGlobal]);
+        getPosts(navigate, dispatch);
+    }, []);
 
     return (
         <main className="main">
             <Nav />
-            {post ?
+            {postGlobal ?
                 <div className="p-8 pb-24 max-w-3xl mx-auto w-full h-full xs:p-12 xs:pb-28 lg:p-8">
                     <section className="flex flex-col gap-4">
                         <div className="flex gap-4 items-center">
@@ -40,8 +40,8 @@ const PostPage = () => {
                             </Link>
                             <p>Home</p>
                         </div>
-                        <Post post={post} />
-                        <form>
+                        <Post post={postGlobal} />
+                        <form ref={formRef} onSubmit={(e) => { createComment(e, id, postFormData, formRef, resetForm, navigate, dispatch) }}>
                             <div>
                                 <label htmlFor="post" className="sr-only">Post</label>
                                 <textarea
@@ -71,6 +71,14 @@ const PostPage = () => {
                         </form>
                     </section>
                     <hr className="my-8 border-neutral-400"/>
+                    <section className="flex flex-col gap-4">
+                        {postGlobal.comments.length > 0 
+                            ? (postGlobal.comments.map((comment) => {
+                                return <Post key={comment.id} post={comment} />
+                            }))
+                            : <p className="text-neutral-500 text-center">This post has no comments.</p>
+                        }
+                    </section>
                 </div>
                 :
                 <div>
