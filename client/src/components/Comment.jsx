@@ -3,10 +3,10 @@ import { useNavigate } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux";
 import escapeHtml from 'escape-html';
 
-import DeletePostModal from "./DeletePostModal";
+import DeleteCommentModal from "./DeleteCommentModal";
 import EditPostModal from "./EditPostModal";
 import ModalWrapper from "./ModalWrapper";
-import { stopPropagation, handlePopups, deletePost, likeComment } from "../globals/utilityFunctions";
+import { stopPropagation, handlePopups, deleteComment, likeComment } from "../globals/utilityFunctions";
 
 const Comment = ({ postId, comment }) => {
     const [optionOpen, setOptionOpen] = useState(false);
@@ -23,10 +23,10 @@ const Comment = ({ postId, comment }) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    // // Wrapper function to delete specific post given id
-    // const deletePostHandler = () => {
-    //     deletePost(post.id, navigate, dispatch);
-    // }
+    // Wrapper function to delete specific post given id
+    const deleteCommentHandler = () => {
+        deleteComment(postId, comment.id, navigate, dispatch);
+    }
 
     // Convert special characters to HTML tags and convert newline to <br>
     const formatContent = (content) => {
@@ -128,17 +128,17 @@ const Comment = ({ postId, comment }) => {
                 </div>
             )}
 
-            {/* {updateModalOpen && (
+            {updateModalOpen && (
                 <ModalWrapper fadeOut={ updateModalFadeOut } toggleModal={ () => handlePopups( updateModalOpen, setUpdateModalOpen, setUpdateModalFadeOut ) } >
-                    <EditPostModal postId={post.id} toggleModal={ () => handlePopups( updateModalOpen, setUpdateModalOpen, setUpdateModalFadeOut ) } />
+                    <EditPostModal postId={postId} toggleModal={ () => handlePopups( updateModalOpen, setUpdateModalOpen, setUpdateModalFadeOut ) } />
                 </ModalWrapper>
             )}
 
             {deleteModalOpen && (
                 <ModalWrapper fadeOut={ deleteModalFadeOut } toggleModal={ () => handlePopups( deleteModalOpen, setDeleteModalOpen, setDeleteModalFadeOut ) }>
-                    <DeletePostModal toggleModal={ () => handlePopups( deleteModalOpen, setDeleteModalOpen, setDeleteModalFadeOut ) } deletePost={ deletePostHandler } />
+                    <DeleteCommentModal toggleModal={ () => handlePopups( deleteModalOpen, setDeleteModalOpen, setDeleteModalFadeOut ) } deleteComment={ deleteCommentHandler } />
                 </ModalWrapper>
-            )} */}
+            )}
         </article>
     )
 }

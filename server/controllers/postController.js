@@ -160,19 +160,22 @@ exports.comment_create = [
     })
 ]
 
+// Like a comment
 exports.comment_like = asyncHandler(async(req, res, next) =>  {
     const postId = req.params.postId;
     const commentId = req.params.commentId;
     const userId = req.user.id;
 
+    // Find the specific post
     const post = await Post.findById(postId);
     if (!post) {
-        return res.status(404).json({ message: 'Post not found' });
+        return res.status(404).json({ message: "Post not found" });
     }
 
+    // Find the specified comment of the post
     const comment = post.comments.id(commentId);
     if (!comment) {
-        return res.status(404).json({ message: 'Comment not found' });
+        return res.status(404).json({ message: "Comment not found" });
     }
 
     // If the user has already likes the post
@@ -189,5 +192,22 @@ exports.comment_like = asyncHandler(async(req, res, next) =>  {
     await post.save();
 
     res.status(200).json({ success: true });
+});
 
+exports.comment_delete = asyncHandler(async(req, res, next) =>  {
+    const postId = req.params.postId;
+    const commentId = req.params.commentId;
+
+    const post = await Post.findById(postId);
+    if (!post) {
+        return res.status(404).json({ message: "Post not found" });
+    }
+
+    // Find the index of the specific comment and delete it from the comments array
+    const commentIdx = post.comments.findIndex(comment => comment.id === commentId);
+    post.comments.splice(commentIdx, 1);
+
+    await post.save();
+
+    res.status(200).json({ sucess: true });
 });

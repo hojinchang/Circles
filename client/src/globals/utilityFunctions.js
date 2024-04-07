@@ -94,6 +94,7 @@ const getPost = async(postId, setPost, navigate, dispatch) => {
 // Like a post or a comment
 const likeResource = async(resourceType, resourceId, subresourceId, navigate, dispatch) => {
     try {
+        // Get the apiPath depending on if the resource is a post or a comment
         let apiPath = "";
         if (resourceType === "post") {
             apiPath = getPostsAPIPath + `/${resourceId}/like`;
@@ -101,8 +102,10 @@ const likeResource = async(resourceType, resourceId, subresourceId, navigate, di
             apiPath = getPostsAPIPath + `/${resourceId}/comment/${subresourceId}/like`;
         }
 
+        // Send a put request to the api
         const response = await axios.put(apiPath);
 
+        // If good, update the posts redux state
         if (response.status === 200) {
             getPosts(navigate, dispatch);
         } else {
@@ -125,11 +128,20 @@ const likeComment = async(postId, commentId, navigate, dispatch) => {
     await likeResource("comment", postId, commentId, navigate, dispatch);
 }
 
-// Send a delete request to server for a specific post id
-const deletePost = async(postId, navigate, dispatch) => {
+// Delete a post/comment 
+const deleteResource = async(resourceType, resourceId, subresourceId, navigate, dispatch) => {
     try {
-        const response = await axios.delete(getPostsAPIPath + `/${postId}`);
-        
+        let apiPath = "";
+        if (resourceType === "post") {
+            apiPath = getPostsAPIPath + `/${resourceId}`;
+        } else if (resourceType === "comment") {
+            apiPath = getPostsAPIPath + `/${resourceId}/comment/${subresourceId}`;
+        }
+
+        // Send a delete request to the api
+        const response = await axios.delete(apiPath);
+
+        // If good, update the posts redux state
         if (response.status === 200) {
             getPosts(navigate, dispatch);
         } else {
@@ -137,10 +149,21 @@ const deletePost = async(postId, navigate, dispatch) => {
         }
 
     } catch(err) {
-        // If user isnt authenticated
-        removeAuthandRedirect("Error Deleting Post", err, navigate, dispatch);
+        // If user isn't authenticated
+        removeAuthandRedirect(`Error Deleting ${resourceType} ${resourceId}`, err, navigate, dispatch);
     }
+} 
+
+// Send a delete request to server for a specific post id
+const deletePost = async(postId, navigate, dispatch) => {
+    await deleteResource("post", postId, null, navigate, dispatch);
 }
+
+// Send a delete request to server for a specific comment id
+const deleteComment = async(postId, commentId, navigate, dispatch) => {
+    await deleteResource("comment", postId, commentId, navigate, dispatch);
+}
+
 
 // Send a put request to server to update a specific post
 const updatePost = async(e, postId, postData, navigate, dispatch) => {
@@ -183,9 +206,10 @@ export {
     createComment,
     getPosts,
     getPost,
-    updatePost,
     likePost,
     likeComment,
     deletePost,
+    deleteComment,
+    updatePost,
     handlePopups
 }

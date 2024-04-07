@@ -74,7 +74,7 @@ const PostPage = () => {
                     <hr className="my-8 border-neutral-400"/>
                     <section className="flex flex-col gap-4">
                         {postGlobal.comments.length > 0 
-                            ? (postGlobal.comments.map((comment) => {
+                            ? (postGlobal.comments.toReversed().map((comment) => {
                                 return <Comment key={comment.id} postId={postId} comment={comment} />
                             }))
                             : <p className="text-neutral-500 text-center">This post has no comments.</p>
@@ -82,8 +82,8 @@ const PostPage = () => {
                     </section>
                 </div>
                 :
-                <div>
-                    <h1>Post not found</h1>
+                <div className="max-w-3xl mx-auto w-full min-h-screen flex justify-center items-center">
+                    <h1 className="font-bold text-xl">Post not found</h1>
                 </div>
             }
         </main>

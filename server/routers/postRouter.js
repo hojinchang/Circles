@@ -27,4 +27,7 @@ router.post("/:postId/comment", postController.comment_create);
 // Like a specific comment
 router.put("/:postId/comment/:commentId/like", postController.comment_like);
 
+// Delete a specific comment
+router.delete("/:postId/comment/:commentId", postController.comment_delete);
+
 module.exports = router;

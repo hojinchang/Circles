@@ -39,7 +39,7 @@ const EditPostModal = ({ postId, toggleModal }) => {
                     >&times;
                 </button>
                     <h3 className="text-lg font-bold">Edit Post</h3>
-                    <p className="text-neutral-500">Update your post.</p>
+                    <p className="text-neutral-500">Edit your post.</p>
                     <form 
                         className="mt-1" 
                         onSubmit={async(e) => {
