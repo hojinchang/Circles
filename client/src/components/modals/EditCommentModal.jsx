@@ -2,24 +2,24 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux";
 
-import { postMaxLength } from "../globals/globalVariables";
-import { stopPropagation, handleInputChange, updatePost } from "../globals/utilityFunctions";
+import { postMaxLength } from "../../globals/globalVariables";
+import { stopPropagation, handleInputChange, updateComment } from "../../globals/utilityFunctions";
 
-const EditPostModal = ({ post, toggleModal }) => {
+const EditCommentModal = ({ postId, comment, toggleModal }) => {
     const [formData, setFormData] = useState({ post: "" });
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    // Save the post content into the formData state
+    // Save the comment content into the formData state
     useEffect(() => {
-        if (post && post.post) {
-            setFormData({ post: post.post });
+        if (comment && comment.post) {
+            setFormData({ post: comment.post });
         }
-    }, [post]);
+    }, [comment]);
 
     return (
         <>
-            {post &&
+            {comment &&
                 <div 
                     className="modal z-20"
                     onClick={(e) => stopPropagation(e) }
@@ -32,12 +32,13 @@ const EditPostModal = ({ post, toggleModal }) => {
                         }}
                     >&times;
                 </button>
-                    <h3 className="text-lg font-bold">Edit Post</h3>
-                    <p className="text-neutral-500">Edit your post.</p>
+                    <h3 className="text-lg font-bold">Edit Comment</h3>
+                    <p className="text-neutral-500">Edit your comment.</p>
                     <form 
                         className="mt-1" 
                         onSubmit={async(e) => {
-                            await updatePost(e, post.id, formData, navigate, dispatch);
+                            await updateComment(e, postId, comment.id, formData, navigate, dispatch);
+                            // await updatePost(e, post.id, formData, navigate, dispatch);
                             toggleModal();
                         }}
                     >
@@ -67,7 +68,7 @@ const EditPostModal = ({ post, toggleModal }) => {
                                 }`}
                                 onClick={(e) => e.stopPropagation()}
                             >
-                                Update Post
+                                Update Comment
                             </button>
                         </div>
                     </form>
@@ -78,4 +79,4 @@ const EditPostModal = ({ post, toggleModal }) => {
     );
 }
 
-export default EditPostModal;
+export default EditCommentModal;

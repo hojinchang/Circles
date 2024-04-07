@@ -2,8 +2,8 @@ import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
-import { postMaxLength } from "../globals/globalVariables";
-import { handleInputChange, createPost } from "../globals/utilityFunctions";
+import { postMaxLength } from "../../globals/globalVariables";
+import { handleInputChange, createPost } from "../../globals/utilityFunctions";
 
 const AddPostModal = ({ toggleModal }) => {
     const formRef = useRef(null);

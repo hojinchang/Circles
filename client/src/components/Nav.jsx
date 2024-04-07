@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import axios from "axios";
 
 import ModalWrapper from "./ModalWrapper";
-import AddPostModal from "../components/AddPostModal";
+import AddPostModal from "./modals/AddPostModal";
 import { setAuthenticated } from "../features/authenticated/authenticatedSlice";
 import { getUserAPIPath, logoutAPIPath } from "../globals/apiPaths";
 import { handlePopups } from "../globals/utilityFunctions";

@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux";
 import escapeHtml from 'escape-html';
 
-import DeletePostModal from "./DeletePostModal";
-import EditPostModal from "./EditPostModal";
+import DeletePostModal from "./modals/DeletePostModal";
+import EditPostModal from "./modals/EditPostModal";
 import ModalWrapper from "./ModalWrapper";
 import { stopPropagation, handlePopups, deletePost, likePost } from "../globals/utilityFunctions";
 

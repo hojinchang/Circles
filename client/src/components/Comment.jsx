@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux";
 import escapeHtml from 'escape-html';
 
-import DeleteCommentModal from "./DeleteCommentModal";
-import EditCommentModal from "./EditCommentModal";
+import DeleteCommentModal from "./modals/DeleteCommentModal";
+import EditCommentModal from "./modals/EditCommentModal";
 import ModalWrapper from "./ModalWrapper";
 import { stopPropagation, handlePopups, deleteComment, likeComment } from "../globals/utilityFunctions";
 

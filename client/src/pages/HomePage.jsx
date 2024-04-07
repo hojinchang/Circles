@@ -66,9 +66,9 @@ const HomePage = () => {
                         </div>
                     </form>
                 </section>
-                
+                <hr className="my-8 border-neutral-400"/>
                 {/* If posts exist, create a new section and output the posts */}
-                <section className="flex flex-col gap-8 mt-16">
+                <section className="flex flex-col gap-8">
                 {posts.length > 0 && posts.map((post) => (
                     <Link key={post.id} to={`/post/${post.id}`}>
                         <Post post={post} />
