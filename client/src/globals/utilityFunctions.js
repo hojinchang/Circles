@@ -148,6 +148,14 @@ const deleteResource = async(resourceType, resourceId, subresourceId, navigate, 
             console.error("Unexpected status code:", response.status);
         }
 
+        /*
+            If you delete a post, navigate back to the homepage.
+            This is useful when deleting a post in the post page
+        */
+        if (resourceType === "post") {
+            navigate("/");
+        }
+
     } catch(err) {
         // If user isn't authenticated
         removeAuthandRedirect(`Error Deleting ${resourceType} ${resourceId}`, err, navigate, dispatch);
