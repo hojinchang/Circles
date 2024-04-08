@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
 
 import googleLogo from "../assets/images/Google__G__logo.svg";
+import defaultProfilePicture from "../assets/images/default-profile-picture.png";
 import { handleInputChange } from "../globals/utilityFunctions";
 import handleLogin from "../globals/login";
 import { signUpAPIPath } from "../globals/apiPaths";
@@ -18,6 +18,7 @@ const SignUpPage = () => {
     });
     const [formErrors, setFormErrors] = useState(null);
     const [formSubmitted, setFormSubmitted] = useState(false);
+    const [profilePicture, setProfilePicture] = useState(null);
 
     // Post request to server containing form data payload
     const emailSignUpSubmission = async(e) => {
@@ -49,6 +50,20 @@ const SignUpPage = () => {
         setFormSubmitted(true);
     }
 
+    // Set the new input profile picture as the display one
+    const handleProfilePictureChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            // setProfilePicture(file.name);
+            const reader = new FileReader();
+            reader.onload = () => {
+                setProfilePicture(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    // Reset the passwords in the formData state
     useEffect(() => {
         if (formSubmitted && formErrors && formErrors.length > 0) {
             setFormData({...formData, password: "", passwordConfirm: ""});
@@ -58,7 +73,7 @@ const SignUpPage = () => {
 
 
     return(
-        <main className="flex flex-col justify-center items-center px-8 py-10 lg:py-24">
+        <main className="flex flex-col justify-center items-center px-8 py-10">
             <header className="mb-10 lg:mb-16">
                 <div className="flex justify-center items-center gap-4">
                     <div className="w-10 h-10 rounded-full border-2 border-neutral-800"></div>
@@ -68,7 +83,7 @@ const SignUpPage = () => {
             
             <section className="mb-6 max-w-96">
                 <h1 className="text-3xl font-semibold text-center mb-2">Sign Up</h1>
-                <p className="text-neutral-500  text-center text-sm">Enter your credentials below to sign in.</p>
+                <p className="text-neutral-500  text-center text-sm">Enter your credentials below and choose your profile picture to sign up.</p>
             </section>
 
             {formErrors && formErrors.length > 0 && (
@@ -83,6 +98,24 @@ const SignUpPage = () => {
 
             <section className="max-w-96 w-full">
                 <form className="w-full mx-auto" onSubmit={emailSignUpSubmission}>
+                    <div className="mb-6">
+                        <label htmlFor="profilePicture" className="sr-only">Profile Picture</label>
+                        <input 
+                            type="file"
+                            id="profilePicture"
+                            name="profilePicture"
+                            accept="image/*"   // Accept only image files
+                            className="hidden"  // Hide the file input initially
+                            onChange={handleProfilePictureChange}
+                        />
+                        <label htmlFor="profilePicture" className="cursor-pointer">
+                            <img 
+                                src={profilePicture ? profilePicture : defaultProfilePicture} 
+                                alt="Default profile picture" id="profileImage" 
+                                className="w-28 h-28 rounded-full mx-auto mb-4" />
+                        </label>
+                    </div>
+
                     <div className="flex flex-col gap-2">
                         <div className="grid grid-cols-4 items-center gap-4">
                             <label htmlFor="firstName" className="text-sm font-medium text-right">First Name *</label>
