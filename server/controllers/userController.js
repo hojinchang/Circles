@@ -1,11 +1,13 @@
 const User = require("../models/user");
 const asyncHandler = require("express-async-handler");
 const { body, validationResult } = require("express-validator");
+const path = require("path");
 
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const cloudinary = require("cloudinary").v2;
 
 
 // Username / Password local strategy authentication
@@ -83,7 +85,7 @@ exports.sign_up_post = [
             return true;
         })
         .escape(),
-    
+
     async(req, res, next) => {
         try {
             // Check for form errors
@@ -94,11 +96,25 @@ exports.sign_up_post = [
                 return res.status(400).json({ errors: errors.array() });
             }
 
+            // Check if the user already exists
             const registeredUser = await User.findOne({ email: req.body.email }).exec();
             if (registeredUser) {
                 return res.status(400).json({
                     errors: [{msg: "Email already exists"}]
                 });
+            }
+
+            let profilePictureUrl = null;
+            if (req.file) {
+                console.log(req.file)
+                // Convert the file into base64 encoding to ensure data remains intact during transport
+                const result = await cloudinary.uploader.upload(`data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`, { folder: 'profile-pictures' });
+                profilePictureUrl = result.secure_url;
+            } else {
+                // Use default image
+                const defaultProfilePicturePath = path.join(__dirname, '../assets/images/default-profile-picture.png');
+                const result = await cloudinary.uploader.upload(defaultProfilePicturePath, { folder: 'profile-pictures' });
+                profilePictureUrl = result.secure_url;
             }
 
             bcrypt.hash(req.body.password, 10, async(err, hashedPassword) => {
@@ -110,7 +126,8 @@ exports.sign_up_post = [
                     firstName: req.body.firstName,
                     lastName: req.body.lastName,
                     email: req.body.email,
-                    password: hashedPassword
+                    password: hashedPassword,
+                    profilePicture: profilePictureUrl
                 });
 
                 await user.save();
@@ -167,7 +184,7 @@ exports.login_post = [
                 }
 
                 const token = jwt.sign({ user: user }, process.env.JWT_SECRET);
-
+                
                 // Set the JWT token in an HTTP-only cookie
                 res.cookie('jwt', token, {
                     httpOnly: true,
@@ -175,7 +192,7 @@ exports.login_post = [
                     // maxAge: 60 * 60 * 1000,
                     path: "/"   // Set the cookie to be accessible from all paths
                 });
-                
+
                 return res.status(200).json({ success: true, user: user.id });
             });
         })(req, res, next);

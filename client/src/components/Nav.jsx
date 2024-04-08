@@ -68,6 +68,7 @@ const Nav = () => {
         };
 
         getUser();
+
     }, []);
 
 
@@ -76,9 +77,19 @@ const Nav = () => {
             <div className="lg:p-16 lg:w-96 lg:h-screen lg:border-r-2 overflow-auto">
                 <div className={`p-4 bg-neutral-50 fixed inset-0 transition-transform duration-500 transform ${secondaryNavOpen ? 'translate-y-0' : 'translate-y-full'} lg:static lg:translate-y-0 lg:p-0 z-10`}>
                     <nav className="flex flex-col gap-2 mx-auto max-w-sm h-full justify-center">
+
                         <div className="mb-4">
-                            <p className="font-medium text-center">{user && user.fullName}</p>
-                            <p className="text-center text-neutral-500">{user && user.email}</p>
+                            {user && (
+                                <>
+                                    <img 
+                                        src={user.profilePicture} 
+                                        alt="Profile"
+                                        className="w-20 h-20 rounded-full mx-auto mb-2"
+                                    />
+                                    <p className="font-medium text-center">{user.fullName}</p>
+                                    <p className="text-center text-neutral-500">{user.email}</p>
+                                </>
+                            )}
                         </div>
                         <div>
                             <NavLink to="/" className={isActive => `secondary-nav-item-container ${isActive ? "nav-active" : ""}`}>

@@ -8,7 +8,6 @@ const handleLogin = (e, loginType, formData, setLoginError, dispatch, navigate) 
         : apiPath = demoLoginAPIPath;
 
     _loginSubmission(e, apiPath, JSON.stringify(formData), setLoginError, dispatch, navigate);
-    
 }
 
 // Post request to server for user authentication

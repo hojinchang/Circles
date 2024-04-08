@@ -7,7 +7,7 @@ const UserSchema = new Schema({
     lastName: { type: String, required: true, minLength: 1, maxLength: 20 },
     email: { type: String, required: true, minLength: 1, maxLength: 100 },
     password: { type: String, required: true, minLength: 1 },
-    profilePicture: { type: Buffer },   // Store the image as binary data
+    profilePicture: { type: String },   // Store the image as binary data
     joinDate: { type: Date, default: Date.now }
 }, {
     toJSON: { virtuals: true },

@@ -8,29 +8,39 @@ import handleLogin from "../globals/login";
 import { signUpAPIPath } from "../globals/apiPaths";
 
 const SignUpPage = () => {
+
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
         email: '',
         password: '',
-        passwordConfirm: ''
+        passwordConfirm: '',
+        profilePicture: null
     });
     const [formErrors, setFormErrors] = useState(null);
     const [formSubmitted, setFormSubmitted] = useState(false);
-    const [profilePicture, setProfilePicture] = useState(null);
+    const [profilePicture, setProfilePicture] = useState(defaultProfilePicture);
 
     // Post request to server containing form data payload
     const emailSignUpSubmission = async(e) => {
         e.preventDefault();
+
+        const formDataObject = new FormData(); // Create FormData object
+    
+        // Append form data to FormData object. This allows for multipart/form-data for my profile picture file
+        formDataObject.append('firstName', formData.firstName);
+        formDataObject.append('lastName', formData.lastName);
+        formDataObject.append('email', formData.email);
+        formDataObject.append('password', formData.password);
+        formDataObject.append('passwordConfirm', formData.passwordConfirm);
+        formDataObject.append('profilePicture', formData.profilePicture); // Append profile picture
+
         try {
             // Have to make requests to /api/.. as we are using a proxy
             const response = await fetch(signUpAPIPath, {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(formData)
+                body: formDataObject
             });
 
             const responseData = await response.json();
@@ -50,13 +60,17 @@ const SignUpPage = () => {
         setFormSubmitted(true);
     }
 
-    // Set the new input profile picture as the display one
+    // Set the new input profile picture
     const handleProfilePictureChange = (e) => {
         const file = e.target.files[0];
         if (file) {
-            // setProfilePicture(file.name);
             const reader = new FileReader();
             reader.onload = () => {
+                setFormData({
+                    ...formData,
+                    profilePicture: file
+                });
+
                 setProfilePicture(reader.result);
             };
             reader.readAsDataURL(file);
@@ -97,7 +111,7 @@ const SignUpPage = () => {
             )}
 
             <section className="max-w-96 w-full">
-                <form className="w-full mx-auto" onSubmit={emailSignUpSubmission}>
+                <form className="w-full mx-auto" onSubmit={emailSignUpSubmission} encType="multipart/form-data">
                     <div className="mb-6">
                         <label htmlFor="profilePicture" className="sr-only">Profile Picture</label>
                         <input 
@@ -110,7 +124,7 @@ const SignUpPage = () => {
                         />
                         <label htmlFor="profilePicture" className="cursor-pointer">
                             <img 
-                                src={profilePicture ? profilePicture : defaultProfilePicture} 
+                                src={ profilePicture } 
                                 alt="Default profile picture" id="profileImage" 
                                 className="w-28 h-28 rounded-full mx-auto mb-4" />
                         </label>

@@ -13,6 +13,13 @@ const userRouter = require("./routers/userRouter");
 const authRouter = require("./routers/authRouter");
 const postRouter = require("./routers/postRouter");
 
+// Import cloudinary image storage
+const cloudinary = require("cloudinary").v2;
+// Configure Cloudinary using CLOUDINARY_URL environment variable
+cloudinary.config({
+    cloudinary_url: process.env.CLOUDINARY_URL
+});
+          
 // Middleware
 const isAuth = require("./middleware/isAuth");
 
@@ -32,7 +39,7 @@ async function main() {
 }
 
 app.use(session({
-  secret: "happy",
+  secret: process.env.SESSION_SECRET,
   resave: false, 
   saveUninitialized: false,
 }));
