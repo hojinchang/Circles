@@ -83,7 +83,7 @@ const Nav = () => {
                                 <>
                                     <img 
                                         src={user.profilePicture} 
-                                        alt="Profile"
+                                        alt="Profile picture"
                                         className="w-20 h-20 rounded-full mx-auto mb-2"
                                     />
                                     <p className="font-medium text-center">{user.fullName}</p>

@@ -106,7 +106,6 @@ exports.sign_up_post = [
 
             let profilePictureUrl = null;
             if (req.file) {
-                console.log(req.file)
                 // Convert the file into base64 encoding to ensure data remains intact during transport
                 const result = await cloudinary.uploader.upload(`data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`, { folder: 'profile-pictures' });
                 profilePictureUrl = result.secure_url;

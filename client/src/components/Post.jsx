@@ -53,7 +53,7 @@ const Post = ({ post }) => {
     return (
         <>
             {post.user && (
-                <article ref={postRef} className="flex flex-col gap-2 p-4 border border-neutral-300 rounded-lg relative">
+                <article ref={postRef} className="flex flex-col gap-3 p-4 border border-neutral-300 rounded-lg relative">
                     {(post.user.id === currentUserId) && (
                         <button 
                             className="absolute right-0 top-0 p-4 rounded-md hover:bg-neutral-300" 
@@ -73,9 +73,16 @@ const Post = ({ post }) => {
                             </svg>
                         </button>
                     )}
-                    <div>
-                        <p>{post.user.fullName}</p>
-                        <p className="text-neutral-500">{post.user.email}</p>
+                    <div className="flex gap-4">
+                        <img 
+                            src={post.user.profilePicture} 
+                            alt="Profile picture"
+                            className="w-12 h-12 rounded-full"
+                        />
+                        <div>
+                            <p>{post.user.fullName}</p>
+                            <p className="text-neutral-500">{post.user.email}</p>
+                        </div>
                     </div>
                     {/* 
                         CLient side escaping.
