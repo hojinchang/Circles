@@ -242,6 +242,22 @@ const getSpecificUser = async(userId, setUser, navigate, dispatch) => {
     }
 }
 
+// Get posts from specific user
+const getUserPosts = async(userId, setPosts, navigate, dispatch) => {
+    try {
+        const response = await axios.get(getUserAPIPath + `/${userId}` + "/posts");
+        if (response.status === 200) {
+            setPosts(response.data);
+        } else {
+            console.error("Unexpected status code:", response.status)
+        }
+
+    } catch(err) {
+        // If user isn't authenticated
+        removeAuthandRedirect("Error Getting Posts From User", err, navigate, dispatch);
+    }
+}
+
 // This function handles the fade in/out of the popup modals
 const handlePopups = (isOpen, setIsOpen, setFadeOut) => {
     // If the option is open, set the fade out animation
@@ -273,5 +289,6 @@ export {
     updateComment,
     getUser,
     getSpecificUser,
+    getUserPosts,
     handlePopups
 }

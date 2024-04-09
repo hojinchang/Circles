@@ -1,14 +1,16 @@
 import { useState, useEffect, useRef } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import PageWrapper from "../components/PageWrapper";
-import { getSpecificUser, handleInputChange, createPost } from "../globals/utilityFunctions";
+import Post from "../components/Post";
+import { getSpecificUser, getUserPosts, handleInputChange, createPost } from "../globals/utilityFunctions";
 import { postMaxLength } from "../globals/globalVariables";
 
 const ProfilePage = () => {
-    const [postFormData, setPostFormData] = useState({ post: "" });
     const [user, setUser] = useState(null);
+    const [posts, setPosts] = useState([]);
+    const [postFormData, setPostFormData] = useState({ post: "" });
     const { userId } = useParams();
 
     const formRef = useRef(null);
@@ -24,6 +26,11 @@ const ProfilePage = () => {
     // Get the user
     useEffect(() => {
         getSpecificUser(userId, setUser, navigate, dispatch);
+    }, []);
+
+    // Get posts from the user
+    useEffect(() => {
+        getUserPosts(userId, setPosts, navigate, dispatch);
     }, []);
 
     return (
@@ -76,8 +83,15 @@ const ProfilePage = () => {
 
                     <hr className="my-8 border-neutral-400"/>
 
-                    <section>
-                        
+                    <section className="flex flex-col gap-8">
+                        {posts.length > 0  
+                            ? posts.map((post) => (
+                                <Link key={post.id} to={`/post/${post.id}`}>
+                                    <Post post={post} />
+                                </Link>
+                            ))
+                            : <p className="text-neutral-500 text-center">This user has no posts.</p>
+                        }
                     </section>
                 </>
             }

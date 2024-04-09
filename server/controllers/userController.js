@@ -1,4 +1,5 @@
 const User = require("../models/user");
+const Post = require("../models/post");
 const asyncHandler = require("express-async-handler");
 const { body, validationResult } = require("express-validator");
 const path = require("path");
@@ -242,3 +243,15 @@ exports.get_specific_user = asyncHandler(async(req, res, next) => {
         ? res.status(200).json(user)
         : res.status(404).json({ message: "User not found" });
 });
+
+// Get posts from a specific user
+exports.get_user_posts = asyncHandler(async(req, res, next) => {
+    const userId = req.params.userId;
+    const posts = await Post.find({ user: userId })
+                            .populate("user")
+                            .exec();
+
+    posts
+        ? res.status(200).json(posts)
+        : res.status(404).json({ message: "User posts not found" });
+})

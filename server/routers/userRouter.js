@@ -28,4 +28,7 @@ router.get("/logout", userController.logout);
 // Get a specfic user given their id
 router.get("/:userId", userController.get_specific_user);
 
+// Get posts from specific user
+router.get("/:userId/posts", userController.get_user_posts);
+
 module.exports = router;
