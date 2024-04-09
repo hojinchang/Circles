@@ -216,6 +216,7 @@ const getUser = async(setUser, navigate, dispatch) => {
     }
 };
 
+// Get all users
 const getUsers = async(setUsers, navigate, dispatch) => {
     try {
         const response = await axios.get(getUserAPIPath + "/all");
@@ -266,19 +267,39 @@ const getUserPosts = async(userId, setPosts, navigate, dispatch) => {
 }
 
 // This function handles the fade in/out of the popup modals
-const handlePopups = (isOpen, setIsOpen, setFadeOut) => {
-    // If the option is open, set the fade out animation
-    if (isOpen) {
-        setFadeOut(true);
-        setTimeout(() => {
-            setIsOpen(false);
-        }, 275);
-    } else {
-        // Else, just toggle it on
-        setIsOpen(true);
-        setFadeOut(false);
-    }
-}
+const handlePopups = (modalKey, setModals) => {
+    setModals(prevState => {
+        const newState = { ...prevState };
+
+        // If the modal is being closed, set fadeOut to true
+        if (newState[modalKey].open) {
+            newState[modalKey] = {
+                ...newState[modalKey],
+                fadeOut: true
+            };
+
+            // After the animation has completed, close the modal
+            setTimeout(() => {
+                setModals(prevState => ({
+                    ...prevState,
+                    [modalKey]: {
+                        ...prevState[modalKey],
+                        open: false
+                    }
+                }));
+            }, 275); // Adjust this to match the length of your fade-out animation
+        } else {
+            // If the modal is being opened, reset fadeOut state and open the modal
+            newState[modalKey] = {
+                ...newState[modalKey],
+                open: true,
+                fadeOut: false
+            };
+        }
+
+        return newState;
+    });
+};
 
 
 export {
