@@ -25,4 +25,7 @@ router.post("/login-demo", userController.demo_login_post);
 // Logout the user
 router.get("/logout", userController.logout);
 
+// Get a specfic user given their id
+router.get("/:userId", userController.get_specific_user);
+
 module.exports = router;

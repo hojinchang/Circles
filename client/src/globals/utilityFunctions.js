@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { createPostAPIPath, getPostsAPIPath } from "./apiPaths";
+import { createPostAPIPath, getPostsAPIPath, getUserAPIPath } from "./apiPaths";
 import { setAuthenticated } from "../features/authenticated/authenticatedSlice";
 import { setPosts } from "../features/posts/postsSlice";
 
@@ -208,6 +208,40 @@ const updateComment = async(e, postId, commentId, formData, navigate, dispatch) 
     await updateResource(e, "comment", postId, commentId, formData, navigate, dispatch);
 }
 
+// Get the current user
+const getUser = async(setUser, navigate, dispatch) => {
+    try {
+        const response = await axios.get(getUserAPIPath);
+
+        if (response.status === 200) {
+            setUser(response.data);
+        } else {
+            console.error("Unexpected status code:", response.status)
+        }
+
+    } catch(err) {
+        // If user isn't authenticated
+        removeAuthandRedirect("Error Getting User", err, navigate, dispatch);
+    }
+};
+
+// Get specific user given their id
+const getSpecificUser = async(userId, setUser, navigate, dispatch) => {
+    try {
+        const response = await axios.get(getUserAPIPath + `/${userId}`);
+        
+        if (response.status === 200) {
+            setUser(response.data);
+        } else {
+            console.error("Unexpected status code:", response.status)
+        }
+
+    } catch(err) {
+        // If user isn't authenticated
+        removeAuthandRedirect("Error Getting User", err, navigate, dispatch);
+    }
+}
+
 // This function handles the fade in/out of the popup modals
 const handlePopups = (isOpen, setIsOpen, setFadeOut) => {
     // If the option is open, set the fade out animation
@@ -237,5 +271,7 @@ export {
     deleteComment,
     updatePost,
     updateComment,
+    getUser,
+    getSpecificUser,
     handlePopups
 }

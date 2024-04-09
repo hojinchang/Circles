@@ -226,7 +226,17 @@ exports.logout = (req, res, next) => {
 
 // Get the authenticated user
 exports.get_user = asyncHandler(async(req, res, next) => {
-    const user = await User.findOne({ _id: req.user.id });
+    const user = await User.findById(req.user.id);
+
+    (user)
+        ? res.status(200).json(user)
+        : res.status(404).json({ message: "User not found" });
+});
+
+// Get the specific user
+exports.get_specific_user = asyncHandler(async(req, res, next) => {
+    const userId = req.params.userId;
+    const user = await User.findById(userId);
 
     (user)
         ? res.status(200).json(user)

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 
@@ -7,7 +7,7 @@ import ModalWrapper from "./modals/ModalWrapper";
 import AddPostModal from "./modals/AddPostModal";
 import { setAuthenticated } from "../features/authenticated/authenticatedSlice";
 import { getUserAPIPath, logoutAPIPath } from "../globals/apiPaths";
-import { handlePopups } from "../globals/utilityFunctions";
+import { getUser, handlePopups } from "../globals/utilityFunctions";
 
 
 const Nav = () => {
@@ -15,6 +15,8 @@ const Nav = () => {
     const [user, setUser] = useState(null);
     const [postModalOpen, setPostModalOpen] = useState(false);
     const [fadeOut, setFadeOut] = useState(false);
+
+    const navigate = useNavigate();
     const dispatch = useDispatch();
 
     // Toggle show the secondary nav
@@ -52,23 +54,7 @@ const Nav = () => {
 
     // Get the user
     useEffect(() => {
-        const getUser = async() => {
-            try {
-                const response = await axios.get(getUserAPIPath);
-
-                if (response.status === 200) {
-                    setUser(response.data);
-                } else {
-                    dispatch( setAuthenticated(false) );
-                    console.error("Unexpected status code:", response.status);
-                }
-            } catch(err) {
-                console.error("Error Getting User", err);
-            }
-        };
-
-        getUser();
-
+        getUser(setUser, navigate, dispatch);
     }, []);
 
 
