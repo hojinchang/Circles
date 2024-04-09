@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import PageWrapper from "../components/PageWrapper";
+import PageWrapper from "../components/wrappers/PageWrapper";
 import Post from "../components/Post";
 import { getSpecificUser, getUserPosts, handleInputChange, createPost } from "../globals/utilityFunctions";
 import { postMaxLength } from "../globals/globalVariables";
@@ -13,6 +13,7 @@ const ProfilePage = () => {
     const [postFormData, setPostFormData] = useState({ post: "" });
     const { userId } = useParams();
 
+    const postsGlobal = useSelector(state => state.posts);
     const formRef = useRef(null);
 
     const navigate = useNavigate();
@@ -31,7 +32,7 @@ const ProfilePage = () => {
     // Get posts from the user
     useEffect(() => {
         getUserPosts(userId, setPosts, navigate, dispatch);
-    }, []);
+    }, [postsGlobal]);
 
     return (
         <PageWrapper>

@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import PageWrapper from "../components/PageWrapper";
+import PageWrapper from "../components/wrappers/PageWrapper";
 import Post from "../components/Post";
 import Comment from "../components/Comment";
 import { handleInputChange, getPosts, createComment } from "../globals/utilityFunctions";

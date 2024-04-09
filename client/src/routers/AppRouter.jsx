@@ -44,6 +44,8 @@ const AppRouter = () => {
                 <Route path="/sign-up" element={<ProtectedRoute redirectToAuth="/"><SignUpPage /></ProtectedRoute>}></Route>
                 <Route path="/post/:postId" element={<ProtectedRoute redirectToUnauth="/login"><PostPage /></ProtectedRoute>}></Route>
                 <Route path="/user/:userId" element={<ProtectedRoute redirectToUnauth="/login"><ProfilePage /></ProtectedRoute>}></Route>
+                <Route path="/user/:userId/friends" element={<ProtectedRoute redirectToUnauth="/login"><ProfilePage /></ProtectedRoute>}></Route>
+                <Route path="/user/:userId/replies" element={<ProtectedRoute redirectToUnauth="/login"><ProfilePage /></ProtectedRoute>}></Route>
             </Routes>
         </BrowserRouter>
     );

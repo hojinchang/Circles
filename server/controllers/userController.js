@@ -249,6 +249,7 @@ exports.get_user_posts = asyncHandler(async(req, res, next) => {
     const userId = req.params.userId;
     const posts = await Post.find({ user: userId })
                             .populate("user")
+                            .sort({ timeStamp: -1 })
                             .exec();
 
     posts
