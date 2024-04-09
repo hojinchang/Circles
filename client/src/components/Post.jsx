@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom"
+import { useNavigate, Link } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux";
 import escapeHtml from 'escape-html';
 
@@ -80,8 +80,8 @@ const Post = ({ post }) => {
                             className="w-12 h-12 rounded-full"
                         />
                         <div>
-                            <p>{post.user.fullName}</p>
-                            <p className="text-neutral-500">{post.user.email}</p>
+                            <Link to={`/user/${post.user.id}`} className="z-100 hover:underline">{post.user.fullName}</Link>
+                            <Link to={`/user/${post.user.id}`} className="z-100 hover:underline"><p className="text-neutral-500">{post.user.email}</p></Link>
                         </div>
                     </div>
                     {/* 
