@@ -263,4 +263,12 @@ exports.get_user_posts = asyncHandler(async(req, res, next) => {
     posts
         ? res.status(200).json(posts)
         : res.status(404).json({ message: "User posts not found" });
-})
+});
+
+// Delete the user
+exports.delete_user = asyncHandler(async(req, res, next) => {
+    const userId = req.params.userId;
+    await User.findByIdAndDelete(userId);
+
+    res.status(200).json({ success: true });
+});

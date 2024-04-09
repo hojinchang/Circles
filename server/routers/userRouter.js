@@ -34,4 +34,7 @@ router.get("/:userId", isAuth, userController.get_specific_user);
 // Get posts from specific user
 router.get("/:userId/posts", isAuth, userController.get_user_posts);
 
+// Delete user
+router.delete("/:userId", isAuth, userController.delete_user);
+
 module.exports = router;

@@ -266,6 +266,22 @@ const getUserPosts = async(userId, setPosts, navigate, dispatch) => {
     }
 }
 
+const deleteUser = async(userId, navigate, dispatch) => {
+    try {
+        const response = await axios.delete(getUserAPIPath + `/${userId}`);
+        if (response.status === 200) {
+            navigate("/login");
+            dispatch( setAuthenticated(null) );
+        } else {
+            console.error("Unexpected status code:", response.status)
+        }
+
+    } catch (err) {
+        // If user isn't authenticated
+        removeAuthandRedirect("Error Getting Posts From User", err, navigate, dispatch);
+    }
+}
+
 // This function handles the fade in/out of the popup modals
 const handlePopups = (modalKey, setModals) => {
     setModals(prevState => {
@@ -287,7 +303,7 @@ const handlePopups = (modalKey, setModals) => {
                         open: false
                     }
                 }));
-            }, 275); // Adjust this to match the length of your fade-out animation
+            }, 275);
         } else {
             // If the modal is being opened, reset fadeOut state and open the modal
             newState[modalKey] = {
@@ -319,5 +335,6 @@ export {
     getUsers,
     getSpecificUser,
     getUserPosts,
+    deleteUser,
     handlePopups
 }

@@ -4,13 +4,20 @@ import { useDispatch, useSelector } from "react-redux";
 
 import PageWrapper from "../components/wrappers/PageWrapper";
 import Post from "../components/Post";
-import { getUser, getSpecificUser, getUserPosts, handleInputChange, createPost } from "../globals/utilityFunctions";
+import DeleteAccountModal from "../components/modals/DeleteAccountModal";
+import ModalWrapper from "../components/modals/ModalWrapper";
+import { getSpecificUser, getUserPosts, handleInputChange, createPost, handlePopups, stopPropagation, deleteUser } from "../globals/utilityFunctions";
 import { postMaxLength, demoUserId } from "../globals/globalVariables";
 
 const ProfilePage = () => {
     const [user, setUser] = useState(null);
     const [posts, setPosts] = useState([]);
     const [postFormData, setPostFormData] = useState({ post: "" });
+    const [modals, setModals] = useState({
+        edit: { open: false, fadeOut: false },
+        delete: { open: false, fadeOut: false }
+    });
+
     const { userId } = useParams();
     const postsGlobal = useSelector(state => state.posts);
 
@@ -56,7 +63,13 @@ const ProfilePage = () => {
                                             </svg>
                                             <p className="text-sm">Edit Account</p>
                                         </button>
-                                        <button className="flex gap-2 items-center p-2 w-fit font-semibold text-red-600 rounded-md transition duration-200 lg:hover:bg-neutral-200">
+                                        <button 
+                                            className="flex gap-2 items-center p-2 w-fit font-semibold text-red-600 rounded-md transition duration-200 lg:hover:bg-neutral-200"
+                                            onClick={(e) => {
+                                                stopPropagation(e);
+                                                handlePopups( "delete", setModals );
+                                            }}
+                                        >
                                             <svg fill="currentColor" width="20" height="20" clipRule="evenodd" fillRule="evenodd" strokeLinejoin="round" strokeMiterlimit="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="m20.015 6.506h-16v14.423c0 .591.448 1.071 1 1.071h14c.552 0 1-.48 1-1.071 0-3.905 0-14.423 0-14.423zm-5.75 2.494c.414 0 .75.336.75.75v8.5c0 .414-.336.75-.75.75s-.75-.336-.75-.75v-8.5c0-.414.336-.75.75-.75zm-4.5 0c.414 0 .75.336.75.75v8.5c0 .414-.336.75-.75.75s-.75-.336-.75-.75v-8.5c0-.414.336-.75.75-.75zm-.75-5v-1c0-.535.474-1 1-1h4c.526 0 1 .465 1 1v1h5.254c.412 0 .746.335.746.747s-.334.747-.746.747h-16.507c-.413 0-.747-.335-.747-.747s.334-.747.747-.747zm4.5 0v-.5h-3v.5z" fillRule="nonzero"/>
                                             </svg>
@@ -141,11 +154,11 @@ const ProfilePage = () => {
                         }
                     </section>
 
-                    {/* {updateModalOpen && (
-                        <ModalWrapper fadeOut={ updateModalFadeOut } toggleModal={ () => handlePopups( updateModalOpen, setUpdateModalOpen, setUpdateModalFadeOut ) } >
-                            <EditPostModal post={post} toggleModal={ () => handlePopups( updateModalOpen, setUpdateModalOpen, setUpdateModalFadeOut ) } />
+                    {modals["delete"].open && (
+                        <ModalWrapper fadeOut={ modals["delete"].fadeOut } toggleModal={ () => handlePopups( "delete", setModals ) } >
+                            <DeleteAccountModal toggleModal={ () => handlePopups( "delete", setModals ) } deleteAccount={ () => deleteUser(user.id, navigate, dispatch) } />
                         </ModalWrapper>
-                    )} */}
+                    )}
                 </>
             }
         </PageWrapper>

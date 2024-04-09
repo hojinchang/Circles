@@ -68,7 +68,7 @@ const Post = ({ post }) => {
                     {(post.user.id === currentUserId) && (
                         <button 
                             className="absolute right-0 top-0 p-4 rounded-md hover:bg-neutral-300" 
-                            onClick={ (e) => {
+                            onClick={(e) => {
                                 stopPropagation(e);
                                 handlePopups( "option", setModals );
                             }}
