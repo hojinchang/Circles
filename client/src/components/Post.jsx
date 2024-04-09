@@ -73,16 +73,18 @@ const Post = ({ post }) => {
                             </svg>
                         </button>
                     )}
-                    <div className="flex gap-4">
-                        <img 
-                            src={post.user.profilePicture} 
-                            alt="Profile picture"
-                            className="w-12 h-12 rounded-full"
-                        />
-                        <div>
-                            <Link to={`/user/${post.user.id}`} className="z-100 hover:underline">{post.user.fullName}</Link>
-                            <Link to={`/user/${post.user.id}`} className="z-100 hover:underline"><p className="text-neutral-500">{post.user.email}</p></Link>
-                        </div>
+                    <div>
+                        <Link to={`/user/${post.user.id}`} className="z-100 flex gap-4">
+                            <img 
+                                src={post.user.profilePicture} 
+                                alt="Profile picture"
+                                className="w-12 h-12 rounded-full"
+                            />
+                            <div>
+                                <p className="hover:underline">{post.user.fullName}</p>
+                                <p className="text-neutral-500 hover:underline">{post.user.email}</p>
+                            </div>
+                        </Link>
                     </div>
                     {/* 
                         CLient side escaping.
