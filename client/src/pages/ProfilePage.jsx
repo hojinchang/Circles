@@ -12,10 +12,9 @@ const ProfilePage = () => {
     const [posts, setPosts] = useState([]);
     const [postFormData, setPostFormData] = useState({ post: "" });
     const { userId } = useParams();
-
     const postsGlobal = useSelector(state => state.posts);
-    const formRef = useRef(null);
 
+    const formRef = useRef(null);
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -43,7 +42,7 @@ const ProfilePage = () => {
                             <img 
                                 src={user.profilePicture} 
                                 alt="Profile picture"
-                                className="w-24 h-24 rounded-full mx-auto mb-4"
+                                className="w-28 h-28 rounded-full mx-auto mb-4"
                             />
                             <p className="font-medium text-center">{user.fullName}</p>
                             <p className="text-center text-neutral-500">{user.email}</p>

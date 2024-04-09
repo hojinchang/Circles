@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 
 import ModalWrapper from "./modals/ModalWrapper";
 import AddPostModal from "./modals/AddPostModal";
 import { setAuthenticated } from "../features/authenticated/authenticatedSlice";
-import { getUserAPIPath, logoutAPIPath } from "../globals/apiPaths";
+import { logoutAPIPath } from "../globals/apiPaths";
 import { getUser, handlePopups } from "../globals/utilityFunctions";
 
 
@@ -66,17 +66,17 @@ const Nav = () => {
 
                         <div className="mb-4">
                             {user && (
-                                <NavLink to={`/user/${user.id}`}>
+                                <Link to={`/user/${user.id}`}  className="group">
                                     <img 
                                         src={user.profilePicture} 
                                         alt="Profile picture"
                                         className="w-20 h-20 rounded-full mx-auto mb-2"
                                     />
-                                    <div className="transition duration-200 hover:bg-neutral-200 rounded-lg">
+                                    <div className="p-2 transition duration-200 group-hover:bg-neutral-200 rounded-lg">
                                         <p className="font-medium text-center">{user.fullName}</p>
                                         <p className="text-center text-neutral-500">{user.email}</p>
                                     </div>
-                                </NavLink>
+                                </Link>
                             )}
                         </div>
                         <div>
@@ -117,7 +117,7 @@ const Nav = () => {
                         </NavLink>
                     </div>
                     <div className="lg:w-full">
-                        <NavLink to="/" className={({ isActive }) => isActive ? "nav-item-container nav-active" : "nav-item-container"}>
+                        <NavLink to="/users" className={({ isActive }) => isActive ? "nav-item-container nav-active" : "nav-item-container"}>
                             <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fillRule="evenodd" clipRule="evenodd" aria-hidden="true">
                                 <path d="M24 22h-24v-20h24v20zm-1-19h-22v18h22v-18zm-4 13v1h-4v-1h4zm-6.002 1h-10.997l-.001-.914c-.004-1.05-.007-2.136 1.711-2.533.789-.182 1.753-.404 1.892-.709.048-.108-.04-.301-.098-.407-1.103-2.036-1.305-3.838-.567-5.078.514-.863 1.448-1.359 2.562-1.359 1.105 0 2.033.488 2.545 1.339.737 1.224.542 3.033-.548 5.095-.057.106-.144.301-.095.41.14.305 1.118.531 1.83.696 1.779.41 1.773 1.503 1.767 2.56l-.001.9zm-9.998-1h8.999c.003-1.014-.055-1.27-.936-1.473-1.171-.27-2.226-.514-2.57-1.267-.174-.381-.134-.816.119-1.294.921-1.739 1.125-3.199.576-4.111-.332-.551-.931-.855-1.688-.855-.764 0-1.369.31-1.703.871-.542.91-.328 2.401.587 4.09.259.476.303.912.13 1.295-.342.757-1.387.997-2.493 1.252-.966.222-1.022.478-1.021 1.492zm18-3v1h-6v-1h6zm0-3v1h-6v-1h6zm0-3v1h-6v-1h6z"/>
                             </svg>

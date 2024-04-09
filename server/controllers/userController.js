@@ -234,6 +234,14 @@ exports.get_user = asyncHandler(async(req, res, next) => {
         : res.status(404).json({ message: "User not found" });
 });
 
+exports.get_users = asyncHandler(async(req, res, next) => {
+    const users = await User.find();
+
+    (users)
+        ? res.status(200).json(users)
+        : res.status(404).json({ message: "Users not found" });
+})
+
 // Get the specific user
 exports.get_specific_user = asyncHandler(async(req, res, next) => {
     const userId = req.params.userId;

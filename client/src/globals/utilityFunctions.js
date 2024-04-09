@@ -56,7 +56,6 @@ const createComment = async (e, postId, formData, formRef, resetForm, navigate, 
     await createResource(e, getPostsAPIPath + `/${postId}/comment`, formData, formRef, resetForm, navigate, dispatch);
 };
 
-
 // Send get request to server to get all of the posts
 const getPosts = async(navigate, dispatch) => {
     try {
@@ -217,6 +216,22 @@ const getUser = async(setUser, navigate, dispatch) => {
     }
 };
 
+const getUsers = async(setUsers, navigate, dispatch) => {
+    try {
+        const response = await axios.get(getUserAPIPath + "/all");
+
+        if (response.status === 200) {
+            setUsers(response.data);
+        } else {
+            console.error("Unexpected status code:", response.status)
+        }
+
+    } catch(err) {
+        // If user isn't authenticated
+        removeAuthandRedirect("Error Getting Users", err, navigate, dispatch);
+    }
+}
+
 // Get specific user given their id
 const getSpecificUser = async(userId, setUser, navigate, dispatch) => {
     try {
@@ -280,6 +295,7 @@ export {
     updatePost,
     updateComment,
     getUser,
+    getUsers,
     getSpecificUser,
     getUserPosts,
     handlePopups

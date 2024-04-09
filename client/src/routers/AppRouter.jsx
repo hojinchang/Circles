@@ -8,6 +8,7 @@ import LoginPage from "../pages/LoginPage";
 import SignUpPage from "../pages/SignUpPage";
 import PostPage from "../pages/PostPage";
 import ProfilePage from "../pages/ProfilePage";
+import UsersPage from "../pages/UsersPage";
 import Loading from "../components/Loading";
 import ProtectedRoute from "../components/ProtectedRoute";
 
@@ -44,8 +45,7 @@ const AppRouter = () => {
                 <Route path="/sign-up" element={<ProtectedRoute redirectToAuth="/"><SignUpPage /></ProtectedRoute>}></Route>
                 <Route path="/post/:postId" element={<ProtectedRoute redirectToUnauth="/login"><PostPage /></ProtectedRoute>}></Route>
                 <Route path="/user/:userId" element={<ProtectedRoute redirectToUnauth="/login"><ProfilePage /></ProtectedRoute>}></Route>
-                <Route path="/user/:userId/friends" element={<ProtectedRoute redirectToUnauth="/login"><ProfilePage /></ProtectedRoute>}></Route>
-                <Route path="/user/:userId/replies" element={<ProtectedRoute redirectToUnauth="/login"><ProfilePage /></ProtectedRoute>}></Route>
+                <Route path="/users" element={<ProtectedRoute redirectToUnauth="/login"><UsersPage /></ProtectedRoute>}></Route>
             </Routes>
         </BrowserRouter>
     );
