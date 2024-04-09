@@ -8,6 +8,7 @@ const UserSchema = new Schema({
     email: { type: String, required: true, minLength: 1, maxLength: 100 },
     password: { type: String, required: true, minLength: 1 },
     profilePicture: { type: String },   // Store the image as binary data
+    friends: [{ type: Schema.Types.ObjectId, ref: "User" }],
     joinDate: { type: Date, default: Date.now }
 }, {
     toJSON: { virtuals: true },
