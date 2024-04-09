@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import Nav from "../components/Nav";
+import PageWrapper from "../components/PageWrapper";
 import Post from "../components/Post";
 import Comment from "../components/Comment";
 import { handleInputChange, getPosts, createComment } from "../globals/utilityFunctions";
@@ -28,10 +28,9 @@ const PostPage = () => {
     }, []);
 
     return (
-        <main className="main">
-            <Nav />
+        <PageWrapper>
             {postGlobal ?
-                <div className="p-8 pb-24 max-w-3xl mx-auto w-full h-full xs:p-12 xs:pb-28 lg:p-8">
+                <>
                     <section className="flex flex-col gap-4">
                         <div className="flex gap-4 items-center">
                             <Link to="/">
@@ -71,7 +70,9 @@ const PostPage = () => {
                             </div>
                         </form>
                     </section>
+
                     <hr className="my-8 border-neutral-400"/>
+                    
                     <section className="flex flex-col gap-4">
                         {postGlobal.comments.length > 0 
                             ? (postGlobal.comments.toReversed().map((comment) => {
@@ -80,13 +81,13 @@ const PostPage = () => {
                             : <p className="text-neutral-500 text-center">This post has no comments.</p>
                         }
                     </section>
-                </div>
+                </>
                 :
                 <div className="max-w-3xl mx-auto w-full min-h-screen flex justify-center items-center">
                     <h1 className="font-bold text-xl">Post not found</h1>
                 </div>
             }
-        </main>
+        </PageWrapper>
     )
 }
 

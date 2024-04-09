@@ -80,7 +80,7 @@ const Nav = () => {
 
                         <div className="mb-4">
                             {user && (
-                                <>
+                                <NavLink to={`/user/${user.id}`}>
                                     <img 
                                         src={user.profilePicture} 
                                         alt="Profile picture"
@@ -88,7 +88,7 @@ const Nav = () => {
                                     />
                                     <p className="font-medium text-center">{user.fullName}</p>
                                     <p className="text-center text-neutral-500">{user.email}</p>
-                                </>
+                                </NavLink>
                             )}
                         </div>
                         <div>

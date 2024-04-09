@@ -1,16 +1,13 @@
 
 
-import Nav from "../components/Nav";
+import PageWrapper from "../components/PageWrapper";
 
 const ProfilePage = () => {
 
     return (
-        <main className="main">
-            <Nav />
-            <div className="flex flex-col items-center w-full overflow-auto">
-                
-            </div>
-        </main>
+        <PageWrapper>
+            
+        </PageWrapper>
     );
 }
 
