@@ -32,13 +32,14 @@ const PostPage = () => {
             {postGlobal ?
                 <>
                     <section className="flex flex-col gap-4">
-                        <div className="flex gap-4 items-center">
-                            <Link to="/">
+                        <div className="flex flex-col gap-4">
+                            <Link to="/" className="flex gap-4 items-center">
                                 <svg width="24" height="24" clipRule="evenodd" fillRule="evenodd" strokeLinejoin="round" strokeMiterlimit="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path d="m9.474 5.209s-4.501 4.505-6.254 6.259c-.147.146-.22.338-.22.53s.073.384.22.53c1.752 1.754 6.252 6.257 6.252 6.257.145.145.336.217.527.217.191-.001.383-.074.53-.221.293-.293.294-.766.004-1.057l-4.976-4.976h14.692c.414 0 .75-.336.75-.75s-.336-.75-.75-.75h-14.692l4.978-4.979c.289-.289.287-.761-.006-1.054-.147-.147-.339-.221-.53-.221-.191-.001-.38.071-.525.215z" fillRule="nonzero"/>
                                 </svg>
+                                <p>Home</p>
                             </Link>
-                            <p>Home</p>
+                            <h1 className="text-4xl font-bold">Post</h1>
                         </div>
                         <Post post={postGlobal} />
                         <form ref={formRef} onSubmit={(e) => { createComment(e, postId, postFormData, formRef, resetForm, navigate, dispatch) }}>
@@ -74,6 +75,7 @@ const PostPage = () => {
                     <hr className="my-8 border-neutral-400"/>
                     
                     <section className="flex flex-col gap-4">
+                        <h2 className="text-2xl font-bold">Comments</h2>
                         {postGlobal.comments.length > 0 
                             ? (postGlobal.comments.toReversed().map((comment) => {
                                 return <Comment key={comment.id} postId={postId} comment={comment} />

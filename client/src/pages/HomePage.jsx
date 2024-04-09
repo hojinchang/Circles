@@ -68,6 +68,7 @@ const HomePage = () => {
 
             {/* If posts exist, create a new section and output the posts */}
             <section className="flex flex-col gap-8">
+                <h2 className="text-2xl font-bold">All Posts</h2>
                 {posts.length > 0 && posts.map((post) => (
                     <Link key={post.id} to={`/post/${post.id}`}>
                         <Post post={post} />
