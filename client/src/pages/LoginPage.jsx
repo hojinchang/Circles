@@ -69,7 +69,7 @@ const LoginPage = () => {
                             />
                         </div>
                         <div className="mt-4">
-                            <button type="submit" className="bg-slate-500 w-full px-6 py-2 text-neutral-50 font-medium rounded-md hover:bg-slate-700 transition ease duration-200">Login</button>
+                            <button type="submit" className="button bg-slate-500 w-full px-6 py-2 text-neutral-50 font-medium rounded-md hover:bg-slate-700 transition ease duration-200">Login</button>
                         </div>
                     </div>
                 </form>
@@ -82,12 +82,12 @@ const LoginPage = () => {
             <section className="max-w-96 w-full flex flex-col gap-3 mb-4">
                 <form className="w-full mx-auto" onSubmit={(e) => handleLogin(e, "demo", {}, setLoginError, dispatch, navigate)}>
                     <div>
-                        <button type="submit" className="bg-slate-400 w-full px-6 py-2 font-medium rounded-md hover:bg-slate-500 transition ease duration-200">Demo Account</button>
+                        <button type="submit" className="button bg-slate-400 w-full px-6 py-2 font-medium rounded-md hover:bg-slate-500 transition ease duration-200">Demo Account</button>
                     </div>
                 </form>
                 <form className="w-full mx-auto">
                     <div>
-                        <button type="submit" className="flex justify-center items-center gap-3 bg-google-400 text-neutral-50 w-full px-6 py-2 font-medium rounded-md hover:bg-google-700 transition ease duration-200">
+                        <button type="submit" className="button flex justify-center items-center gap-3 bg-google-400 text-neutral-50 w-full px-6 py-2 font-medium rounded-md hover:bg-google-700 transition ease duration-200">
                             <div className="bg-white rounded-full p-0.5">
                                 <img src={googleLogo} alt="Google logo" />
                             </div>

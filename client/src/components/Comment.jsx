@@ -56,7 +56,7 @@ const Comment = ({ postId, comment }) => {
                 <article ref={commentRef} className="flex flex-col gap-4 p-4 border border-neutral-300 rounded-lg relative">
                     {(comment.user.id === currentUserId) && (
                         <button 
-                            className="absolute right-0 top-0 p-4 rounded-md hover:bg-neutral-300" 
+                            className="button absolute right-0 top-0 p-4 rounded-md hover:bg-neutral-300" 
                             onClick={ (e) => {
                                 stopPropagation(e);
                                 handlePopups( optionOpen, setOptionOpen, setOptionFadeOut );
@@ -93,7 +93,7 @@ const Comment = ({ postId, comment }) => {
                     <div className="flex gap-6">
                         <div className="flex items-center gap-2">
                             <button 
-                                className="z-100" 
+                                className="button z-100" 
                                 onClick={(e) => {
                                     stopPropagation(e);
                                     likeComment(postId, comment.id, navigate, dispatch);
@@ -115,7 +115,7 @@ const Comment = ({ postId, comment }) => {
                     {optionOpen && (
                         <div className={`flex flex-col absolute right-0 top-12 z-10 g-2 border bg-neutral-50 border-neutral-300 rounded-md w-24 shadow-md ${optionFadeOut ? 'fade-out' : 'fade-in'}`}>
                             <button 
-                                className="py-1 text-sm hover:bg-neutral-300 w-full rounded-sm transition duration-200"
+                                className="button py-1 text-sm hover:bg-neutral-300 w-full rounded-sm transition duration-200"
                                 onClick={(e) => {
                                     stopPropagation(e);
                                     handlePopups( updateModalOpen, setUpdateModalOpen, setUpdateModalFadeOut );
@@ -125,7 +125,7 @@ const Comment = ({ postId, comment }) => {
                                 Edit
                             </button>
                             <button 
-                                className="py-1 text-sm hover:bg-neutral-300 w-full rounded-sm transition duration-200" 
+                                className="button py-1 text-sm hover:bg-neutral-300 w-full rounded-sm transition duration-200" 
                                 onClick={(e) => {
                                     stopPropagation(e);
                                     handlePopups( deleteModalOpen, setDeleteModalOpen, setDeleteModalFadeOut );

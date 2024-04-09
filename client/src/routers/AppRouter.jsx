@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setAuthenticated } from "../features/authenticated/authenticatedSlice";
 
 import HomePage from "../pages/HomePage";
 import LoginPage from "../pages/LoginPage";
 import SignUpPage from "../pages/SignUpPage";
 import PostPage from "../pages/PostPage";
+import ProfilePage from "../pages/ProfilePage";
 import Loading from "../components/Loading";
 import ProtectedRoute from "../components/ProtectedRoute";
 
@@ -42,6 +43,7 @@ const AppRouter = () => {
                 <Route path="/login" element={<ProtectedRoute redirectToAuth="/"><LoginPage /></ProtectedRoute>}></Route>
                 <Route path="/sign-up" element={<ProtectedRoute redirectToAuth="/"><SignUpPage /></ProtectedRoute>}></Route>
                 <Route path="/post/:postId" element={<ProtectedRoute redirectToUnauth="/login"><PostPage /></ProtectedRoute>}></Route>
+                <Route path="/user/:userId" element={<ProtectedRoute redirectToUnauth="/login"><ProfilePage /></ProtectedRoute>}></Route>
             </Routes>
         </BrowserRouter>
     );

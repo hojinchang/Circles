@@ -25,7 +25,7 @@ const EditCommentModal = ({ postId, comment, toggleModal }) => {
                     onClick={(e) => stopPropagation(e) }
                 >
                     <button 
-                        className="leading-none absolute right-4 top-2 text-2xl text-neutral-500 transition duration-200 hover:text-neutral-950" 
+                        className="button leading-none absolute right-4 top-2 text-2xl text-neutral-500 transition duration-200 hover:text-neutral-950" 
                         onClick={(e) => {
                             stopPropagation(e);
                             toggleModal();
@@ -63,7 +63,7 @@ const EditCommentModal = ({ postId, comment, toggleModal }) => {
                             </p>
                             <button
                                 type="submit"
-                                className={`px-6 py-2 font-medium rounded-md transition ease duration-200 ${
+                                className={`button px-6 py-2 font-medium rounded-md transition ease duration-200 ${
                                     formData.post.length === 0 ? 'bg-slate-200 text-neutral-400 cursor-not-allowed' : 'bg-slate-700 text-neutral-50 hover:bg-slate-500'
                                 }`}
                                 onClick={(e) => e.stopPropagation()}

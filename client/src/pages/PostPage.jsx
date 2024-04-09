@@ -63,7 +63,7 @@ const PostPage = () => {
                                 </p>
                                 <button 
                                     type="submit" 
-                                    className={`px-6 py-2 font-medium text-sm rounded-md transition ease duration-200 ${
+                                    className={`button px-6 py-2 font-medium text-sm rounded-md transition ease duration-200 ${
                                         postFormData.post.length === 0 ? 'bg-slate-200 text-neutral-400 cursor-not-allowed' : 'bg-slate-700 text-neutral-50 hover:bg-slate-500'
                                     }`}
                                     disabled={postFormData.post.length === 0}
