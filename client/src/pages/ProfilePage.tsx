@@ -9,9 +9,13 @@ import ModalWrapper from "../components/modals/ModalWrapper";
 import { getSpecificUser, getUserPosts, handleInputChange, createPost, handlePopups, stopPropagation, deleteUser } from "../globals/utilityFunctions";
 import { postMaxLength, demoUserId } from "../globals/globalVariables";
 
+import { RootState } from "../store/store";
+import UserInterface from "../types/User";
+import { PostInterface } from "../types/Post";
+
 const ProfilePage = () => {
-    const [user, setUser] = useState(null);
-    const [posts, setPosts] = useState([]);
+    const [user, setUser] = useState<UserInterface | null>(null);
+    const [posts, setPosts] = useState<PostInterface[]>([]);
     const [postFormData, setPostFormData] = useState({ post: "" });
     const [modals, setModals] = useState({
         edit: { open: false, fadeOut: false },
@@ -19,10 +23,12 @@ const ProfilePage = () => {
     });
 
     const { userId } = useParams();
-    const postsGlobal = useSelector(state => state.posts);
+    const userIdConfirmed = userId as string;
+
+    const postsGlobal = useSelector(( state: RootState ) => state.posts);
 
     // Get the current user ID from Redux
-    const currentUserId = useSelector(state => state.authenticated.isAuth);
+    const currentUserId = useSelector(( state: RootState ) => state.authenticated.isAuth);
 
     const formRef = useRef(null);
     const navigate = useNavigate();
@@ -34,19 +40,20 @@ const ProfilePage = () => {
     };
 
     // Function to check if a user is the demo user
-    const isDemoUser = (userId) => {
+    const isDemoUser = (userId: string) => {
         return userId === demoUserId;
     };
 
     // Get the user
     useEffect(() => {
-        getSpecificUser(userId, setUser, navigate, dispatch);
-    }, [userId]);
-
+        getSpecificUser({ userId: userIdConfirmed, setUser, navigate, dispatch });
+    }, [userIdConfirmed]);
+    
     // Get posts from the user
     useEffect(() => {
-        getUserPosts(userId, setPosts, navigate, dispatch);
-    }, [postsGlobal]);
+        setPosts([]); // Clear existing posts before loading new ones
+        getUserPosts({ userId: userIdConfirmed, setPosts, navigate, dispatch });
+    }, [postsGlobal, userIdConfirmed, dispatch, navigate]); // Ensure dispatch and navigate are in the dependency array if they could change
 
     return (
         <PageWrapper>
@@ -65,10 +72,10 @@ const ProfilePage = () => {
                                         </button>
                                         <button 
                                             className="flex gap-2 items-center p-2 w-fit font-semibold text-red-600 rounded-md transition duration-200 lg:hover:bg-neutral-200"
-                                            onClick={(e) => {
+                                            onClick={ (e) => {
                                                 stopPropagation(e);
-                                                handlePopups( "delete", setModals );
-                                            }}
+                                                handlePopups({ modalKey: "delete", setModals });
+                                            } }
                                         >
                                             <svg fill="currentColor" width="20" height="20" clipRule="evenodd" fillRule="evenodd" strokeLinejoin="round" strokeMiterlimit="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="m20.015 6.506h-16v14.423c0 .591.448 1.071 1 1.071h14c.552 0 1-.48 1-1.071 0-3.905 0-14.423 0-14.423zm-5.75 2.494c.414 0 .75.336.75.75v8.5c0 .414-.336.75-.75.75s-.75-.336-.75-.75v-8.5c0-.414.336-.75.75-.75zm-4.5 0c.414 0 .75.336.75.75v8.5c0 .414-.336.75-.75.75s-.75-.336-.75-.75v-8.5c0-.414.336-.75.75-.75zm-.75-5v-1c0-.535.474-1 1-1h4c.526 0 1 .465 1 1v1h5.254c.412 0 .746.335.746.747s-.334.747-.746.747h-16.507c-.413 0-.747-.335-.747-.747s.334-.747.747-.747zm4.5 0v-.5h-3v.5z" fillRule="nonzero"/>
@@ -95,29 +102,29 @@ const ProfilePage = () => {
                         </div>
                         <div>
                             <img 
-                                src={user.profilePicture} 
+                                src={ user.profilePicture } 
                                 alt="Profile picture"
                                 className="w-28 h-28 rounded-full mx-auto mb-4"
                             />
-                            <p className="font-medium text-center">{user.fullName}</p>
-                            <p className="text-center text-neutral-500">{user.email}</p>
-                            <p className="text-sm text-center text-neutral-500 mt-3">Member since {user.joinDateFormatted}</p>
+                            <p className="font-medium text-center">{ user.fullName }</p>
+                            <p className="text-center text-neutral-500">{ user.email }</p>
+                            <p className="text-sm text-center text-neutral-500 mt-3">Member since { user.joinDateFormatted }</p>
                         </div>
                         {(user.id === currentUserId) && (
                             <div>
                                 <p className="text-neutral-500 mb-2">Create a post by typing your thoughts in the input below and click the "Post" button.</p>
-                                <form ref={formRef} onSubmit={(e) => { createPost(e, postFormData, formRef, resetForm, navigate, dispatch) }}>
+                                <form ref={ formRef } onSubmit={ (e) => { createPost({ e, formData: postFormData, formRef, resetForm, navigate, dispatch }) } }>
                                     <div>
                                         <label htmlFor="post" className="sr-only">Post</label>
                                         <textarea
                                             id="post"
                                             className="w-full p-2 bg-neutral-50 border border-neutral-300 rounded-md text-base focus:outline-neutral-400"
                                             name="post"
-                                            cols="20" 
-                                            rows="4"
-                                            maxLength="400"
+                                            cols={ 20 } 
+                                            rows={ 4 }
+                                            maxLength={ 400 }
                                             placeholder="Share your thoughts..."
-                                            onChange={(e) => handleInputChange(e, setPostFormData)}
+                                            onChange={ (e) => handleInputChange(e, setPostFormData) }
                                             required
                                         ></textarea>
                                     </div>
@@ -143,9 +150,9 @@ const ProfilePage = () => {
                     <section className="flex flex-col gap-8">
                         <h2 className="text-2xl font-bold">{user.fullName ? user.fullName : user.email}'s Posts</h2>
                         {posts.length > 0  
-                            ? posts.map((post) => (
-                                <Link key={post.id} to={`/post/${post.id}`}>
-                                    <Post post={post} />
+                            ? posts.map(( post ) => (
+                                <Link key={ post.id } to={`/post/${ post.id }`}>
+                                    <Post post={ post } />
                                 </Link>
                             ))
                             : <p className="text-neutral-500 text-center">
@@ -155,8 +162,8 @@ const ProfilePage = () => {
                     </section>
 
                     {modals["delete"].open && (
-                        <ModalWrapper fadeOut={ modals["delete"].fadeOut } toggleModal={ () => handlePopups( "delete", setModals ) } >
-                            <DeleteAccountModal toggleModal={ () => handlePopups( "delete", setModals ) } deleteAccount={ () => deleteUser(user.id, navigate, dispatch) } />
+                        <ModalWrapper fadeOut={ modals["delete"].fadeOut } toggleModal={ () => handlePopups({ modalKey: "delete", setModals }) } >
+                            <DeleteAccountModal toggleModal={ () => handlePopups({ modalKey: "delete", setModals }) } deleteAccount={ () => deleteUser({ userId: user.id, navigate, dispatch }) } />
                         </ModalWrapper>
                     )}
                 </>

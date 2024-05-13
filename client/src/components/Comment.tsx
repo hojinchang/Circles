@@ -8,39 +8,59 @@ import EditCommentModal from "./modals/EditCommentModal";
 import ModalWrapper from "./modals/ModalWrapper";
 import { stopPropagation, handlePopups, deleteComment, likeComment } from "../globals/utilityFunctions";
 
-const Comment = ({ postId, comment }) => {
-    const [optionOpen, setOptionOpen] = useState(false);
-    const [updateModalOpen, setUpdateModalOpen] = useState(false);
-    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-    const [optionFadeOut, setOptionFadeOut] = useState(false);
-    const [updateModalFadeOut, setUpdateModalFadeOut] = useState(false);
-    const [deleteModalFadeOut, setDeleteModalFadeOut] = useState(false);
-    const commentRef = useRef(null);
+import { CommentInterface } from "../types/Post";
+import { RootState } from "../store/store";
+
+interface CommentProps {
+    postId: string;
+    comment: CommentInterface;
+}
+
+const Comment: React.FC<CommentProps> = ({ postId, comment }) => {
+    const [modals, setModals] = useState({
+        option: { open: false, fadeOut: false },
+        update: { open: false, fadeOut: false },
+        delete: { open: false, fadeOut: false }
+    });
+
+    const commentRef = useRef<HTMLDivElement>(null);
 
     // Get the current user ID from Redux
-    const currentUserId = useSelector(state => state.authenticated.isAuth);
+    const currentUserId = useSelector(( state: RootState) => state.authenticated.isAuth);
+    const hasLiked = comment.likes.some(user => user === currentUserId);
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
     // Wrapper function to delete specific post given id
     const deleteCommentHandler = () => {
-        deleteComment(postId, comment.id, navigate, dispatch);
+        deleteComment({ postId, commentId: comment.id, navigate, dispatch });
     }
 
     // Convert special characters to HTML tags and convert newline to <br>
-    const formatContent = (content) => {
+    const formatContent = (content: string) => {
         return escapeHtml(content).replace(/\n/g, '<br>');
     };
 
     // Close options when clicked outside of the post article
     useEffect(() => {
-        const handleClickOutside = (e) => {
-            if (commentRef.current && !commentRef.current.contains(e.target)) {
-                setOptionFadeOut(true);
-                setTimeout(() => {
-                    setOptionOpen(false);
-                }, 275);
+        const handleClickOutside = (e: MouseEvent) => {
+            if (commentRef.current && !commentRef.current.contains(e.target as Node)) {
+                // If the modal is open, start the fade-out animation
+                if (modals.option.open) {
+                    setModals(prevState => ({
+                        ...prevState,
+                        option: { open: true, fadeOut: true }
+                    }));
+        
+                    // After the animation has completed, close the modal
+                    setTimeout(() => {
+                        setModals(prevState => ({
+                            ...prevState,
+                            option: { open: false, fadeOut: false }
+                        }));
+                    }, 275);
+                }
             }
         };
 
@@ -53,13 +73,13 @@ const Comment = ({ postId, comment }) => {
     return (
         <>
             {comment.user && (
-                <article ref={commentRef} className="flex flex-col gap-4 p-4 border border-neutral-300 rounded-lg relative">
+                <article ref={ commentRef } className="flex flex-col gap-4 p-4 border border-neutral-300 rounded-lg relative">
                     {(comment.user.id === currentUserId) && (
                         <button 
                             className="button absolute right-0 top-0 p-4 rounded-md hover:bg-neutral-300" 
                             onClick={ (e) => {
                                 stopPropagation(e);
-                                handlePopups( optionOpen, setOptionOpen, setOptionFadeOut );
+                                handlePopups({ modalKey: "option", setModals });
                             }}
                         >
                             <svg className="w-4 h-4 text-neutral-700" fill="currentColor" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 41.91 41.91" xmlSpace="preserve">
@@ -75,13 +95,13 @@ const Comment = ({ postId, comment }) => {
                     )}
                     <div className="flex gap-4">
                         <img 
-                            src={comment.user.profilePicture} 
+                            src={ comment.user.profilePicture } 
                             alt="Profile picture"
                             className="w-12 h-12 rounded-full"
                         />
                         <div>
-                            <p>{comment.user.fullName}</p>
-                            <p className="text-neutral-500">{comment.user.email}</p>
+                            <p>{ comment.user.fullName }</p>
+                            <p className="text-neutral-500">{ comment.user.email }</p>
                         </div>
                     </div>
                     {/* 
@@ -89,63 +109,63 @@ const Comment = ({ postId, comment }) => {
                         Use dangerouslySetInnerHTML to convert special characters into their HTML entitites
                     */}
                     <p className="text-lg font-normal" dangerouslySetInnerHTML={{ __html: formatContent(comment.post) }}></p>
-                    <p className="text-neutral-500">{comment.timeStampFormatted}</p>
+                    <p className="text-neutral-500">{ comment.timeStampFormatted }</p>
                     <div className="flex gap-6">
                         <div className="flex items-center gap-2">
                             <button 
                                 className="button z-100" 
-                                onClick={(e) => {
+                                onClick={ (e) => {
                                     stopPropagation(e);
-                                    likeComment(postId, comment.id, navigate, dispatch);
-                                }}
+                                    likeComment({ postId, commentId: comment.id, navigate, dispatch });
+                                } }
                             >
                                 <svg 
                                     className="w-5 h-5 text-neutral-700 transition duration-200 hover:text-neutral-400" 
                                     role="img" 
-                                    fill={(comment.likes.includes(currentUserId)) ? "currentColor" : "none"} 
+                                    fill={ hasLiked ? "currentColor" : "none" } 
                                     stroke="currentColor" strokeWidth="2" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="-1 -1 26 26" aria-label="Like button" 
                                 >
                                     <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z"/>
                                 </svg>
                             </button>
-                            <span>{comment.likes.length}</span>
+                            <span>{ comment.likes.length }</span>
                         </div>
                     </div>
 
-                    {optionOpen && (
-                        <div className={`flex flex-col absolute right-0 top-12 z-10 g-2 border bg-neutral-50 border-neutral-300 rounded-md w-24 shadow-md ${optionFadeOut ? 'fade-out' : 'fade-in'}`}>
+                    {modals.option.open && (
+                        <div className={`flex flex-col absolute right-0 top-12 z-10 g-2 border bg-neutral-50 border-neutral-300 rounded-md w-24 shadow-md ${modals.option.fadeOut ? 'fade-out' : 'fade-in'}`}>
                             <button 
                                 className="button py-1 text-sm hover:bg-neutral-300 w-full rounded-sm transition duration-200"
-                                onClick={(e) => {
+                                onClick={ (e) => {
                                     stopPropagation(e);
-                                    handlePopups( updateModalOpen, setUpdateModalOpen, setUpdateModalFadeOut );
-                                    handlePopups( optionOpen, setOptionOpen, setOptionFadeOut );
-                                }}
+                                    handlePopups({ modalKey: "update", setModals });
+                                    handlePopups({ modalKey: "option", setModals });
+                                } }
                             >
                                 Edit
                             </button>
                             <button 
                                 className="button py-1 text-sm hover:bg-neutral-300 w-full rounded-sm transition duration-200" 
-                                onClick={(e) => {
+                                onClick={ (e) => {
                                     stopPropagation(e);
-                                    handlePopups( deleteModalOpen, setDeleteModalOpen, setDeleteModalFadeOut );
-                                    handlePopups( optionOpen, setOptionOpen, setOptionFadeOut );
-                                }}
+                                    handlePopups({ modalKey: "delete", setModals });
+                                    handlePopups({ modalKey: "option", setModals });
+                                } }
                             >
                                 Delete
                             </button>
                         </div>
                     )}
 
-                    {updateModalOpen && (
-                        <ModalWrapper fadeOut={ updateModalFadeOut } toggleModal={ () => handlePopups( updateModalOpen, setUpdateModalOpen, setUpdateModalFadeOut ) } >
-                            <EditCommentModal postId={postId} comment={comment} toggleModal={ () => handlePopups( updateModalOpen, setUpdateModalOpen, setUpdateModalFadeOut ) } />
+                    {modals.update.open && (
+                        <ModalWrapper fadeOut={ modals.update.fadeOut } toggleModal={ () => handlePopups({ modalKey: "update", setModals }) } >
+                            <EditCommentModal postId={ postId } comment={ comment } toggleModal={ () => handlePopups({ modalKey: "update", setModals }) } />
                         </ModalWrapper>
                     )}
 
-                    {deleteModalOpen && (
-                        <ModalWrapper fadeOut={ deleteModalFadeOut } toggleModal={ () => handlePopups( deleteModalOpen, setDeleteModalOpen, setDeleteModalFadeOut ) }>
-                            <DeleteCommentModal toggleModal={ () => handlePopups( deleteModalOpen, setDeleteModalOpen, setDeleteModalFadeOut ) } deleteComment={ deleteCommentHandler } />
+                    {modals.delete.open && (
+                        <ModalWrapper fadeOut={ modals.delete.fadeOut } toggleModal={ () => handlePopups({ modalKey: "delete", setModals }) }>
+                            <DeleteCommentModal toggleModal={ () => handlePopups({ modalKey: "delete", setModals }) } deleteComment={ deleteCommentHandler } />
                         </ModalWrapper>
                     )}
                 </article>

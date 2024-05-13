@@ -1,14 +1,20 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
+import { RootState } from "../store/store";
 
+interface ProtectedRouteProps {
+    redirectToAuth?: string;
+    redirectToUnauth?: string;
+    children: React.ReactNode;
+}
 /*
     This component is a protected route.
 */
-const ProtectedRoute = ({ redirectToAuth, redirectToUnauth, children }) => {
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ redirectToAuth, redirectToUnauth, children }) => {
     const navigate = useNavigate();
-    const currentUserId = useSelector(state => state.authenticated.isAuth);
+    const currentUserId = useSelector(( state: RootState ) => state.authenticated.isAuth);
 
     useEffect(() => {
         // If the user is authenticated and tries to visit "/login" or "/sign-up", redirect to "/"

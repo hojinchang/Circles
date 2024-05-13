@@ -3,44 +3,50 @@ import { useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux";
 
 import { postMaxLength } from "../../globals/globalVariables";
-import { stopPropagation, handleInputChange, updateComment } from "../../globals/utilityFunctions";
+import { stopPropagation, handleInputChange, updatePost } from "../../globals/utilityFunctions";
 
-const EditCommentModal = ({ postId, comment, toggleModal }) => {
+import { PostInterface } from "../../types/Post";
+
+interface EditPostModalProps {
+    post: PostInterface;
+    toggleModal: () => void;
+}
+
+const EditPostModal: React.FC<EditPostModalProps> = ({ post, toggleModal }) => {
     const [formData, setFormData] = useState({ post: "" });
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    // Save the comment content into the formData state
+    // Save the post content into the formData state
     useEffect(() => {
-        if (comment && comment.post) {
-            setFormData({ post: comment.post });
+        if (post && post.post) {
+            setFormData({ post: post.post });
         }
-    }, [comment]);
+    }, [post]);
 
     return (
         <>
-            {comment &&
+            {post &&
                 <div 
                     className="modal z-20"
-                    onClick={(e) => stopPropagation(e) }
+                    onClick={ (e) => stopPropagation(e) }
                 >
                     <button 
                         className="button leading-none absolute right-4 top-2 text-2xl text-neutral-500 transition duration-200 hover:text-neutral-950" 
-                        onClick={(e) => {
+                        onClick={ (e) => {
                             stopPropagation(e);
                             toggleModal();
-                        }}
+                        } }
                     >&times;
                 </button>
-                    <h3 className="text-lg font-bold">Edit Comment</h3>
-                    <p className="text-neutral-500">Edit your comment.</p>
+                    <h3 className="text-lg font-bold">Edit Post</h3>
+                    <p className="text-neutral-500">Edit your post.</p>
                     <form 
                         className="mt-1" 
-                        onSubmit={async(e) => {
-                            await updateComment(e, postId, comment.id, formData, navigate, dispatch);
-                            // await updatePost(e, post.id, formData, navigate, dispatch);
+                        onSubmit={ async(e) => {
+                            await updatePost({ e, postId: post.id, formData, navigate, dispatch });
                             toggleModal();
-                        }}
+                        } }
                     >
                         <div>
                             <label htmlFor="post" className="sr-only">Post</label>
@@ -48,27 +54,27 @@ const EditCommentModal = ({ postId, comment, toggleModal }) => {
                                 id="post"
                                 className="w-full p-2 bg-neutral-50 border border-neutral-300 rounded-md text-base focus:outline-neutral-400"
                                 name="post"
-                                cols="20" 
-                                rows="4"
-                                maxLength="400"
+                                cols={ 20 } 
+                                rows={ 4 }
+                                maxLength={ 400 }
                                 placeholder="Share your thoughts..."
-                                value={formData.post}
-                                onChange={(e) => handleInputChange(e, setFormData)}
+                                value={ formData.post }
+                                onChange={ (e) => handleInputChange(e, setFormData) }
                                 required
                             ></textarea>
                         </div>
                         <div className="flex justify-between w-full">
                             <p className="text-sm text-neutral-500">
-                                {formData.post.length} / {postMaxLength} characters
+                                { formData.post.length } / { postMaxLength } characters
                             </p>
                             <button
                                 type="submit"
-                                className={`button px-6 py-2 font-medium rounded-md transition ease duration-200 ${
+                                className={ `button px-6 py-2 font-medium rounded-md transition ease duration-200 ${
                                     formData.post.length === 0 ? 'bg-slate-200 text-neutral-400 cursor-not-allowed' : 'bg-slate-700 text-neutral-50 hover:bg-slate-500'
-                                }`}
-                                onClick={(e) => e.stopPropagation()}
+                                }` }
+                                onClick={ (e) => e.stopPropagation() }
                             >
-                                Update Comment
+                                Update Post
                             </button>
                         </div>
                     </form>
@@ -79,4 +85,4 @@ const EditCommentModal = ({ postId, comment, toggleModal }) => {
     );
 }
 
-export default EditCommentModal;
+export default EditPostModal;

@@ -1,7 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { PostInterface } from "../../types/Post";
 
-const initialState = {
-    posts: []
+interface PostsState {
+    posts: PostInterface[];
+    loading: boolean;
+}
+
+const initialState: PostsState = {
+    posts: [],
+    loading: false,
 }
 
 export const postsSlice = createSlice({
@@ -10,7 +17,6 @@ export const postsSlice = createSlice({
     reducers: {
         setPosts: (state, action) => {
             state.posts = action.payload;
-            state.loading = false;
         }
     }
 });

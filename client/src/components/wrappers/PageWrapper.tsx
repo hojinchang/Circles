@@ -1,6 +1,10 @@
 import Nav from "../Nav";
 
-const PageWrapper = ({ children, containerMaxWidth = "max-w-3xl" }) => {
+interface PageWrapperProps {
+    children: React.ReactNode;
+    containerMaxWidth?: string;
+}
+const PageWrapper: React.FC<PageWrapperProps> = ({ children, containerMaxWidth = "max-w-3xl" }) => {
 
     return (
         <main className="main">

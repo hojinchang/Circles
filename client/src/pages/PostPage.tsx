@@ -8,11 +8,15 @@ import Comment from "../components/Comment";
 import { handleInputChange, getPosts, createComment } from "../globals/utilityFunctions";
 import { postMaxLength } from "../globals/globalVariables";
 
+import { RootState } from "../store/store";
+import { PostInterface } from "../types/Post";
+
 const PostPage = () => {
     const [postFormData, setPostFormData] = useState({ post: "" });
     const { postId } = useParams();
+    const postIdConfirmed = postId as string;
     
-    const postGlobal = useSelector(state => state.posts.posts.find(post => post.id === postId));
+    const postGlobal = useSelector(( state: RootState ) => state.posts.posts.find(( post: PostInterface ) => post.id === postId));
     
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -24,7 +28,7 @@ const PostPage = () => {
     };
 
     useEffect(() => {
-        getPosts(navigate, dispatch);
+        getPosts({ navigate, dispatch });
     }, []);
 
     return (
@@ -41,32 +45,32 @@ const PostPage = () => {
                             </Link>
                             <h1 className="text-4xl font-bold">Post</h1>
                         </div>
-                        <Post post={postGlobal} />
-                        <form ref={formRef} onSubmit={(e) => { createComment(e, postId, postFormData, formRef, resetForm, navigate, dispatch) }}>
+                        <Post post={ postGlobal } />
+                        <form ref={ formRef } onSubmit={ (e) => { createComment({ e, postId: postIdConfirmed, formData: postFormData, formRef, resetForm, navigate, dispatch }) }}>
                             <div>
                                 <label htmlFor="post" className="sr-only">Post</label>
                                 <textarea
                                     id="post"
                                     className="w-full p-2 bg-neutral-50 border border-neutral-300 rounded-md text-base focus:outline-neutral-400"
                                     name="post"
-                                    cols="20" 
-                                    rows="4"
-                                    maxLength="400"
+                                    cols={ 20 }
+                                    rows={ 4 }
+                                    maxLength={ 400 }
                                     placeholder="Reply to this post..."
-                                    onChange={(e) => handleInputChange(e, setPostFormData)}
+                                    onChange={ (e) => handleInputChange(e, setPostFormData) }
                                     required
                                 ></textarea>
                             </div>
                             <div className="flex justify-between w-full">
                                 <p className="text-sm text-neutral-500">
-                                    {postFormData.post.length} / {postMaxLength} characters
+                                    { postFormData.post.length } / { postMaxLength } characters
                                 </p>
                                 <button 
                                     type="submit" 
-                                    className={`button px-6 py-2 font-medium text-sm rounded-md transition ease duration-200 ${
+                                    className={ `button px-6 py-2 font-medium text-sm rounded-md transition ease duration-200 ${
                                         postFormData.post.length === 0 ? 'bg-slate-200 text-neutral-400 cursor-not-allowed' : 'bg-slate-700 text-neutral-50 hover:bg-slate-500'
-                                    }`}
-                                    disabled={postFormData.post.length === 0}
+                                    }` }
+                                    disabled={ postFormData.post.length === 0 }
                                 >Post</button>
                             </div>
                         </form>
@@ -76,9 +80,9 @@ const PostPage = () => {
                     
                     <section className="flex flex-col gap-4">
                         <h2 className="text-2xl font-bold">Comments</h2>
-                        {postGlobal.comments.length > 0 
-                            ? (postGlobal.comments.toReversed().map((comment) => {
-                                return <Comment key={comment.id} postId={postId} comment={comment} />
+                        { postGlobal.comments.length > 0 
+                            ? ( [...postGlobal.comments].reverse().map(( comment ) => {
+                                return <Comment key={ comment.id } postId={ postIdConfirmed } comment={ comment } />
                             }))
                             : <p className="text-neutral-500 text-center">This post has no comments.</p>
                         }

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
-import googleLogo from "../assets/images/Google__G__logo.svg";
+import googleLogo from "../../public/assets/images/Google__G__logo.svg";
 import { handleInputChange } from "../globals/utilityFunctions";
 import handleLogin from "../globals/login";
 
@@ -40,7 +40,7 @@ const LoginPage = () => {
             )}
 
             <section className="max-w-96 w-full">
-                <form className="w-full mx-auto" onSubmit={(e) => handleLogin(e, "local", formData, setLoginError, dispatch, navigate)}>
+                <form className="w-full mx-auto" onSubmit={ (e) => handleLogin({ e, loginType: "local", formData, setLoginError, dispatch, navigate }) }>
                     <div className="flex flex-col gap-2">
                         <div className="grid grid-cols-4 items-center gap-4">
                             <label htmlFor="username" className="text-sm font-medium text-right">Email *</label>
@@ -48,9 +48,9 @@ const LoginPage = () => {
                                 type="email" 
                                 id="username" 
                                 name="username" 
-                                minLength="1"
+                                minLength={ 1 }
                                 placeholder="name@example.com"
-                                onChange={(e) => handleInputChange(e, setFormData)}
+                                onChange={ (e) => handleInputChange(e, setFormData) }
                                 required
                                 className="input col-span-3"
                             />
@@ -61,9 +61,9 @@ const LoginPage = () => {
                                 type="password" 
                                 id="password" 
                                 name="password" 
-                                minLength="1"
+                                minLength={ 1 }
                                 placeholder="********"
-                                onChange={(e) => handleInputChange(e, setFormData)}
+                                onChange={ (e) => handleInputChange(e, setFormData) }
                                 required
                                 className="input col-span-3"
                             />
@@ -80,7 +80,7 @@ const LoginPage = () => {
                 <div className="flex-grow bg-neutral-300 h-0.5"></div> {/* Right bar */}
             </div>
             <section className="max-w-96 w-full flex flex-col gap-3 mb-4">
-                <form className="w-full mx-auto" onSubmit={(e) => handleLogin(e, "demo", {}, setLoginError, dispatch, navigate)}>
+                <form className="w-full mx-auto" onSubmit={ (e) => handleLogin({ e, loginType: "demo", formData: {}, setLoginError, dispatch, navigate }) }>
                     <div>
                         <button type="submit" className="button bg-slate-400 w-full px-6 py-2 font-medium rounded-md hover:bg-slate-500 transition ease duration-200">Demo Account</button>
                     </div>

@@ -1,17 +1,35 @@
 import { setAuthenticated } from "../features/authenticated/authenticatedSlice";
 import { localLoginAPIPath, demoLoginAPIPath } from "./apiPaths";
+import RefreshPage from "../types/RefreshPage";
 
-const handleLogin = (e, loginType, formData, setLoginError, dispatch, navigate) => {
-    let apiPath;
+
+interface HandleLogin extends RefreshPage {
+    e: React.FormEvent<HTMLFormElement>;
+    loginType: "local" | "demo";
+    formData: {
+        username: string;
+        password: string;
+    } | {};
+    setLoginError: React.Dispatch<any>;
+}
+const handleLogin = ({ e, loginType, formData, setLoginError, dispatch, navigate }: HandleLogin) => {
+    let apiEndpoint;
     (loginType === "local")
-        ? apiPath = localLoginAPIPath
-        : apiPath = demoLoginAPIPath;
+        ? apiEndpoint = localLoginAPIPath
+        : apiEndpoint = demoLoginAPIPath;
 
-    _loginSubmission(e, apiPath, JSON.stringify(formData), setLoginError, dispatch, navigate);
+    const body = JSON.stringify(formData);
+    _loginSubmission({ e, apiEndpoint, body, setLoginError, dispatch, navigate });
 }
 
+interface LoginSubmission extends RefreshPage {
+    e: React.FormEvent<HTMLFormElement>;
+    apiEndpoint: string;
+    body: string;
+    setLoginError: React.Dispatch<any>;
+}
 // Post request to server for user authentication
-const _loginSubmission = async(e, apiEndpoint, body, setLoginError, dispatch, navigate) => {
+const _loginSubmission = async({ e, apiEndpoint, body, setLoginError, dispatch, navigate }: LoginSubmission) => {
     e.preventDefault();
     
     try {

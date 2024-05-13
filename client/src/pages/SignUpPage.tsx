@@ -1,16 +1,27 @@
 import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
-import googleLogo from "../assets/images/Google__G__logo.svg";
-import defaultProfilePicture from "../assets/images/default-profile-picture.png";
+import googleLogo from "../../public/assets/images/Google__G__logo.svg";
+import defaultProfilePicture from "../../public/assets/images/default-profile-picture.png";
 import { handleInputChange } from "../globals/utilityFunctions";
 import handleLogin from "../globals/login";
 import { signUpAPIPath } from "../globals/apiPaths";
 
-const SignUpPage = () => {
+interface FormData {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+    passwordConfirm: string;
+    profilePicture: File | null; // Now allows both File and null
+}
 
+const SignUpPage = () => {
     const navigate = useNavigate();
-    const [formData, setFormData] = useState({
+    const dispatch = useDispatch();
+
+    const [formData, setFormData] = useState<FormData>({
         firstName: '',
         lastName: '',
         email: '',
@@ -18,12 +29,12 @@ const SignUpPage = () => {
         passwordConfirm: '',
         profilePicture: null
     });
-    const [formErrors, setFormErrors] = useState(null);
+    const [formErrors, setFormErrors] = useState([]);
     const [formSubmitted, setFormSubmitted] = useState(false);
     const [profilePicture, setProfilePicture] = useState(defaultProfilePicture);
 
     // Post request to server containing form data payload
-    const emailSignUpSubmission = async(e) => {
+    const emailSignUpSubmission = async(e: React.FormEvent) => {
         e.preventDefault();
 
         const formDataObject = new FormData(); // Create FormData object
@@ -34,7 +45,11 @@ const SignUpPage = () => {
         formDataObject.append('email', formData.email);
         formDataObject.append('password', formData.password);
         formDataObject.append('passwordConfirm', formData.passwordConfirm);
-        formDataObject.append('profilePicture', formData.profilePicture); // Append profile picture
+        
+        // Append profile picture only if it's not null
+        if (formData.profilePicture) {
+            formDataObject.append('profilePicture', formData.profilePicture);
+        }
 
         try {
             // Have to make requests to /api/.. as we are using a proxy
@@ -61,17 +76,22 @@ const SignUpPage = () => {
     }
 
     // Set the new input profile picture
-    const handleProfilePictureChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
+    const handleProfilePictureChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files.length > 0) {
+            const file = e.target.files[0];
             const reader = new FileReader();
             reader.onload = () => {
-                setFormData({
-                    ...formData,
-                    profilePicture: file
-                });
-
-                setProfilePicture(reader.result);
+                if (typeof reader.result === 'string') {
+                    setProfilePicture(reader.result);
+                    setFormData({
+                        ...formData,
+                        profilePicture: file
+                    });
+                } else {
+                    console.error('Failed to load file');
+                    // Optionally, set to a default image or handle the error
+                    setProfilePicture(defaultProfilePicture);
+                }
             };
             reader.readAsDataURL(file);
         }
@@ -103,15 +123,15 @@ const SignUpPage = () => {
             {formErrors && formErrors.length > 0 && (
                 <section className="max-w-96 w-full mb-4">
                     <ul>
-                        {formErrors.map((error, idx) => (
-                            <li key={idx} className="list-disc mb-1"><p className="text-red-600">{error.msg}</p></li>
-                        ))}
+                        { formErrors.map(( error: {msg: string}, idx ) => (
+                            <li key={ idx } className="list-disc mb-1"><p className="text-red-600">{ error.msg }</p></li>
+                        )) }
                     </ul>
                 </section>
             )}
 
             <section className="max-w-96 w-full">
-                <form className="w-full mx-auto" onSubmit={emailSignUpSubmission} encType="multipart/form-data">
+                <form className="w-full mx-auto" onSubmit={ emailSignUpSubmission } encType="multipart/form-data">
                     <div className="mb-6">
                         <label htmlFor="profilePicture" className="sr-only">Profile Picture</label>
                         <input 
@@ -120,7 +140,7 @@ const SignUpPage = () => {
                             name="profilePicture"
                             accept="image/*"   // Accept only image files
                             className="hidden"  // Hide the file input initially
-                            onChange={handleProfilePictureChange}
+                            onChange={ handleProfilePictureChange }
                         />
                         <label htmlFor="profilePicture" className="cursor-pointer">
                             <img 
@@ -137,10 +157,10 @@ const SignUpPage = () => {
                                 type="text" 
                                 id="firstName" 
                                 name="firstName" 
-                                minLength="1"
+                                minLength={ 1 }
                                 placeholder="John"
-                                onChange={(e) => handleInputChange(e, setFormData)}
-                                value={formData.firstName}
+                                onChange={ (e) => handleInputChange(e, setFormData) }
+                                value={ formData.firstName }
                                 required
                                 className="input col-span-3"
                             />
@@ -151,10 +171,10 @@ const SignUpPage = () => {
                                 type="text" 
                                 id="lastName" 
                                 name="lastName" 
-                                minLength="1"
+                                minLength={ 1 }
                                 placeholder="Doe"
-                                onChange={(e) => handleInputChange(e, setFormData)}
-                                value={formData.lastName}
+                                onChange={ (e) => handleInputChange(e, setFormData) }
+                                value={ formData.lastName }
                                 required
                                 className="input col-span-3"
                             />
@@ -165,10 +185,10 @@ const SignUpPage = () => {
                                 type="email" 
                                 id="email" 
                                 name="email" 
-                                minLength="1"
+                                minLength={ 1 }
                                 placeholder="name@example.com"
-                                onChange={(e) => handleInputChange(e, setFormData)}
-                                value={formData.email}
+                                onChange={ (e) => handleInputChange(e, setFormData) }
+                                value={ formData.email }
                                 required
                                 className="input col-span-3"
                             />
@@ -179,10 +199,10 @@ const SignUpPage = () => {
                                 type="password" 
                                 id="password" 
                                 name="password" 
-                                minLength="1"
+                                minLength={ 1 }
                                 placeholder="********"
-                                onChange={(e) => handleInputChange(e, setFormData)}
-                                value={formData.password}
+                                onChange={ (e) => handleInputChange(e, setFormData) }
+                                value={ formData.password }
                                 required
                                 className="input col-span-3"
                             />
@@ -193,10 +213,10 @@ const SignUpPage = () => {
                                 type="password" 
                                 id="passwordConfirm" 
                                 name="passwordConfirm" 
-                                minLength="1"
+                                minLength={ 1 }
                                 placeholder="********"
-                                onChange={(e) => handleInputChange(e, setFormData)}
-                                value={formData.passwordConfirm}
+                                onChange={ (e) => handleInputChange(e, setFormData) }
+                                value={ formData.passwordConfirm }
                                 required
                                 className="input col-span-3"
                             />
@@ -213,7 +233,7 @@ const SignUpPage = () => {
                 <div className="flex-grow bg-neutral-300 h-0.5"></div> {/* Right bar */}
             </div>
             <section className="max-w-96 w-full flex flex-col gap-3 mb-4">
-                <form className="w-full mx-auto" onSubmit={(e) => handleLogin(e, "demo", setFormErrors, navigate)}>
+                <form className="w-full mx-auto" onSubmit={ (e) => handleLogin({ e, loginType: "demo", formData: {}, setLoginError: setFormErrors, dispatch, navigate }) }>
                     <div>
                         <button type="submit" className="button bg-slate-400 w-full px-6 py-2 font-medium rounded-md hover:bg-slate-500 transition ease duration-200">Demo Account</button>
                     </div>

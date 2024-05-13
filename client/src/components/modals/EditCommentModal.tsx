@@ -3,43 +3,52 @@ import { useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux";
 
 import { postMaxLength } from "../../globals/globalVariables";
-import { stopPropagation, handleInputChange, updatePost } from "../../globals/utilityFunctions";
+import { stopPropagation, handleInputChange, updateComment } from "../../globals/utilityFunctions";
 
-const EditPostModal = ({ post, toggleModal }) => {
+import { CommentInterface } from "../../types/Post";
+
+interface EditCommentModalProps {
+    postId: string;
+    comment: CommentInterface;
+    toggleModal: () => void;
+}
+
+const EditCommentModal: React.FC<EditCommentModalProps> = ({ postId, comment, toggleModal }) => {
     const [formData, setFormData] = useState({ post: "" });
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    // Save the post content into the formData state
+    // Save the comment content into the formData state
     useEffect(() => {
-        if (post && post.post) {
-            setFormData({ post: post.post });
+        if (comment && comment.post) {
+            setFormData({ post: comment.post });
         }
-    }, [post]);
+    }, [comment]);
 
     return (
         <>
-            {post &&
+            {comment &&
                 <div 
                     className="modal z-20"
-                    onClick={(e) => stopPropagation(e) }
+                    onClick={ (e) => stopPropagation(e) }
                 >
                     <button 
                         className="button leading-none absolute right-4 top-2 text-2xl text-neutral-500 transition duration-200 hover:text-neutral-950" 
-                        onClick={(e) => {
+                        onClick={ (e) => {
                             stopPropagation(e);
                             toggleModal();
-                        }}
+                        } }
                     >&times;
                 </button>
-                    <h3 className="text-lg font-bold">Edit Post</h3>
-                    <p className="text-neutral-500">Edit your post.</p>
+                    <h3 className="text-lg font-bold">Edit Comment</h3>
+                    <p className="text-neutral-500">Edit your comment.</p>
                     <form 
                         className="mt-1" 
-                        onSubmit={async(e) => {
-                            await updatePost(e, post.id, formData, navigate, dispatch);
+                        onSubmit={ async(e) => {
+                            await updateComment({ e, postId, commentId: comment.id, formData, navigate, dispatch });
+                            // await updatePost(e, post.id, formData, navigate, dispatch);
                             toggleModal();
-                        }}
+                        } }
                     >
                         <div>
                             <label htmlFor="post" className="sr-only">Post</label>
@@ -47,12 +56,12 @@ const EditPostModal = ({ post, toggleModal }) => {
                                 id="post"
                                 className="w-full p-2 bg-neutral-50 border border-neutral-300 rounded-md text-base focus:outline-neutral-400"
                                 name="post"
-                                cols="20" 
-                                rows="4"
-                                maxLength="400"
+                                cols={ 20 } 
+                                rows={ 4 }
+                                maxLength={ 400 }
                                 placeholder="Share your thoughts..."
-                                value={formData.post}
-                                onChange={(e) => handleInputChange(e, setFormData)}
+                                value={ formData.post }
+                                onChange={ (e) => handleInputChange(e, setFormData) }
                                 required
                             ></textarea>
                         </div>
@@ -67,7 +76,7 @@ const EditPostModal = ({ post, toggleModal }) => {
                                 }`}
                                 onClick={(e) => e.stopPropagation()}
                             >
-                                Update Post
+                                Update Comment
                             </button>
                         </div>
                     </form>
@@ -78,4 +87,4 @@ const EditPostModal = ({ post, toggleModal }) => {
     );
 }
 
-export default EditPostModal;
+export default EditCommentModal;
